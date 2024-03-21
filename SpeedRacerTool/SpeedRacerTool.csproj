@@ -1,0 +1,17 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net8.0</TargetFramework>
+		<LangVersion>latest</LangVersion>
+		<OutputType>Exe</OutputType>
+		<Nullable>enable</Nullable>
+		<NoWarn>IDE0290</NoWarn>
+		<RootNamespace>Kermalis.SpeedRacerTool</RootNamespace>
+		<StartupObject>Kermalis.SpeedRacerTool.Program</StartupObject>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="EndianBinaryIO" Version="2.1.0" />
+	</ItemGroup>
+
+</Project>
