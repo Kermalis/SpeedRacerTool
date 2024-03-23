@@ -1,8 +1,7 @@
 ﻿using Kermalis.EndianBinaryIO;
-using Kermalis.SpeedRacerTool.NIF;
 using System;
 
-namespace Kermalis.SpeedRacerTool.NIF.Chunks.NiMain;
+namespace Kermalis.SpeedRacerTool.NIF.NiMain;
 
 internal sealed class NiStringExtraData : NiExtraData
 {

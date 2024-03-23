@@ -1,8 +1,7 @@
 ﻿using Kermalis.EndianBinaryIO;
-using Kermalis.SpeedRacerTool.NIF.Chunks;
 using System.Numerics;
 
-namespace Kermalis.SpeedRacerTool.NIF.Chunks.NiMain;
+namespace Kermalis.SpeedRacerTool.NIF.NiMain;
 
 /// <summary>Mesh data: vertices, vertex normals, etc.</summary>
 internal abstract class NiGeometryData : NiObject

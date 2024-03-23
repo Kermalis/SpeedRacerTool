@@ -1,6 +1,6 @@
 ﻿using Kermalis.EndianBinaryIO;
 
-namespace Kermalis.SpeedRacerTool.Chunks.NiMain;
+namespace Kermalis.SpeedRacerTool.NIF.NiMain;
 
 /// <summary>Holds mesh data using strips of triangles.</summary>
 internal sealed class NiTriStripsData : NiTriBasedGeomData

@@ -1,9 +1,9 @@
 ﻿using Kermalis.EndianBinaryIO;
-using Kermalis.SpeedRacerTool.Chunks.NiMain;
-using Kermalis.SpeedRacerTool.Chunks.SpeedRacer;
+using Kermalis.SpeedRacerTool.NIF.NiMain;
+using Kermalis.SpeedRacerTool.NIF.SpeedRacer;
 using System;
 
-namespace Kermalis.SpeedRacerTool.Chunks;
+namespace Kermalis.SpeedRacerTool.NIF;
 
 internal abstract class Chunk
 {

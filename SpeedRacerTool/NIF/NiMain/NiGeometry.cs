@@ -1,7 +1,6 @@
 ﻿using Kermalis.EndianBinaryIO;
-using Kermalis.SpeedRacerTool.NIF.Chunks;
 
-namespace Kermalis.SpeedRacerTool.NIF.Chunks.NiMain;
+namespace Kermalis.SpeedRacerTool.NIF.NiMain;
 
 /// <summary>Describes a visible scene element with vertices like a mesh, a particle system, lines, etc.</summary>
 internal abstract class NiGeometry : NiAVObject

@@ -1,6 +1,6 @@
 ﻿using Kermalis.EndianBinaryIO;
 
-namespace Kermalis.SpeedRacerTool.NIF.Chunks.NiMain;
+namespace Kermalis.SpeedRacerTool.NIF.NiMain;
 
 internal sealed class MaterialData
 {

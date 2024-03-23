@@ -1,6 +1,6 @@
 ﻿using Kermalis.EndianBinaryIO;
-using Kermalis.SpeedRacerTool.Chunks;
-using Kermalis.SpeedRacerTool.Chunks.NiMain;
+using Kermalis.SpeedRacerTool.NIF;
+using Kermalis.SpeedRacerTool.NIF.NiMain;
 using System;
 using System.IO;
 using System.Text;

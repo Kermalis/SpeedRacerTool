@@ -1,10 +1,9 @@
 ﻿using Kermalis.EndianBinaryIO;
-using Kermalis.SpeedRacerTool.Chunks;
-using Kermalis.SpeedRacerTool.Chunks.NiMain;
+using Kermalis.SpeedRacerTool.NIF.NiMain;
 using System;
 using System.IO;
 
-namespace Kermalis.SpeedRacerTool;
+namespace Kermalis.SpeedRacerTool.NIF;
 
 internal sealed class NIFFile
 {

@@ -1,7 +1,6 @@
 ﻿using Kermalis.EndianBinaryIO;
-using Kermalis.SpeedRacerTool.NIF.Chunks;
 
-namespace Kermalis.SpeedRacerTool.NIF.Chunks.NiMain;
+namespace Kermalis.SpeedRacerTool.NIF.NiMain;
 
 /// <summary>Abstract base class for NiObjects that support names, extra data, and time controllers.</summary>
 internal abstract class NiObjectNET : NiObject

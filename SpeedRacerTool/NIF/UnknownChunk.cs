@@ -1,6 +1,6 @@
 ﻿using Kermalis.EndianBinaryIO;
 
-namespace Kermalis.SpeedRacerTool.NIF.Chunks;
+namespace Kermalis.SpeedRacerTool.NIF;
 
 internal sealed class UnknownChunk : Chunk
 {

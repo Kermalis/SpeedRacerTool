@@ -1,9 +1,7 @@
 ﻿using Kermalis.EndianBinaryIO;
-using Kermalis.SpeedRacerTool.NIF;
-using Kermalis.SpeedRacerTool.NIF.Chunks;
 using System;
 
-namespace Kermalis.SpeedRacerTool.NIF.Chunks.SpeedRacer;
+namespace Kermalis.SpeedRacerTool.NIF.SpeedRacer;
 
 // fwd_short.trk
 internal sealed class SRTrackPieceSaveData : Chunk

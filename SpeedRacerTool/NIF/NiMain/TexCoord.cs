@@ -1,6 +1,6 @@
 ﻿using Kermalis.EndianBinaryIO;
 
-namespace Kermalis.SpeedRacerTool.NIF.Chunks.NiMain;
+namespace Kermalis.SpeedRacerTool.NIF.NiMain;
 
 /// <summary>Texture coordinates (u,v). As in OpenGL; image origin is in the lower left corner.</summary>
 internal readonly struct TexCoord

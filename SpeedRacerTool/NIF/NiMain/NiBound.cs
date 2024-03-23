@@ -1,7 +1,7 @@
 ﻿using Kermalis.EndianBinaryIO;
 using System.Numerics;
 
-namespace Kermalis.SpeedRacerTool.NIF.Chunks.NiMain;
+namespace Kermalis.SpeedRacerTool.NIF.NiMain;
 
 /// <summary>A sphere.</summary>
 internal readonly struct NiBound

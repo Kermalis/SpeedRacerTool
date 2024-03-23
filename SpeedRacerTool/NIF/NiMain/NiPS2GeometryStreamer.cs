@@ -5,7 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 
-namespace Kermalis.SpeedRacerTool.Chunks.NiMain;
+namespace Kermalis.SpeedRacerTool.NIF.NiMain;
 
 internal sealed class NiPS2GeometryStreamer : Chunk
 {
@@ -78,8 +78,8 @@ internal sealed class NiPS2GeometryStreamer : Chunk
 				string s16 = string.Format("({0} | {1})", A, B);
 				string u16 = string.Format("(0x{0:X4} | 0x{1:X4})", (ushort)A, (ushort)B);
 				string half = string.Format("({0} | {1})", BitConverter.Int16BitsToHalf(A).ToString(Program.TOSTRING_NO_SCIENTIFIC), BitConverter.Int16BitsToHalf(B).ToString(Program.TOSTRING_NO_SCIENTIFIC));
-				string s32 = string.Format("{0}", (int)((ushort)A | ((uint)B << 16)));
-				string u32 = string.Format("0x{0:X8}", (uint)((ushort)A | ((uint)B << 16)));
+				string s32 = string.Format("{0}", (int)((ushort)A | (uint)B << 16));
+				string u32 = string.Format("0x{0:X8}", (ushort)A | (uint)B << 16);
 
 				return string.Format("(S16={0} ... U16={1} ... H={2} ... S32={3} ... U32={4})", s16, u16, half, s32, u32);
 			}
@@ -114,8 +114,8 @@ internal sealed class NiPS2GeometryStreamer : Chunk
 				string s16 = string.Format("({0} | {1})", A, B);
 				string u16 = string.Format("(0x{0:X4} | 0x{1:X4})", (ushort)A, (ushort)B);
 				string half = string.Format("({0} | {1})", BitConverter.Int16BitsToHalf(A).ToString(Program.TOSTRING_NO_SCIENTIFIC), BitConverter.Int16BitsToHalf(B).ToString(Program.TOSTRING_NO_SCIENTIFIC));
-				string s32 = string.Format("{0}", (int)((ushort)A | ((uint)B << 16)));
-				string u32 = string.Format("0x{0:X8}", (uint)((ushort)A | ((uint)B << 16)));
+				string s32 = string.Format("{0}", (int)((ushort)A | (uint)B << 16));
+				string u32 = string.Format("0x{0:X8}", (ushort)A | (uint)B << 16);
 
 				return string.Format("(S16={0} ... U16={1} ... H={2} ... S32={3} ... U32={4})", s16, u16, half, s32, u32);
 			}
@@ -231,9 +231,9 @@ internal sealed class NiPS2GeometryStreamer : Chunk
 
 				float stU = st.A / 8192f; // Appears to be Horizontal TexCoord if div 8192
 				float ttU = tt.A / 32_768f; // Can be negative/positive
-				float ttU_0To1 = (ttU * 0.5f) + 0.5f;
+				float ttU_0To1 = ttU * 0.5f + 0.5f;
 				float ttV = tt.B / 32_768f; // Can be negative/positive
-				float ttV_0To1 = (ttV * 0.5f) + 0.5f;
+				float ttV_0To1 = ttV * 0.5f + 0.5f;
 				float dThing = v.D / 32_768f;
 				sbOBJ.Append(' ');
 				sbOBJ.Append(ttU_0To1.ToString(Program.TOSTRING_NO_SCIENTIFIC));

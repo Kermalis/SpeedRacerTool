@@ -1,8 +1,7 @@
 ﻿using Kermalis.EndianBinaryIO;
-using Kermalis.SpeedRacerTool.NIF.Chunks;
 using System.Numerics;
 
-namespace Kermalis.SpeedRacerTool.NIF.Chunks.NiMain;
+namespace Kermalis.SpeedRacerTool.NIF.NiMain;
 
 /// <summary>Abstract audio-visual base class from which all of Gamebryo's scene graph objects inherit.</summary>
 internal abstract class NiAVObject : NiObjectNET

@@ -1,6 +1,4 @@
-﻿using Kermalis.SpeedRacerTool.NIF.Chunks;
-
-namespace Kermalis.SpeedRacerTool.NIF.Chunks.NiMain;
+﻿namespace Kermalis.SpeedRacerTool.NIF.NiMain;
 
 /// <summary>Abstract object type.</summary>
 internal abstract class NiObject : Chunk

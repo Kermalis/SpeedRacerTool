@@ -1,8 +1,6 @@
 ﻿using Kermalis.EndianBinaryIO;
-using Kermalis.SpeedRacerTool.NIF;
-using Kermalis.SpeedRacerTool.NIF.Chunks;
 
-namespace Kermalis.SpeedRacerTool.NIF.Chunks.NiMain;
+namespace Kermalis.SpeedRacerTool.NIF.NiMain;
 
 /// <summary>Generic node object for grouping.</summary>
 internal sealed class NiNode : NiAVObject

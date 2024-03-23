@@ -1,7 +1,6 @@
 ﻿using Kermalis.EndianBinaryIO;
-using Kermalis.SpeedRacerTool.NIF;
 
-namespace Kermalis.SpeedRacerTool.NIF.Chunks.NiMain;
+namespace Kermalis.SpeedRacerTool.NIF.NiMain;
 
 /// <summary>This Property controls the Z buffer (OpenGL: depth buffer).</summary>
 internal sealed class NiZBufferProperty : NiProperty

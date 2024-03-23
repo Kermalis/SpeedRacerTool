@@ -1,7 +1,6 @@
 ﻿using Kermalis.EndianBinaryIO;
-using Kermalis.SpeedRacerTool.NIF;
 
-namespace Kermalis.SpeedRacerTool.NIF.Chunks.NiMain;
+namespace Kermalis.SpeedRacerTool.NIF.NiMain;
 
 /// <summary>A shape node that refers to data organized into strips of triangles.</summary>
 internal sealed class NiTriStrips : NiTriBasedGeom
