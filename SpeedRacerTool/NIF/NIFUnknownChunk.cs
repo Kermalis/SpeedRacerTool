@@ -2,12 +2,12 @@
 
 namespace Kermalis.SpeedRacerTool.NIF;
 
-internal sealed class UnknownChunk : Chunk
+internal sealed class NIFUnknownChunk : NIFChunk
 {
 	public readonly string Type;
 	public readonly byte[] Data;
 
-	internal UnknownChunk(EndianBinaryReader r, int offset, string type, uint size)
+	internal NIFUnknownChunk(EndianBinaryReader r, int offset, string type, uint size)
 		: base(offset)
 	{
 		Type = type;

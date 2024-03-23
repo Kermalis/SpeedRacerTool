@@ -7,7 +7,7 @@ using System.Text;
 
 namespace Kermalis.SpeedRacerTool.NIF.NiMain;
 
-internal sealed class NiPS2GeometryStreamer : Chunk
+internal sealed class NiPS2GeometryStreamer : NIFChunk
 {
 	public const string NAME = "NiPS2GeometryStreamer";
 

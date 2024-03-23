@@ -1,6 +1,7 @@
 ﻿using Kermalis.EndianBinaryIO;
 using Kermalis.SpeedRacerTool.NIF;
 using Kermalis.SpeedRacerTool.NIF.NiMain;
+using Kermalis.SpeedRacerTool.XDS;
 using System;
 using System.IO;
 using System.Text;
@@ -18,9 +19,23 @@ internal sealed class Program
 	{
 		TestISO();
 		//TestNIF();
-		// TODO: XDS viewer. maybe we can edit the rivals list in vehicle_registry.xds
+		//TestXDS();
 	}
 
+	private static void TestXDS()
+	{
+		// track registry (PS2)
+		const string PATH = @"C:\Users\Kermalis\Documents\Emulation\PS2\Hacking\Speed Racer PS2 and WII rip\Original PS2.ZIP ps2_ps2\game\track_registry.xds";
+
+		Console.WriteLine("Opening {0}", PATH);
+
+		using (FileStream s = File.OpenRead(PATH))
+		{
+			var xds = new XDSFile(s);
+
+			;
+		}
+	}
 	private static void TestISO()
 	{
 		const string IN = @"C:\Users\Kermalis\Documents\Emulation\PS2\Games\Speed Racer - Original.iso";
@@ -99,7 +114,7 @@ internal sealed class Program
 		{
 			var nif = new NIFFile(s);
 
-			foreach (Chunk c in nif.BlockDatas)
+			foreach (NIFChunk c in nif.BlockDatas)
 			{
 				Console.WriteLine(c.DebugStr(nif));
 			}

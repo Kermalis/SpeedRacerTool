@@ -5,23 +5,23 @@ using System;
 
 namespace Kermalis.SpeedRacerTool.NIF;
 
-internal abstract class Chunk
+internal abstract class NIFChunk
 {
 	public int Offset;
 
-	protected Chunk(int offset)
+	protected NIFChunk(int offset)
 	{
 		Offset = offset;
 	}
 
-	public static Chunk ReadChunk(EndianBinaryReader r, string chunkType, uint chunkSize, uint userVersion)
+	internal static NIFChunk ReadChunk(EndianBinaryReader r, string chunkType, uint chunkSize, uint userVersion)
 	{
 		int ofs = (int)r.Stream.Position;
 
 		// Referring to "nif.xml" in NifSkope to add these
 		// Ptr is "tUpLink" type. It usually refers to things prior in the hierarchy
 
-		Chunk c;
+		NIFChunk c;
 
 		switch (chunkType)
 		{
@@ -46,7 +46,7 @@ internal abstract class Chunk
 				c = new NiTriStripsData(r, ofs, userVersion); break;
 
 			default:
-				c = new UnknownChunk(r, ofs, chunkType, chunkSize); break;
+				c = new NIFUnknownChunk(r, ofs, chunkType, chunkSize); break;
 		}
 
 		if (ofs + chunkSize != r.Stream.Position)

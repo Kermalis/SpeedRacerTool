@@ -17,7 +17,7 @@ internal sealed class NIFFile
 	public readonly uint[] BlockSizes;
 	public readonly string[] Strings;
 	public readonly uint[] Groups;
-	public readonly Chunk[] BlockDatas;
+	public readonly NIFChunk[] BlockDatas;
 	public readonly ChunkRef<NiObject>[] Roots;
 
 	public NIFFile(Stream s)
@@ -60,10 +60,10 @@ internal sealed class NIFFile
 		Groups = new uint[r.ReadUInt32()];
 		r.ReadUInt32s(Groups);
 
-		BlockDatas = new Chunk[numBlocks];
+		BlockDatas = new NIFChunk[numBlocks];
 		for (int i = 0; i < BlockDatas.Length; i++)
 		{
-			BlockDatas[i] = Chunk.ReadChunk(r, BlockTypes[BlockTypeIndices[i] & 0x7FFF], BlockSizes[i], UserVersion);
+			BlockDatas[i] = NIFChunk.ReadChunk(r, BlockTypes[BlockTypeIndices[i] & 0x7FFF], BlockSizes[i], UserVersion);
 		}
 
 		Roots = new ChunkRef<NiObject>[r.ReadUInt32()];

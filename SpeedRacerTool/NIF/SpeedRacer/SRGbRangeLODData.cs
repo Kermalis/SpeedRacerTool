@@ -3,7 +3,7 @@ using System;
 
 namespace Kermalis.SpeedRacerTool.NIF.SpeedRacer;
 
-internal sealed class SRGbRangeLODData : Chunk
+internal sealed class SRGbRangeLODData : NIFChunk
 {
 	public const string NAME = "SRGbRangeLODData";
 

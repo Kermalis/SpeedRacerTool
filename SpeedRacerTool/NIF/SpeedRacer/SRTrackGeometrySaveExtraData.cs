@@ -3,7 +3,7 @@ using System;
 
 namespace Kermalis.SpeedRacerTool.NIF.SpeedRacer;
 
-internal sealed class SRTrackGeometrySaveExtraData : Chunk
+internal sealed class SRTrackGeometrySaveExtraData : NIFChunk
 {
 	public const string NAME = "SRTrackGeometrySaveExtraData";
 

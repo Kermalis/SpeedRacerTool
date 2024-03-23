@@ -5,7 +5,7 @@ using System.Runtime.InteropServices;
 namespace Kermalis.SpeedRacerTool.NIF.NiMain;
 
 /// <summary>"tLink" type from NifSkope. It usually refers to things later in the hierarchy</summary>
-internal readonly struct ChunkRef<T> where T : Chunk
+internal readonly struct ChunkRef<T> where T : NIFChunk
 {
 	public readonly int ChunkIndex;
 

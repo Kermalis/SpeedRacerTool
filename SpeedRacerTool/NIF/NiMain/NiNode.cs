@@ -8,7 +8,7 @@ internal sealed class NiNode : NiAVObject
 	public const string NAME = "NiNode";
 
 	public readonly ChunkRef<NiAVObject>[] Children;
-	public readonly ChunkRef<UnknownChunk>[] Effects; // TODO: Ref<NiDynamicEffect>[]
+	public readonly ChunkRef<NIFUnknownChunk>[] Effects; // TODO: Ref<NiDynamicEffect>[]
 
 	internal NiNode(EndianBinaryReader r, int offset)
 		: base(r, offset)
@@ -16,8 +16,8 @@ internal sealed class NiNode : NiAVObject
 		Children = new ChunkRef<NiAVObject>[r.ReadUInt32()];
 		ChunkRef<NiAVObject>.ReadArray(r, Children);
 
-		Effects = new ChunkRef<UnknownChunk>[r.ReadUInt32()];
-		ChunkRef<UnknownChunk>.ReadArray(r, Effects);
+		Effects = new ChunkRef<NIFUnknownChunk>[r.ReadUInt32()];
+		ChunkRef<NIFUnknownChunk>.ReadArray(r, Effects);
 	}
 
 	internal override string DebugStr(NIFFile nif)
