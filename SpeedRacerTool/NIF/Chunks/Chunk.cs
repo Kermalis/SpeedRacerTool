@@ -62,7 +62,7 @@ internal abstract class Chunk
 		return string.Format("{0}@0x{1:X} = ({2})", name, Offset, contents);
 	}
 
-	internal virtual string DebugStr(NIF nif)
+	internal virtual string DebugStr(NIFFile nif)
 	{
 		return ToString()!;
 	}

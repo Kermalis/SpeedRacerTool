@@ -197,7 +197,7 @@ internal sealed class NiPS2GeometryStreamer : Chunk
 			return offset + portionBegin;
 		}
 
-		public void Output(StringBuilder sbOBJ, StringBuilder sbDebug, NIF nif)
+		public void Output(StringBuilder sbOBJ, StringBuilder sbDebug, NIFFile nif)
 		{
 			NiTriStripsData data = TriData.Resolve(nif)!;
 
@@ -302,7 +302,7 @@ internal sealed class NiPS2GeometryStreamer : Chunk
 		}
 	}
 
-	public void TestOBJ(NIF nif)
+	public void TestOBJ(NIFFile nif)
 	{
 		const string DIR = @"C:\Users\Kermalis\Downloads\Output\";
 		if (Directory.Exists(DIR))
@@ -328,7 +328,7 @@ internal sealed class NiPS2GeometryStreamer : Chunk
 			File.WriteAllText(string.Format("{0}{1}.txt", DIR, i), sbDebug.ToString());
 		}
 	}
-	public void TestGLTF(NIF nif)
+	public void TestGLTF(NIFFile nif)
 	{
 		using (FileStream s = File.Create(@"C:\Users\Kermalis\Downloads\Test.gltf"))
 		{

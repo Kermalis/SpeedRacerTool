@@ -6,7 +6,7 @@ using System.IO;
 
 namespace Kermalis.SpeedRacerTool;
 
-internal sealed class NIF
+internal sealed class NIFFile
 {
 	// Speed Racer is 20.3.0.9 (0x14030009)
 
@@ -21,7 +21,7 @@ internal sealed class NIF
 	public readonly Chunk[] BlockDatas;
 	public readonly ChunkRef<NiObject>[] Roots;
 
-	public NIF(Stream s)
+	public NIFFile(Stream s)
 	{
 		var r = new EndianBinaryReader(s, ascii: true);
 

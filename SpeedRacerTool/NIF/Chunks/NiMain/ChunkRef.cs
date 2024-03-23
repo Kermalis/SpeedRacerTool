@@ -14,7 +14,7 @@ internal readonly struct ChunkRef<T> where T : Chunk
 		ChunkIndex = r.ReadInt32();
 	}
 
-	public T? Resolve(NIF nif)
+	public T? Resolve(NIFFile nif)
 	{
 		return ChunkIndex == -1 ? null : (T)nif.BlockDatas[ChunkIndex];
 	}

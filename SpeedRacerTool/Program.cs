@@ -97,7 +97,7 @@ internal sealed class Program
 
 		using (FileStream s = File.OpenRead(PATH))
 		{
-			var nif = new NIF(s);
+			var nif = new NIFFile(s);
 
 			foreach (Chunk c in nif.BlockDatas)
 			{

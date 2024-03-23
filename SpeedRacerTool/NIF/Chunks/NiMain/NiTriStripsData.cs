@@ -42,7 +42,7 @@ internal sealed class NiTriStripsData : NiTriBasedGeomData
 		}
 	}
 
-	internal override string DebugStr(NIF nif)
+	internal override string DebugStr(NIFFile nif)
 	{
 		return DebugStr(NAME, string.Format("NumVerts={0} | NumTris={1} | NumStrips={2}",
 			NumVerts, NumTris, StripLengths.Length));
