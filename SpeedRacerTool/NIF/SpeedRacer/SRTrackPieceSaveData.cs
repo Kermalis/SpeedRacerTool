@@ -3,27 +3,26 @@ using System;
 
 namespace Kermalis.SpeedRacerTool.NIF.SpeedRacer;
 
-// fwd_short.trk
 internal sealed class SRTrackPieceSaveData : Chunk
 {
-    public const string NAME = "SRTrackPieceSaveData";
+	public const string NAME = "SRTrackPieceSaveData";
 
-    public readonly float[] Data;
+	public readonly float[] Data;
 
-    internal SRTrackPieceSaveData(EndianBinaryReader r, int offset, uint size)
-        : base(offset)
-    {
-        if (size != 8)
-        {
-            throw new Exception();
-        }
+	internal SRTrackPieceSaveData(EndianBinaryReader r, int offset, uint size)
+		: base(offset)
+	{
+		if (size != 8)
+		{
+			throw new Exception();
+		}
 
-        Data = new float[2];
-        r.ReadSingles(Data);
-    }
+		Data = new float[2];
+		r.ReadSingles(Data);
+	}
 
-    internal override string DebugStr(NIFFile nif)
-    {
-        return DebugStr(NAME, string.Format("{0} | {1}", Data[0], Data[1]));
-    }
+	internal override string DebugStr(NIFFile nif)
+	{
+		return DebugStr(NAME, string.Format("{0} | {1}", Data[0], Data[1]));
+	}
 }
