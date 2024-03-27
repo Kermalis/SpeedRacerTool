@@ -10,6 +10,14 @@ namespace Kermalis.SpeedRacerTool;
 
 internal sealed class Program
 {
+	private enum ProgramAction : byte
+	{
+		PatchISO_PS2,
+		TestNIF,
+		TestXDS,
+		TestEveryXDS,
+	}
+
 	// For doubles but also works for float
 	public const string TOSTRING_NO_SCIENTIFIC = "0.###################################################################################################################################################################################################################################################################################################################################################";
 
@@ -17,10 +25,41 @@ internal sealed class Program
 
 	private static void Main()
 	{
-		//TestISO();
-		//TestNIF();
-		//TestXDS();
-		TestEveryXDS();
+		const string ISO_PATH = @"C:\Users\Kermalis\Documents\Emulation\PS2\Games\";
+		const string MODDED_PS2_ZIP_FILE = @"C:\Users\Kermalis\Documents\Emulation\PS2\Hacking\Speed Racer PS2 and WII rip\Mod Test\ISO Contents\DATA\PS2.ZIP";
+
+		const string RIPPED_PATH = @"C:\Users\Kermalis\Documents\Emulation\PS2\Hacking\Speed Racer PS2 and WII rip\";
+		const string RIPPED_PS2_PATH = RIPPED_PATH + @"Original PS2.ZIP ps2_ps2\";
+		const string RIPPED_WII_PATH = RIPPED_PATH + @"Original WII rip\";
+
+		ProgramAction a = ProgramAction.PatchISO_PS2;
+
+		switch (a)
+		{
+			case ProgramAction.PatchISO_PS2:
+			{
+				string originalISOFile = ISO_PATH + @"Speed Racer - Original.iso";
+				string newISOFile = ISO_PATH + @"Speed Racer Modded.iso";
+				PatchISO_PS2(originalISOFile, newISOFile, MODDED_PS2_ZIP_FILE);
+				break;
+			}
+			case ProgramAction.TestNIF:
+			{
+				TestNIF();
+				break;
+			}
+			case ProgramAction.TestXDS:
+			{
+				TestXDS();
+				break;
+			}
+			case ProgramAction.TestEveryXDS:
+			{
+				TestEveryXDS(RIPPED_PS2_PATH);
+				TestEveryXDS(RIPPED_WII_PATH);
+				break;
+			}
+		}
 	}
 
 	private static void TestXDS()
@@ -37,21 +76,10 @@ internal sealed class Program
 			;
 		}
 	}
-	private static void TestEveryXDS()
+	private static void TestEveryXDS(string dir)
 	{
-		const string DIR = @"C:\Users\Kermalis\Documents\Emulation\PS2\Hacking\Speed Racer PS2 and WII rip\";
-
-		foreach (string PATH in Directory.GetFiles(DIR, "*.xds", SearchOption.AllDirectories))
+		foreach (string PATH in Directory.GetFiles(dir, "*.xds", SearchOption.AllDirectories))
 		{
-			/*if (PATH.Contains("ps2_ps2"))
-			{
-				continue; // SKIP PS2
-			}*/
-			/*if (PATH.Contains("Original WII"))
-			{
-				continue; // SKIP WII
-			}*/
-
 			Console.WriteLine("Opening {0}", PATH);
 
 			using (FileStream s = File.OpenRead(PATH))
@@ -64,32 +92,27 @@ internal sealed class Program
 
 		;
 	}
-	private static void TestISO()
+	private static void PatchISO_PS2(string originalISOFile, string newISOFile, string inZip)
 	{
-		const string IN = @"C:\Users\Kermalis\Documents\Emulation\PS2\Games\Speed Racer - Original.iso";
-		const string OUT = @"C:\Users\Kermalis\Documents\Emulation\PS2\Games\Speed Racer Modded.iso";
-
-		const string IN_ZIP = @"C:\Users\Kermalis\Documents\Emulation\PS2\Hacking\Speed Racer PS2 and WII rip\Mod Test\ISO Contents\DATA\PS2.ZIP";
-
 		// In the USA release I have, PS2.ZIP exists from 0x493E0000 to 0x4D05BA38 inclusive (0x3C7BA39 length)
-		const uint PS2ZIP_OFFSET = 0x493E0000;
-		const uint PS2ZIP_LENGTH = 0x03C7BA39;
+		const uint PS2_ZIP_OFFSET = 0x493E0000;
+		const uint PS2_ZIP_LENGTH = 0x03C7BA39;
 
-		File.Copy(IN, OUT, true);
+		File.Copy(originalISOFile, newISOFile, true);
 
-		FileStream inzip = File.OpenRead(IN_ZIP);
+		FileStream inzip = File.OpenRead(inZip);
 
-		if (inzip.Length > PS2ZIP_LENGTH)
+		if (inzip.Length > PS2_ZIP_LENGTH)
 		{
 			throw new Exception();
 		}
 
-		FileStream outFile = File.Open(OUT, FileMode.Open, FileAccess.Write, FileShare.None);
-		outFile.Position = PS2ZIP_OFFSET;
+		FileStream outFile = File.Open(newISOFile, FileMode.Open, FileAccess.Write, FileShare.None);
+		outFile.Position = PS2_ZIP_OFFSET;
 		inzip.CopyTo(outFile);
 
 		// Shouldn't get any underflow
-		int numPaddingNeeded = (int)(PS2ZIP_LENGTH - inzip.Length);
+		int numPaddingNeeded = (int)(PS2_ZIP_LENGTH - inzip.Length);
 		inzip.Dispose();
 		if (numPaddingNeeded != 0)
 		{
