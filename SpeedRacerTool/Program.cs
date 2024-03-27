@@ -17,9 +17,10 @@ internal sealed class Program
 
 	private static void Main()
 	{
-		TestISO();
+		//TestISO();
 		//TestNIF();
 		//TestXDS();
+		TestEveryXDS();
 	}
 
 	private static void TestXDS()
@@ -35,6 +36,24 @@ internal sealed class Program
 
 			;
 		}
+	}
+	private static void TestEveryXDS()
+	{
+		const string DIR = @"C:\Users\Kermalis\Documents\Emulation\PS2\Hacking\Speed Racer PS2 and WII rip\";
+
+		foreach (string PATH in Directory.GetFiles(DIR, "*.xds", SearchOption.AllDirectories))
+		{
+			Console.WriteLine("Opening {0}", PATH);
+
+			using (FileStream s = File.OpenRead(PATH))
+			{
+				var xds = new XDSFile(s);
+
+				;
+			}
+		}
+
+		;
 	}
 	private static void TestISO()
 	{
