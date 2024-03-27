@@ -1,6 +1,7 @@
 ﻿using Kermalis.EndianBinaryIO;
 using System;
 using System.IO;
+using System.Numerics;
 
 namespace Kermalis.SpeedRacerTool.XDS;
 
@@ -91,47 +92,6 @@ internal sealed class XDSFile
 		// editor_template.xds is similar to the t01.xds in the PS2. It's interesting
 		// t01.xds is the endgoal to open.
 		//  Interestingly, PS2 tracks have a different filetype/Unk24 (0xE73FBE05 / 0x0131) than the WII tracks (0xF6EB4F8D / 0x012F)
-
-
-		// t01_phx_props_nodmg.xds - track data
-		//  0x00-0x0F = Header
-		//   fileType = 0xAB90DE70
-		//  0x10-0x25 = MabStream header
-		//   len = 0x50F
-		//   Unk24 = 0x0124
-		//  0x26 (ushort_LE) = 0x0001
-		//  0x28 = (uint_LE) = [magic1] 0x0034BA98 in PS2, 0x003ABCC0 in WII
-		//  0x2C-0x33 = all 00s (8 00s to be exact, which is room for 2 uints)
-
-		//  0x34 (uint) = 8 (Uses file endianness)
-		//  0x38 = (uint_LE) = [magic1] 0x0034BAB8 in PS2, 0x003ABCE0 in WII
-
-		//  0x3C-0x5B = all 00s (room for 8 uints)
-		//  0x5C = (LE)0x0009
-		//  <
-		//   0x5E: [OneBeeString] = "t01_phx_props_nodmg"
-		//   0x77: [OneAyyArray](0)
-		//   0x7D: [OneAyyArray](8) // each entry is variable length
-		//   {
-		//    [magic1]
-		//    0x3C 00s (which is room for 16 uints)
-		//    9 floats using file endianness
-		//    (LE)0x0009
-		//    <
-		//     [OneBeeString] // collision shape
-		//     [OneBeeString] = ""
-		//     [OneAyyArray](0)
-		//     [OneAyyArray](0)
-		//     [OneAyyArray](0)
-		//     [OneAyyArray](0)
-		//     [OneAyyArray](0)
-		//     (LE)0x001C
-		//    >
-		//   }
-		//   [OneAyyArray](0)
-		//   (LE)0x001C
-		//  >
-		//  (LE)0x0000
 
 		// replay_list.xds
 		//  0x00-0x0F = Header
@@ -236,6 +196,34 @@ internal sealed class XDSFile
 			throw new Exception();
 		}
 	}
+	internal static void AssertValue(float value, float expected)
+	{
+		if (value != expected)
+		{
+			throw new Exception();
+		}
+	}
+	internal static void AssertValue(Vector3 value, Vector3 expected)
+	{
+		if (value != expected)
+		{
+			throw new Exception();
+		}
+	}
+	internal static void AssertValueNot(float value, float expected)
+	{
+		if (value == expected)
+		{
+			throw new Exception();
+		}
+	}
+	internal static void AssertValueNot(Vector3 value, Vector3 expected)
+	{
+		if (value == expected)
+		{
+			throw new Exception();
+		}
+	}
 	internal uint ReadFileUInt32(EndianBinaryReader r)
 	{
 		r.Endianness = Endianness;
@@ -243,10 +231,30 @@ internal sealed class XDSFile
 		r.Endianness = Endianness.LittleEndian;
 		return val;
 	}
+	internal float ReadFileSingle(EndianBinaryReader r)
+	{
+		r.Endianness = Endianness;
+		float val = r.ReadSingle();
+		r.Endianness = Endianness.LittleEndian;
+		return val;
+	}
+	internal Vector3 ReadFileVector3(EndianBinaryReader r)
+	{
+		r.Endianness = Endianness;
+		Vector3 val = r.ReadVector3();
+		r.Endianness = Endianness.LittleEndian;
+		return val;
+	}
 	internal void ReadFileSingles(EndianBinaryReader r, Span<float> dest)
 	{
 		r.Endianness = Endianness;
 		r.ReadSingles(dest);
+		r.Endianness = Endianness.LittleEndian;
+	}
+	internal void ReadFileUInt16s(EndianBinaryReader r, Span<ushort> dest)
+	{
+		r.Endianness = Endianness;
+		r.ReadUInt16s(dest);
 		r.Endianness = Endianness.LittleEndian;
 	}
 
@@ -257,6 +265,7 @@ internal sealed class XDSFile
 			case 0x51C55993: return new SpeechStringsChunk(r, this); // track_registry.xds - These two just happen to look the same.
 			case 0x9056EE72: return new VehicleRegistryChunk(r, this);
 			case 0x91DB494E: return new SpeechStringsChunk(r, this);
+			case 0xAB90DE70: return new PhysicsPropsChunk(r, this);
 		}
 
 		//throw new Exception($"Type not supported: 0x{FileType:X8}");

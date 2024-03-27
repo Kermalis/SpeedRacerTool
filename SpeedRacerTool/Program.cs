@@ -43,6 +43,15 @@ internal sealed class Program
 
 		foreach (string PATH in Directory.GetFiles(DIR, "*.xds", SearchOption.AllDirectories))
 		{
+			/*if (PATH.Contains("ps2_ps2"))
+			{
+				continue; // SKIP PS2
+			}*/
+			/*if (PATH.Contains("Original WII"))
+			{
+				continue; // SKIP WII
+			}*/
+
 			Console.WriteLine("Opening {0}", PATH);
 
 			using (FileStream s = File.OpenRead(PATH))

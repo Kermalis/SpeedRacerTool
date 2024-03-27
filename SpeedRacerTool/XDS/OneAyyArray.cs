@@ -13,4 +13,9 @@ internal struct OneAyyArray<T>
 
 		Values = new T[r.ReadUInt16()];
 	}
+
+	public override readonly string ToString()
+	{
+		return $"{typeof(T)}[{Values.Length}]";
+	}
 }
