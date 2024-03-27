@@ -1,8 +1,10 @@
 ﻿using Kermalis.EndianBinaryIO;
 using System;
+using System.Diagnostics;
 
 namespace Kermalis.SpeedRacerTool.XDS;
 
+[DebuggerDisplay("{" + nameof(Values) + "}")]
 internal struct OneAyyArray<T>
 {
 	public T[] Values;
@@ -14,14 +16,7 @@ internal struct OneAyyArray<T>
 		XDSFile.AssertValue(r.ReadUInt16(), 0x0002);
 
 		ushort num = r.ReadUInt16();
-		if (num == 0)
-		{
-			Values = [];
-		}
-		else
-		{
-			Values = new T[num];
-		}
+		Values = num == 0 ? [] : new T[num];
 	}
 
 	/// <summary>Does not write the elements</summary>
@@ -39,6 +34,6 @@ internal struct OneAyyArray<T>
 
 	public override readonly string ToString()
 	{
-		return $"{typeof(T)}[{Values.Length}]";
+		return Values.ToString()!;
 	}
 }
