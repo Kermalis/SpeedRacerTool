@@ -10,12 +10,12 @@ internal sealed class XDSFile
 	public readonly Endianness Endianness;
 	public uint FileType;
 	public byte Unk24;
-	public byte Unk25;
-	public ushort Unk26;
+	/// <summary>The amount of nodes in the MabStream (not nodes within nodes)</summary>
+	public ushort NumMabStreamNodes;
 
-	public readonly XDSChunk Chunk;
+	public readonly XDSChunk? Chunk;
 
-	public XDSFile(Stream s)
+	public XDSFile(Stream s, bool throwIfNotSupported)
 	{
 		var r = new EndianBinaryReader(s, ascii: true);
 
@@ -34,17 +34,14 @@ internal sealed class XDSFile
 			default: throw new InvalidDataException("Invalid endianness: " + endianChar);
 		}
 
-		byte unk9 = r.ReadByte(); // Always 4
-		AssertValue(unk9, 4);
-		ushort unkA = r.ReadUInt16(); // Always 0x0001
-		AssertValue(unkA, 0x0001);
-		FileType = r.ReadUInt32(); // Seems to indicate the type of file. All t01 physics ones are 0xAB90DE70 for example, between PS2 and WII
-		ushort unk10 = r.ReadUInt16(); // Always 0x0002
-		AssertValue(unk10, 0x0002);
-		ushort unk12 = r.ReadUInt16(); // Always 0x000A
-		AssertValue(unk12, 0x000A);
-		byte unk14 = r.ReadByte(); // Always 0x09
-		AssertValue(unk14, 0x09);
+		AssertValue(r.ReadByte(), 4); // Unk9
+		AssertValue(r.ReadUInt16(), 0x0001); // UnkA
+
+		FileType = r.ReadUInt32();
+
+		AssertValue(r.ReadUInt16(), 0x0002); // Unk10
+		AssertValue(r.ReadUInt16(), 0x000A); // Unk12
+		AssertValue(r.ReadByte(), 0x09); // Unk14
 
 		Span<char> mabStream = stackalloc char[9];
 		r.ReadChars(mabStream);
@@ -53,27 +50,34 @@ internal sealed class XDSFile
 			throw new Exception();
 		}
 
-		ushort unk1E = r.ReadUInt16(); // Always 0x0100
-		AssertValue(unk1E, 0x0100);
+		AssertValue(r.ReadUInt16(), 0x0100); // Unk1E
 
 		uint fileLength = r.ReadUInt32();
 		Unk24 = r.ReadByte();
-		byte unk25 = r.ReadByte();
-		AssertValue(unk25, 0x01); // Always 0x01
 
+		AssertValue(r.ReadByte(), 0x01); // Unk25
+
+		// Validate fileLength
 		AssertValue(fileLength, (ulong)(r.Stream.Length - r.Stream.Position));
 
-		Unk26 = r.ReadUInt16();
-		AssertValueNot(Unk26, 0x0000);
-		Console.WriteLine("FileType=0x{0:X8}, Unk24=0x{1:X2}, Unk26=0x{2:X4}", FileType, Unk24, Unk26);
-		Console.WriteLine();
+		NumMabStreamNodes = r.ReadUInt16();
+		AssertValueNot(NumMabStreamNodes, 0x0000);
 
 		Chunk = ReadChunk(r);
+
+		Console.WriteLine("FileType=0x{0:X8}, Unk24=0x{1:X2}, NumNodes=0x{2:X4}, ToolType={3}",
+			FileType, Unk24, NumMabStreamNodes, Chunk?.GetType().Name);
+		Console.WriteLine();
+
+		if (throwIfNotSupported && Chunk is null)
+		{
+			throw new Exception($"Type not supported: 0x{FileType:X8}");
+		}
 
 		// TODO NOTES:
 		// All files end with (LE)0x001C (LE)0x0000. Maybe the 0x1C is like an end tag in an xml, and the 0x00 is a "end file" operation
 		// Opcodes seem to be 2 bytes, always LE
-		// [magic1]= Some uint_LE that they are similar between files. PS2 values are 0x34XXXX or 0x42XXXX. WII values are 0x3AXXXX. Might be an allocator for OneAyyArray below
+		// [magic1] = Some uint_LE that they are similar between files. PS2 values are 0x34XXXX or 0x42XXXX. WII values are 0x3AXXXX. Might be an allocator for OneAyyArray below
 
 		// These come after a (LE)0x0009 (which seems to indicate "new node"). It comes shortly after a "magic1" value
 		//  [OneAyyArray] = (LE)0x001A (LE)0x0002. seems to be an opcode for "ushort_LE (len)" followed by entries of variable structure and size
@@ -87,7 +91,7 @@ internal sealed class XDSFile
 		//  (uint_LE) = length of the data from Unk26 to the end
 		//  (byte) = ??? Unk24. Seems to affect how the following data is read, but not by much. So it might be an opcode or bitflags
 		//  (byte) = 0x01
-		//  (ushort_LE) = ??? Unk26. Seems related to the amount of nodes in the MabStream (not nodes within nodes)
+		//  (ushort_LE) = NumNodes
 
 
 		// editor_template.xds is similar to the t01.xds in the PS2. It's interesting
@@ -100,7 +104,7 @@ internal sealed class XDSFile
 		//  0x10-0x25 = MabStream header
 		//   len = 0xC0
 		//   Unk24 = 0x06
-		//   Unk26 = 0x0001, which is the amount of nodes below
+		//   NumNodes = 0x0001
 
 		//  0x28 (uint) = amount of tracks (Uses file endianness). 5 for both... skorost is missing in PS2 version
 		//  0x2C (uint_LE) = [magic1] 0x00346FD0 in PS2, 0x003A71F0 in WII
@@ -121,7 +125,7 @@ internal sealed class XDSFile
 		//  0x10-0x25 = MabStream header
 		//   len = 0x27A
 		//   Unk24 = 0x08
-		//   Unk26 = 0x0001
+		//   NumNodes = 0x0001
 
 		//  0x28 (uint) = 4 (Uses file endianness, happens to be the number of event entries too)
 		//  0x2C (uint_LE) = [magic1] 0x00347800 in PS2, 0x003A7A20 in WII. (Difference of 0x830 from the magic1 in replay_list.xds)
@@ -148,7 +152,7 @@ internal sealed class XDSFile
 		//  0x10-0x25 = MabStream header
 		//   len = 0x11A9 in PS2, 0xEAF in WII
 		//   Unk24 = 0x0F
-		//   Unk26 = 0x0001
+		//   NumNodes = 0x0001
 		//  0x28 (uint_LE) = [magic1] 0x0034B390 in PS2, 0x003AA5E8 in WII.
 
 		//  0x2C (uint) = num entries (Uses file endianness). 0x2A in PS2, 0x23 in WII
@@ -259,7 +263,20 @@ internal sealed class XDSFile
 		r.Endianness = Endianness.LittleEndian;
 	}
 
-	private XDSChunk ReadChunk(EndianBinaryReader r)
+	internal static void ReadNodeStart(EndianBinaryReader r)
+	{
+		AssertValue(r.ReadUInt16(), 0x0009);
+	}
+	internal static void ReadNodeEnd(EndianBinaryReader r)
+	{
+		AssertValue(r.ReadUInt16(), 0x001C);
+	}
+	internal static void ReadChunkEnd(EndianBinaryReader r)
+	{
+		AssertValue(r.ReadUInt16(), 0x0000);
+	}
+
+	private XDSChunk? ReadChunk(EndianBinaryReader r)
 	{
 		switch (FileType)
 		{
@@ -268,9 +285,6 @@ internal sealed class XDSFile
 			case 0x91DB494E: return new SpeechStringsChunk(r, this);
 			case 0xAB90DE70: return new PhysicsPropsChunk(r, this);
 		}
-
-		//throw new Exception($"Type not supported: 0x{FileType:X8}");
-		// For testing:
-		return null!;
+		return null;
 	}
 }

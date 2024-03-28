@@ -47,31 +47,33 @@ internal sealed class VehicleRegistryChunk : XDSChunk
 
 	public MagicValue Magic;
 	public string Timestamp;
+
 	public OneAyyArray<Entry> Entries;
 
 	internal VehicleRegistryChunk(EndianBinaryReader r, XDSFile xds)
 	{
 		XDSFile.AssertValue(xds.Unk24, 0x06);
-		XDSFile.AssertValue(xds.Unk26, 0x0001);
+		XDSFile.AssertValue(xds.NumMabStreamNodes, 0x0001);
 
 		uint numDrivers = xds.ReadFileUInt32(r);
 		Magic = new MagicValue(r);
 
 		Timestamp = r.ReadString_Count_TrimNullTerminators(0x20);
 
-		XDSFile.AssertValue(r.ReadUInt16(), 0x0009);
+		// NODE START
+		XDSFile.ReadNodeStart(r);
 
 		Entries = new OneAyyArray<Entry>(r);
-
 		XDSFile.AssertValue((ulong)Entries.Values.Length, numDrivers);
-
 		for (int i = 0; i < Entries.Values.Length; i++)
 		{
 			Entries.Values[i] = new Entry(r, xds);
 		}
 
-		XDSFile.AssertValue(r.ReadUInt16(), 0x001C);
-		XDSFile.AssertValue(r.ReadUInt16(), 0x0000);
+		XDSFile.ReadNodeEnd(r);
+		// NODE END
+
+		XDSFile.ReadChunkEnd(r);
 	}
 
 	// vehicle_registry.xds - driver data
@@ -80,7 +82,7 @@ internal sealed class VehicleRegistryChunk : XDSChunk
 	//  0x10-0x25 = MabStream header
 	//   len = 0x1CEC in PS2, 0x172E in WII
 	//   Unk24 = 0x06
-	//   Unk26 = 0x0001, which is the amount of nodes below
+	//   NumNodes = 0x0001
 
 	//  0x28 (uint) = amount of drivers (Uses file endianness). 25 in PS2, 20 in WII
 	//  0x2C (uint_LE) = [magic1] 0x00422008 in PS2, 0x003ACD68 in WII

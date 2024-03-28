@@ -71,7 +71,7 @@ internal sealed class Program
 
 		using (FileStream s = File.OpenRead(PATH))
 		{
-			var xds = new XDSFile(s);
+			var xds = new XDSFile(s, true);
 
 			;
 		}
@@ -84,7 +84,7 @@ internal sealed class Program
 
 			using (FileStream s = File.OpenRead(PATH))
 			{
-				var xds = new XDSFile(s);
+				var xds = new XDSFile(s, false);
 
 				;
 			}

@@ -40,6 +40,7 @@ internal sealed class PhysicsPropsChunk : XDSChunk
 		public Vector3 BoxScale;
 		public Vector3 EulerRot; // TODO: Verify
 		public Vector3 Pos; // TODO: Verify
+
 		public OneBeeString CollisionShape;
 		public OneAyyArray<ConvexData1> ConvexArray1;
 		public OneAyyArray<ConvexData2> ConvexArray2;
@@ -77,7 +78,8 @@ internal sealed class PhysicsPropsChunk : XDSChunk
 			EulerRot = xds.ReadFileVector3(r);
 			Pos = xds.ReadFileVector3(r);
 
-			XDSFile.AssertValue(r.ReadUInt16(), 0x0009);
+			// NODE START
+			XDSFile.ReadNodeStart(r);
 
 			CollisionShape = new OneBeeString(r);
 
@@ -177,7 +179,8 @@ internal sealed class PhysicsPropsChunk : XDSChunk
 			emptyArr = new OneAyyArray<object>(r);
 			XDSFile.AssertValue((ulong)emptyArr.Values.Length, 0);
 
-			XDSFile.AssertValue(r.ReadUInt16(), 0x001C);
+			XDSFile.ReadNodeEnd(r);
+			// NODE END
 		}
 
 		public override string ToString()
@@ -195,7 +198,7 @@ internal sealed class PhysicsPropsChunk : XDSChunk
 	internal PhysicsPropsChunk(EndianBinaryReader r, XDSFile xds)
 	{
 		XDSFile.AssertValue(xds.Unk24, 0x24);
-		XDSFile.AssertValue(xds.Unk26, 0x0001);
+		XDSFile.AssertValue(xds.NumMabStreamNodes, 0x0001);
 
 		Magic28 = new MagicValue(r);
 
@@ -212,7 +215,8 @@ internal sealed class PhysicsPropsChunk : XDSChunk
 			XDSFile.AssertValue(r.ReadUInt32(), 0x00000000);
 		}
 
-		XDSFile.AssertValue(r.ReadUInt16(), 0x0009);
+		// NODE START
+		XDSFile.ReadNodeStart(r);
 
 		Name = new OneBeeString(r);
 
@@ -221,7 +225,6 @@ internal sealed class PhysicsPropsChunk : XDSChunk
 
 		Entries = new OneAyyArray<Entry>(r);
 		XDSFile.AssertValue((ulong)Entries.Values.Length, numEntries);
-
 		for (int i = 0; i < Entries.Values.Length; i++)
 		{
 			Entries.Values[i] = new Entry(r, xds);
@@ -230,8 +233,10 @@ internal sealed class PhysicsPropsChunk : XDSChunk
 		emptyArr = new OneAyyArray<object>(r);
 		XDSFile.AssertValue((ulong)emptyArr.Values.Length, 0);
 
-		XDSFile.AssertValue(r.ReadUInt16(), 0x001C);
-		XDSFile.AssertValue(r.ReadUInt16(), 0x0000);
+		XDSFile.ReadNodeEnd(r);
+		// NODE END
+
+		XDSFile.ReadChunkEnd(r);
 	}
 
 	// t01_phx_props_nodmg.xds - track data
@@ -240,7 +245,7 @@ internal sealed class PhysicsPropsChunk : XDSChunk
 	//  0x10-0x25 = MabStream header
 	//   len = 0x50F
 	//   Unk24 = 0x24
-	//   Unk26 = 0x0001
+	//   NumNodes = 0x0001
 	//  0x28 = (uint_LE) = [magic1] 0x0034BA98 in PS2, 0x003ABCC0 in WII
 	//  0x2C-0x33 = all 00s (8 00s to be exact, which is room for 2 uints)
 

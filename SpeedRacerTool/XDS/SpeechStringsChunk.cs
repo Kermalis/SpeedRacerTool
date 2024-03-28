@@ -11,12 +11,14 @@ internal sealed class SpeechStringsChunk : XDSChunk
 
 		internal Entry(EndianBinaryReader r)
 		{
-			XDSFile.AssertValue(r.ReadUInt16(), 0x0009);
+			// NODE START
+			XDSFile.ReadNodeStart(r);
 
 			TextID = new OneBeeString(r);
 			Text = new OneBeeString(r);
 
-			XDSFile.AssertValue(r.ReadUInt16(), 0x001C);
+			XDSFile.ReadNodeEnd(r);
+			// NODE END
 		}
 
 		public override string ToString()
@@ -26,23 +28,23 @@ internal sealed class SpeechStringsChunk : XDSChunk
 	}
 
 	public MagicValue[] Magics;
+
 	public Entry[] Entries;
 
 	internal SpeechStringsChunk(EndianBinaryReader r, XDSFile xds)
 	{
 		XDSFile.AssertValue(xds.Unk24, 0x06);
 
-		Magics = new MagicValue[xds.Unk26 * 2];
+		Magics = new MagicValue[xds.NumMabStreamNodes * 2];
 		MagicValue.ReadArray(r, Magics);
 
-		Entries = new Entry[xds.Unk26];
-
+		Entries = new Entry[xds.NumMabStreamNodes];
 		for (int i = 0; i < Entries.Length; i++)
 		{
 			Entries[i] = new Entry(r);
 		}
 
-		XDSFile.AssertValue(r.ReadUInt16(), 0x0000);
+		XDSFile.ReadChunkEnd(r);
 	}
 
 	// track_registry.xds - track data
@@ -51,7 +53,7 @@ internal sealed class SpeechStringsChunk : XDSChunk
 	//  0x10-0x25 = MabStream header
 	//   len = 0xD2 in PS2, 0xB0 in WII
 	//   Unk24 = 0x06
-	//   Unk26 = amount of tracks. 6 in PS2, 5 in WII. This corresponds with the amount of nodes below.
+	//   NumNodes = amount of tracks. 6 in PS2, 5 in WII
 	//  0x28 = 2 [magic1] values per track. So 12 in PS2, 10 in WII. This corresponds with the amount of [OneBeeString] below.
 	//  [numTracks array elements]
 	//  {
@@ -70,7 +72,7 @@ internal sealed class SpeechStringsChunk : XDSChunk
 	//  0x10-0x25 = MabStream header
 	//   len = 0x20620 PS2, 0x20EC6 WII
 	//   Unk24 = 0x06
-	//   Unk26 = 0x073C (1,852). There are 1,852 nodes below.
+	//   NumNodes = 0x073C (1,852)
 	//  0x28-0x3A07 = 0xE78 (3,704) [magic1] values, 2 per the above value (like track_registry.xds). There are also 3,704 [OneBeeString] below. Interestingly, the 2nd value of each pair is the smaller value, unlike track_registry.
 	//  [1,852 array elements]
 	//  {
