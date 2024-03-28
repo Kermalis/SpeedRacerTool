@@ -8,14 +8,12 @@ internal sealed class PhysicsPropsChunk : XDSChunk
 {
 	public sealed class Entry
 	{
-		public sealed class ConvexData1
 		{
-			public ushort[] Data;
 
 			internal ConvexData1(EndianBinaryReader r, XDSFile xds)
 			{
-				Data = new ushort[4];
-				xds.ReadFileUInt16s(r, Data);
+				VertexIndices = new ushort[3];
+				xds.ReadFileUInt16s(r, VertexIndices);
 			}
 		}
 		public sealed class ConvexData2
@@ -32,7 +30,6 @@ internal sealed class PhysicsPropsChunk : XDSChunk
 		public MagicValue Magic0;
 		public MagicValue MagicC;
 		public MagicValue Magic14;
-		public uint Unk18;
 		public uint Unk1C;
 		public MagicValue Magic2C;
 		public float Radius;
@@ -56,7 +53,6 @@ internal sealed class PhysicsPropsChunk : XDSChunk
 			MagicC = new MagicValue(r);
 			uint numConvex2 = xds.ReadFileUInt32(r);
 			Magic14 = new MagicValue(r);
-			Unk18 = xds.ReadFileUInt32(r);
 			Unk1C = xds.ReadFileUInt32(r);
 
 			for (int i = 0; i < 2; i++)
