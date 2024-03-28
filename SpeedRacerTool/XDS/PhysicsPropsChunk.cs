@@ -194,7 +194,7 @@ internal sealed class PhysicsPropsChunk : XDSChunk
 
 	internal PhysicsPropsChunk(EndianBinaryReader r, XDSFile xds)
 	{
-		XDSFile.AssertValue(xds.Unk24, 0x0124);
+		XDSFile.AssertValue(xds.Unk24, 0x24);
 		XDSFile.AssertValue(xds.Unk26, 0x0001);
 
 		Magic28 = new MagicValue(r);
@@ -239,8 +239,8 @@ internal sealed class PhysicsPropsChunk : XDSChunk
 	//   fileType = 0xAB90DE70
 	//  0x10-0x25 = MabStream header
 	//   len = 0x50F
-	//   Unk24 = 0x0124
-	//  0x26 (ushort_LE) = 0x0001
+	//   Unk24 = 0x24
+	//   Unk26 = 0x0001
 	//  0x28 = (uint_LE) = [magic1] 0x0034BA98 in PS2, 0x003ABCC0 in WII
 	//  0x2C-0x33 = all 00s (8 00s to be exact, which is room for 2 uints)
 

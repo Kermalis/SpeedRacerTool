@@ -9,7 +9,8 @@ internal sealed class XDSFile
 {
 	public readonly Endianness Endianness;
 	public uint FileType;
-	public ushort Unk24;
+	public byte Unk24;
+	public byte Unk25;
 	public ushort Unk26;
 
 	public readonly XDSChunk Chunk;
@@ -56,16 +57,15 @@ internal sealed class XDSFile
 		AssertValue(unk1E, 0x0100);
 
 		uint fileLength = r.ReadUInt32();
-		Unk24 = r.ReadUInt16();
+		Unk24 = r.ReadByte();
+		byte unk25 = r.ReadByte();
+		AssertValue(unk25, 0x01); // Always 0x01
 
 		AssertValue(fileLength, (ulong)(r.Stream.Length - r.Stream.Position));
 
 		Unk26 = r.ReadUInt16();
-		if (Unk26 == 0)
-		{
-			throw new Exception();
-		}
-		Console.WriteLine("FileType=0x{0:X8}, Unk24=0x{1:X4}, Unk26=0x{2:X4}", FileType, Unk24, Unk26);
+		AssertValueNot(Unk26, 0x0000);
+		Console.WriteLine("FileType=0x{0:X8}, Unk24=0x{1:X2}, Unk26=0x{2:X4}", FileType, Unk24, Unk26);
 		Console.WriteLine();
 
 		Chunk = ReadChunk(r);
@@ -84,9 +84,10 @@ internal sealed class XDSFile
 		//  (LE)0x0002 (LE)0x000A seems to be the opcode
 		//  The following byte is the length of the str (always "MabStream")
 		//  (LE)0x0100
-		//  (uint_LE) = length of the data (starts counting after the next 2 bytes)
-		//  (ushort_LE) = ??? Unk24. Seems to affect how the following data is read, but not by much. So it might be an opcode or bitflags
-		//   // For example, 0x0106 is followed by a ushort_LE, which may indicate num magic1
+		//  (uint_LE) = length of the data from Unk26 to the end
+		//  (byte) = ??? Unk24. Seems to affect how the following data is read, but not by much. So it might be an opcode or bitflags
+		//  (byte) = 0x01
+		//  (ushort_LE) = ??? Unk26. Seems related to the amount of nodes in the MabStream (not nodes within nodes)
 
 
 		// editor_template.xds is similar to the t01.xds in the PS2. It's interesting
@@ -98,8 +99,8 @@ internal sealed class XDSFile
 		//   fileType = 0xAA55B8C0
 		//  0x10-0x25 = MabStream header
 		//   len = 0xC0
-		//   Unk24 = 0x0106
-		//  0x26 (ushort_LE) = 0x0001, which is the amount of nodes below
+		//   Unk24 = 0x06
+		//   Unk26 = 0x0001, which is the amount of nodes below
 
 		//  0x28 (uint) = amount of tracks (Uses file endianness). 5 for both... skorost is missing in PS2 version
 		//  0x2C (uint_LE) = [magic1] 0x00346FD0 in PS2, 0x003A71F0 in WII
@@ -119,8 +120,8 @@ internal sealed class XDSFile
 		//   fileType = 0x1D0D4974
 		//  0x10-0x25 = MabStream header
 		//   len = 0x27A
-		//   Unk24 = 0x0108
-		//  0x26 (ushort_LE) = 0x0001
+		//   Unk24 = 0x08
+		//   Unk26 = 0x0001
 
 		//  0x28 (uint) = 4 (Uses file endianness, happens to be the number of event entries too)
 		//  0x2C (uint_LE) = [magic1] 0x00347800 in PS2, 0x003A7A20 in WII. (Difference of 0x830 from the magic1 in replay_list.xds)
@@ -146,8 +147,8 @@ internal sealed class XDSFile
 		//   fileType = 0x5F3A7F1E
 		//  0x10-0x25 = MabStream header
 		//   len = 0x11A9 in PS2, 0xEAF in WII
-		//   Unk24 = 0x010F
-		//  0x26 (ushort_LE) = 0x0001
+		//   Unk24 = 0x0F
+		//   Unk26 = 0x0001
 		//  0x28 (uint_LE) = [magic1] 0x0034B390 in PS2, 0x003AA5E8 in WII.
 
 		//  0x2C (uint) = num entries (Uses file endianness). 0x2A in PS2, 0x23 in WII
