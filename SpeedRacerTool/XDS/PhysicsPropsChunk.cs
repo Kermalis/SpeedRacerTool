@@ -8,15 +8,20 @@ internal sealed class PhysicsPropsChunk : XDSChunk
 {
 	public sealed class Entry
 	{
+		/// <summary>The 3 vertices to use to create a triangle, like how .obj works</summary>
+		public struct ConvexData1
 		{
+			public ushort[] VertexIndices;
 
 			internal ConvexData1(EndianBinaryReader r, XDSFile xds)
 			{
 				VertexIndices = new ushort[3];
 				xds.ReadFileUInt16s(r, VertexIndices);
+				XDSFile.AssertValue(r.ReadUInt16(), 0x0000);
 			}
 		}
-		public sealed class ConvexData2
+		/// <summary>The vertices that are available to the convex</summary>
+		public struct ConvexData2
 		{
 			public Vector3 Data;
 
@@ -30,7 +35,8 @@ internal sealed class PhysicsPropsChunk : XDSChunk
 		public MagicValue Magic0;
 		public MagicValue MagicC;
 		public MagicValue Magic14;
-		public uint Unk1C;
+		public uint HeightfieldWL1; // Which is width and which is length?
+		public uint HeightfieldWL2;
 		public MagicValue Magic2C;
 		public float Radius;
 		public float CapsuleHeight;
@@ -41,7 +47,7 @@ internal sealed class PhysicsPropsChunk : XDSChunk
 		public OneBeeString CollisionShape;
 		public OneAyyArray<ConvexData1> ConvexArray1;
 		public OneAyyArray<ConvexData2> ConvexArray2;
-		public OneAyyArray<uint> HeightfieldData; // TODO: What are the values?
+		public OneAyyArray<uint> HeightfieldData; // TODO: The values indicate how high off the ground this x/z coordinate is, but what unit?
 
 		internal Entry(EndianBinaryReader r, XDSFile xds)
 		{
@@ -53,7 +59,8 @@ internal sealed class PhysicsPropsChunk : XDSChunk
 			MagicC = new MagicValue(r);
 			uint numConvex2 = xds.ReadFileUInt32(r);
 			Magic14 = new MagicValue(r);
-			Unk1C = xds.ReadFileUInt32(r);
+			HeightfieldWL1 = xds.ReadFileUInt32(r);
+			HeightfieldWL2 = xds.ReadFileUInt32(r);
 
 			for (int i = 0; i < 2; i++)
 			{
@@ -86,6 +93,8 @@ internal sealed class PhysicsPropsChunk : XDSChunk
 					XDSFile.AssertValue(Radius, 0);
 					XDSFile.AssertValue(CapsuleHeight, 0);
 					XDSFile.AssertValueNot(BoxScale, Vector3.Zero);
+					XDSFile.AssertValue(HeightfieldWL1, 0);
+					XDSFile.AssertValue(HeightfieldWL2, 0);
 					XDSFile.AssertValue(numConvex1, 0);
 					XDSFile.AssertValue(numConvex2, 0);
 					XDSFile.AssertValue(numHeightfieldData, 0);
@@ -96,6 +105,8 @@ internal sealed class PhysicsPropsChunk : XDSChunk
 					XDSFile.AssertValueNot(Radius, 0);
 					XDSFile.AssertValueNot(CapsuleHeight, 0);
 					XDSFile.AssertValue(BoxScale, Vector3.Zero);
+					XDSFile.AssertValue(HeightfieldWL1, 0);
+					XDSFile.AssertValue(HeightfieldWL2, 0);
 					XDSFile.AssertValue(numConvex1, 0);
 					XDSFile.AssertValue(numConvex2, 0);
 					XDSFile.AssertValue(numHeightfieldData, 0);
@@ -108,6 +119,8 @@ internal sealed class PhysicsPropsChunk : XDSChunk
 					XDSFile.AssertValue(BoxScale, Vector3.Zero);
 					XDSFile.AssertValue(EulerRot, Vector3.Zero);
 					XDSFile.AssertValue(Pos, Vector3.Zero);
+					XDSFile.AssertValue(HeightfieldWL1, 0);
+					XDSFile.AssertValue(HeightfieldWL2, 0);
 					XDSFile.AssertValueNot(numConvex1, 0);
 					XDSFile.AssertValueNot(numConvex2, 0);
 					XDSFile.AssertValue(numHeightfieldData, 0);
@@ -118,9 +131,12 @@ internal sealed class PhysicsPropsChunk : XDSChunk
 					XDSFile.AssertValue(Radius, 0);
 					XDSFile.AssertValue(CapsuleHeight, 0);
 					XDSFile.AssertValueNot(BoxScale, Vector3.Zero);
+					XDSFile.AssertValueNot(HeightfieldWL1, 0);
+					XDSFile.AssertValueNot(HeightfieldWL2, 0);
 					XDSFile.AssertValue(numConvex1, 0);
 					XDSFile.AssertValue(numConvex2, 0);
 					XDSFile.AssertValueNot(numHeightfieldData, 0);
+					XDSFile.AssertValue(numHeightfieldData, HeightfieldWL1 * HeightfieldWL2);
 					break;
 				}
 				case "MESH": // PS2 version doesn't use this
@@ -130,6 +146,8 @@ internal sealed class PhysicsPropsChunk : XDSChunk
 					XDSFile.AssertValue(BoxScale, Vector3.Zero);
 					XDSFile.AssertValue(EulerRot, Vector3.Zero);
 					XDSFile.AssertValue(Pos, Vector3.Zero);
+					XDSFile.AssertValue(HeightfieldWL1, 0);
+					XDSFile.AssertValue(HeightfieldWL2, 0);
 					XDSFile.AssertValueNot(numConvex1, 0);
 					XDSFile.AssertValueNot(numConvex2, 0);
 					XDSFile.AssertValue(numHeightfieldData, 0);
@@ -140,6 +158,8 @@ internal sealed class PhysicsPropsChunk : XDSChunk
 					XDSFile.AssertValueNot(Radius, 0);
 					XDSFile.AssertValue(CapsuleHeight, 0);
 					XDSFile.AssertValue(BoxScale, Vector3.Zero);
+					XDSFile.AssertValue(HeightfieldWL1, 0);
+					XDSFile.AssertValue(HeightfieldWL2, 0);
 					XDSFile.AssertValue(numConvex1, 0);
 					XDSFile.AssertValue(numConvex2, 0);
 					XDSFile.AssertValue(numHeightfieldData, 0);
