@@ -25,6 +25,7 @@ internal sealed class Program
 
 	private static void Main()
 	{
+		const string LOG_PATH = @"Log.txt";
 		const string ISO_PATH = @"C:\Users\Kermalis\Documents\Emulation\PS2\Games\";
 		const string MODDED_PS2_ZIP_FILE = @"C:\Users\Kermalis\Documents\Emulation\PS2\Hacking\Speed Racer PS2 and WII rip\Mod Test\ISO Contents\DATA\PS2.ZIP";
 
@@ -32,32 +33,37 @@ internal sealed class Program
 		const string RIPPED_PS2_PATH = RIPPED_PATH + @"Original PS2.ZIP ps2_ps2\";
 		const string RIPPED_WII_PATH = RIPPED_PATH + @"Original WII rip\";
 
-		ProgramAction a = ProgramAction.PatchISO_PS2;
-
-		switch (a)
+		using (StreamWriter log = File.CreateText(LOG_PATH))
 		{
-			case ProgramAction.PatchISO_PS2:
+			Console.SetOut(log);
+
+			ProgramAction a = ProgramAction.TestEveryXDS;
+
+			switch (a)
 			{
-				string originalISOFile = ISO_PATH + @"Speed Racer - Original.iso";
-				string newISOFile = ISO_PATH + @"Speed Racer Modded.iso";
-				PatchISO_PS2(originalISOFile, newISOFile, MODDED_PS2_ZIP_FILE);
-				break;
-			}
-			case ProgramAction.TestNIF:
-			{
-				TestNIF();
-				break;
-			}
-			case ProgramAction.TestXDS:
-			{
-				TestXDS();
-				break;
-			}
-			case ProgramAction.TestEveryXDS:
-			{
-				TestEveryXDS(RIPPED_PS2_PATH);
-				TestEveryXDS(RIPPED_WII_PATH);
-				break;
+				case ProgramAction.PatchISO_PS2:
+				{
+					string originalISOFile = ISO_PATH + @"Speed Racer - Original.iso";
+					string newISOFile = ISO_PATH + @"Speed Racer Modded.iso";
+					PatchISO_PS2(originalISOFile, newISOFile, MODDED_PS2_ZIP_FILE);
+					break;
+				}
+				case ProgramAction.TestNIF:
+				{
+					TestNIF();
+					break;
+				}
+				case ProgramAction.TestXDS:
+				{
+					TestXDS();
+					break;
+				}
+				case ProgramAction.TestEveryXDS:
+				{
+					TestEveryXDS(RIPPED_PS2_PATH);
+					TestEveryXDS(RIPPED_WII_PATH);
+					break;
+				}
 			}
 		}
 	}
