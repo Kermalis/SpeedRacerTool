@@ -43,6 +43,21 @@ internal sealed class XDSStringBuilder
 			_sb.AppendLine(val.ToString());
 		}
 	}
+	public void AppendLine(string name, ushort val, bool hex = true)
+	{
+		_sb.Append(_curIndentChars);
+		_sb.Append(name);
+		if (hex)
+		{
+			_sb.Append(" = 0x");
+			_sb.AppendLine(val.ToString("X4"));
+		}
+		else
+		{
+			_sb.Append(" = ");
+			_sb.AppendLine(val.ToString());
+		}
+	}
 	public void AppendLine(string name, uint val, bool hex = true)
 	{
 		_sb.Append(_curIndentChars);
@@ -71,6 +86,13 @@ internal sealed class XDSStringBuilder
 		_sb.Append(name);
 		_sb.Append(" = ");
 		AppendLine(val, indent: false);
+	}
+	public void AppendLine_Boolean(string name, bool val)
+	{
+		_sb.Append(_curIndentChars);
+		_sb.Append(name);
+		_sb.Append(" = ");
+		AppendLine(val.ToString(), indent: false);
 	}
 
 	public void Indent(int change)

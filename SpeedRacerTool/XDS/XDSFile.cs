@@ -102,10 +102,6 @@ internal sealed class XDSFile
 		sb.AppendLine(']');
 
 		Console.WriteLine(sb.ToString());
-
-		// editor_template.xds is similar to the t01.xds in the PS2. It's interesting
-		// t01.xds is the endgoal to open.
-		//  Interestingly, PS2 tracks have a different filetype/Unk24 (0xE73FBE05 / 0x0131) than the WII tracks (0xF6EB4F8D / 0x012F)
 	}
 
 	internal static void AssertValue(ulong value, ulong expected)
@@ -191,5 +187,19 @@ internal sealed class XDSFile
 	internal static void ReadNodeEnd(EndianBinaryReader r)
 	{
 		AssertValue(r.ReadUInt16(), 0x001C);
+	}
+
+	internal static string DEBUG_READ_SAFE_STR(EndianBinaryReader r, int numChars)
+	{
+		long offset = r.Stream.Position;
+
+		string str = r.ReadString_NullTerminated();
+		offset += numChars;
+		while (r.Stream.Position != offset)
+		{
+			AssertValue(r.ReadByte(), 0);
+		}
+
+		return str;
 	}
 }

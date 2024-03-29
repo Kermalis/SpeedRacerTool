@@ -29,6 +29,8 @@ internal abstract class XDSChunk
 			case 0x91DB494E: return new SpeechStringsChunk(r, offset, opcode, numNodes);
 			case 0xAA55B8C0: return new ReplayListChunk(r, xds, offset, opcode, numNodes);
 			case 0xAB90DE70: return new PhysicsPropsChunk(r, xds, offset, opcode, numNodes);
+			case 0xE73FBE05: return new PS2TrackChunk(r, xds, offset, opcode, numNodes);
+				//case 0xF6EB4F8D: return new WIITrackChunk(r, xds, offset, opcode, numNodes);
 		}
 		return new XDSUnsupportedChunk(r, offset, opcode, numNodes);
 	}
