@@ -43,14 +43,14 @@ internal sealed class SplinesChunk : XDSChunk
 	}
 
 	public string Name;
-	// These two uints are related. They add to the amount of UnkArray1/UnkArray2
+	// These two uints are related. Their sum is the length of UnkArray1/UnkArray2
 	public uint Unk48;
 	public uint Unk4C;
 	public float Unk50;
-	public MagicValue Unk58;
-	public MagicValue Unk64;
-	public MagicValue Unk6C;
-	public MagicValue Unk74;
+	public MagicValue Magic_UnkArray1;
+	public MagicValue Magic_UnkArray2;
+	public MagicValue Magic_UnkArray3;
+	public MagicValue Magic_EmptyArray;
 	/// <summary>Almost always 1</summary>
 	public float Unk7C;
 	public string UnitOfMeasurement;
@@ -71,14 +71,14 @@ internal sealed class SplinesChunk : XDSChunk
 		Unk4C = xds.ReadFileUInt32(r); // ???
 		Unk50 = xds.ReadFileSingle(r); // ???
 		uint unk54 = xds.ReadFileUInt32(r);
-		Unk58 = new MagicValue(r);
+		Magic_UnkArray1 = new MagicValue(r);
 		uint unk5C = xds.ReadFileUInt32(r);
 		uint unk60 = xds.ReadFileUInt32(r);
-		Unk64 = new MagicValue(r);
-		uint unk68 = xds.ReadFileUInt32(r);
-		Unk6C = new MagicValue(r);
+		Magic_UnkArray2 = new MagicValue(r);
+		uint numUnkArray3 = xds.ReadFileUInt32(r);
+		Magic_UnkArray3 = new MagicValue(r);
 		XDSFile.AssertValue(r.ReadUInt32(), 0);
-		Unk74 = new MagicValue(r);
+		Magic_EmptyArray = new MagicValue(r);
 		XDSFile.AssertValue(r.ReadUInt32(), 0);
 		Unk7C = xds.ReadFileSingle(r);
 		UnitOfMeasurement = r.ReadString_Count_TrimNullTerminators(0x10);
@@ -106,7 +106,7 @@ internal sealed class SplinesChunk : XDSChunk
 
 		UnkArray3 = new OneAyyArray<Array2_3Data>(r);
 		XDSFile.AssertValue((ulong)UnkArray3.Values.Length, Unk48 + unk54 + 1);
-		XDSFile.AssertValue((ulong)UnkArray3.Values.Length, unk68);
+		XDSFile.AssertValue((ulong)UnkArray3.Values.Length, numUnkArray3);
 		for (int i = 0; i < UnkArray3.Values.Length; i++)
 		{
 			UnkArray3.Values[i] = new Array2_3Data(r, xds, false);

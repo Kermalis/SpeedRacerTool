@@ -42,12 +42,12 @@ internal sealed class PhysicsPropsChunk : XDSChunk
 			}
 		}
 
-		public MagicValue Magic0;
-		public MagicValue MagicC;
-		public MagicValue Magic14;
+		public MagicValue Magic_CollisionShape;
+		public MagicValue Magic_ConvexArray1;
+		public MagicValue Magic_ConvexArray2;
 		public uint HeightfieldWL1; // Which is width and which is length?
 		public uint HeightfieldWL2;
-		public MagicValue Magic2C;
+		public MagicValue Magic_HeightfieldData;
 		public float Radius;
 		public float CapsuleHeight;
 		public Vector3 BoxScale;
@@ -62,14 +62,14 @@ internal sealed class PhysicsPropsChunk : XDSChunk
 
 		internal Entry(EndianBinaryReader r, XDSFile xds)
 		{
-			Magic0 = new MagicValue(r);
+			Magic_CollisionShape = new MagicValue(r);
 
 			XDSFile.AssertValue(r.ReadUInt32(), 0x00000000);
 
 			uint numConvex1 = xds.ReadFileUInt32(r);
-			MagicC = new MagicValue(r);
+			Magic_ConvexArray1 = new MagicValue(r);
 			uint numConvex2 = xds.ReadFileUInt32(r);
-			Magic14 = new MagicValue(r);
+			Magic_ConvexArray2 = new MagicValue(r);
 			HeightfieldWL1 = xds.ReadFileUInt32(r);
 			HeightfieldWL2 = xds.ReadFileUInt32(r);
 
@@ -79,7 +79,7 @@ internal sealed class PhysicsPropsChunk : XDSChunk
 			}
 
 			uint numHeightfieldData = xds.ReadFileUInt32(r);
-			Magic2C = new MagicValue(r);
+			Magic_HeightfieldData = new MagicValue(r);
 
 			for (int i = 0; i < 2; i++)
 			{
@@ -269,8 +269,8 @@ internal sealed class PhysicsPropsChunk : XDSChunk
 		}
 	}
 
-	public MagicValue Magic28;
-	public MagicValue Magic38;
+	public MagicValue Magic_Name;
+	public MagicValue Magic_Entries;
 
 	// Node data
 	public OneBeeString Name;
@@ -282,7 +282,7 @@ internal sealed class PhysicsPropsChunk : XDSChunk
 		XDSFile.AssertValue(OpCode, 0x0124);
 		XDSFile.AssertValue(NumNodes, 0x0001);
 
-		Magic28 = new MagicValue(r);
+		Magic_Name = new MagicValue(r);
 
 		for (int i = 0; i < 2; i++)
 		{
@@ -290,7 +290,7 @@ internal sealed class PhysicsPropsChunk : XDSChunk
 		}
 
 		uint numEntries = xds.ReadFileUInt32(r);
-		Magic38 = new MagicValue(r);
+		Magic_Entries = new MagicValue(r);
 
 		for (int i = 0; i < 8; i++)
 		{

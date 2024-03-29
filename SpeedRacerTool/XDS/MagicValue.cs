@@ -4,6 +4,9 @@ using System.Runtime.InteropServices;
 
 namespace Kermalis.SpeedRacerTool.XDS;
 
+/// <summary>Some uint_LE that are similar between files. PS2 values are 0x34XXXX, 0x42XXXX, 0x46XXXX, or 0x4EXXXX. WII values are 0x3AXXXX or 0xB0XXXX.
+/// Probably an allocator for <see cref="OneAyyArray{T}"/> and <see cref="OneBeeString"/>.
+/// If this value is 0, it corresponds with an empty array/string.</summary>
 internal struct MagicValue
 {
 	public uint Value;

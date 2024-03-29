@@ -141,10 +141,12 @@ internal sealed class XDSStringBuilder
 		_sb.Append(_curIndentChars);
 		_sb.AppendLine(str.ToString());
 	}
-
-	public void AppendLine_Quotes(string val)
+	public void AppendLine_Quotes(string val, bool indent = true)
 	{
-		_sb.Append(_curIndentChars);
+		if (indent)
+		{
+			_sb.Append(_curIndentChars);
+		}
 		_sb.Append('"');
 		_sb.Append(val);
 		_sb.Append('"');

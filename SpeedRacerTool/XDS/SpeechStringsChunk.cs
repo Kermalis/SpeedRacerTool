@@ -37,13 +37,13 @@ internal sealed class SpeechStringsChunk : XDSChunk
 	}
 
 	public MagicValue[] Magics;
-
 	public Entry[] Entries;
 
 	internal SpeechStringsChunk(EndianBinaryReader r, int offset, ushort opcode, ushort numNodes)
 		: base(offset, opcode, numNodes)
 	{
 		XDSFile.AssertValue(OpCode, 0x0106);
+		XDSFile.AssertValueNot(NumNodes, 0x0000);
 
 		Magics = new MagicValue[NumNodes * 2];
 		MagicValue.ReadArray(r, Magics);

@@ -77,7 +77,7 @@ internal sealed class VehicleRegistryChunk : XDSChunk
 		}
 	}
 
-	public MagicValue Magic;
+	public MagicValue Magic_Entries;
 	public string Timestamp;
 
 	// Node data
@@ -90,7 +90,7 @@ internal sealed class VehicleRegistryChunk : XDSChunk
 		XDSFile.AssertValue(NumNodes, 0x0001);
 
 		uint numDrivers = xds.ReadFileUInt32(r);
-		Magic = new MagicValue(r);
+		Magic_Entries = new MagicValue(r);
 
 		Timestamp = r.ReadString_Count_TrimNullTerminators(0x20);
 

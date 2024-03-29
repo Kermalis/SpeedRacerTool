@@ -22,9 +22,12 @@ internal abstract class XDSChunk
 		switch (xds.FileType)
 		{
 			case 0x1208BC7C: return new SplinesChunk(r, xds, offset, opcode, numNodes);
+			case 0x1D0D4974: return new InterestingEventGeneratorsChunk(r, xds, offset, opcode, numNodes);
 			case 0x51C55993: return new TrackRegistryChunk(r, offset, opcode, numNodes);
+			case 0x5F3A7F1E: return new ActionMapChunk(r, xds, offset, opcode, numNodes);
 			case 0x9056EE72: return new VehicleRegistryChunk(r, xds, offset, opcode, numNodes);
 			case 0x91DB494E: return new SpeechStringsChunk(r, offset, opcode, numNodes);
+			case 0xAA55B8C0: return new ReplayListChunk(r, xds, offset, opcode, numNodes);
 			case 0xAB90DE70: return new PhysicsPropsChunk(r, xds, offset, opcode, numNodes);
 		}
 		return new XDSUnsupportedChunk(r, offset, opcode, numNodes);
