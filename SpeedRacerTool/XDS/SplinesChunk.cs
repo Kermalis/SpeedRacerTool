@@ -47,10 +47,11 @@ internal sealed class SplinesChunk : XDSChunk
 	public uint Unk48;
 	public uint Unk4C;
 	public float Unk50;
-	public MagicValue Magic_UnkArray1;
-	public MagicValue Magic_UnkArray2;
-	public MagicValue Magic_UnkArray3;
-	public MagicValue Magic_EmptyArray;
+	public Magic_OneAyyArray Magic_UnkArray1;
+	public Magic_OneAyyArray Magic_UnkArray2;
+	public Magic_OneAyyArray Magic_UnkArray3;
+	/// <summary>The magic value is present despite the length being 0</summary>
+	public Magic_OneAyyArray Magic_EmptyArray;
 	/// <summary>Almost always 1</summary>
 	public float Unk7C;
 	public string UnitOfMeasurement;
@@ -70,15 +71,11 @@ internal sealed class SplinesChunk : XDSChunk
 		Unk48 = xds.ReadFileUInt32(r); // ???
 		Unk4C = xds.ReadFileUInt32(r); // ???
 		Unk50 = xds.ReadFileSingle(r); // ???
-		uint unk54 = xds.ReadFileUInt32(r);
-		Magic_UnkArray1 = new MagicValue(r);
+		Magic_UnkArray1 = new Magic_OneAyyArray(r, xds);
 		uint unk5C = xds.ReadFileUInt32(r);
-		uint unk60 = xds.ReadFileUInt32(r);
-		Magic_UnkArray2 = new MagicValue(r);
-		uint numUnkArray3 = xds.ReadFileUInt32(r);
-		Magic_UnkArray3 = new MagicValue(r);
-		XDSFile.AssertValue(r.ReadUInt32(), 0);
-		Magic_EmptyArray = new MagicValue(r);
+		Magic_UnkArray2 = new Magic_OneAyyArray(r, xds);
+		Magic_UnkArray3 = new Magic_OneAyyArray(r, xds);
+		Magic_EmptyArray = new Magic_OneAyyArray(r, xds);
 		XDSFile.AssertValue(r.ReadUInt32(), 0);
 		Unk7C = xds.ReadFileSingle(r);
 		UnitOfMeasurement = r.ReadString_Count_TrimNullTerminators(0x10);
@@ -87,33 +84,33 @@ internal sealed class SplinesChunk : XDSChunk
 		XDSFile.ReadNodeStart(r);
 
 		UnkArray1 = new OneAyyArray<Array1Data>(r);
+		UnkArray1.AssertMatch(Magic_UnkArray1);
 		XDSFile.AssertValue((ulong)UnkArray1.Values.Length, Unk48 + Unk4C);
-		XDSFile.AssertValue((ulong)UnkArray1.Values.Length, unk54);
 		XDSFile.AssertValue((ulong)UnkArray1.Values.Length, unk5C); // If these are all equal, don't need to check them again below
-		XDSFile.AssertValue((ulong)UnkArray1.Values.Length, unk60);
+		XDSFile.AssertValue((ulong)UnkArray1.Values.Length, Magic_UnkArray2.ArrayLen);
 		for (int i = 0; i < UnkArray1.Values.Length; i++)
 		{
 			UnkArray1.Values[i] = new Array1Data(r, xds);
 		}
 
 		UnkArray2 = new OneAyyArray<Array2_3Data>(r);
+		UnkArray2.AssertMatch(Magic_UnkArray2);
 		XDSFile.AssertValue((ulong)UnkArray2.Values.Length, Unk48 + Unk4C);
-		XDSFile.AssertValue((ulong)UnkArray2.Values.Length, unk54);
+		XDSFile.AssertValue((ulong)UnkArray2.Values.Length, unk5C);
 		for (int i = 0; i < UnkArray2.Values.Length; i++)
 		{
 			UnkArray2.Values[i] = new Array2_3Data(r, xds, true);
 		}
 
 		UnkArray3 = new OneAyyArray<Array2_3Data>(r);
-		XDSFile.AssertValue((ulong)UnkArray3.Values.Length, Unk48 + unk54 + 1);
-		XDSFile.AssertValue((ulong)UnkArray3.Values.Length, numUnkArray3);
+		UnkArray3.AssertMatch(Magic_UnkArray3);
+		XDSFile.AssertValue((ulong)UnkArray3.Values.Length, Unk48 + unk5C + 1);
 		for (int i = 0; i < UnkArray3.Values.Length; i++)
 		{
 			UnkArray3.Values[i] = new Array2_3Data(r, xds, false);
 		}
 
-		var emptyArr = new OneAyyArray<object>(r);
-		XDSFile.AssertValue((ulong)emptyArr.Values.Length, 0);
+		OneAyyArray<object>.ReadEmpty(r);
 
 		XDSFile.ReadNodeEnd(r);
 		// NODE END

@@ -27,6 +27,11 @@ internal struct MagicValue
 		w.WriteUInt32s(arrInt);
 	}
 
+	internal static void ReadEmpty(EndianBinaryReader r)
+	{
+		XDSFile.AssertValue(r.ReadUInt32(), 0);
+	}
+
 	internal readonly void Write(EndianBinaryWriter w)
 	{
 		w.WriteUInt32(Value);

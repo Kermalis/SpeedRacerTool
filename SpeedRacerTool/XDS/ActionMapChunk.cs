@@ -52,7 +52,7 @@ internal sealed class ActionMapChunk : XDSChunk
 		}
 
 		public MagicValue Magic_ActionName;
-		public MagicValue Magic_KeyBinds;
+		public Magic_OneAyyArray Magic_KeyBinds;
 
 		// Node data
 		public OneBeeString ActionName;
@@ -61,8 +61,7 @@ internal sealed class ActionMapChunk : XDSChunk
 		internal Entry(EndianBinaryReader r, XDSFile xds)
 		{
 			Magic_ActionName = new MagicValue(r);
-			uint numBinds = xds.ReadFileUInt32(r);
-			Magic_KeyBinds = new MagicValue(r);
+			Magic_KeyBinds = new Magic_OneAyyArray(r, xds);
 
 			// NODE START
 			XDSFile.ReadNodeStart(r);
@@ -70,7 +69,7 @@ internal sealed class ActionMapChunk : XDSChunk
 			ActionName = new OneBeeString(r);
 
 			KeyBinds = new OneAyyArray<KeyBind>(r);
-			XDSFile.AssertValue((ulong)KeyBinds.Values.Length, numBinds);
+			KeyBinds.AssertMatch(Magic_KeyBinds);
 			for (int i = 0; i < KeyBinds.Values.Length; i++)
 			{
 				KeyBinds.Values[i] = new KeyBind(r);
@@ -103,7 +102,7 @@ internal sealed class ActionMapChunk : XDSChunk
 	}
 
 	public MagicValue Magic_ActionGroupName;
-	public MagicValue Magic_Entries;
+	public Magic_OneAyyArray Magic_Entries;
 
 	// Node data
 	public OneBeeString ActionGroupName;
@@ -116,8 +115,7 @@ internal sealed class ActionMapChunk : XDSChunk
 		XDSFile.AssertValue(NumNodes, 0x0001);
 
 		Magic_ActionGroupName = new MagicValue(r);
-		uint numEntries = xds.ReadFileUInt32(r);
-		Magic_Entries = new MagicValue(r);
+		Magic_Entries = new Magic_OneAyyArray(r, xds);
 
 		// NODE START
 		XDSFile.ReadNodeStart(r);
@@ -125,7 +123,7 @@ internal sealed class ActionMapChunk : XDSChunk
 		ActionGroupName = new OneBeeString(r);
 
 		Entries = new OneAyyArray<Entry>(r);
-		XDSFile.AssertValue((ulong)Entries.Values.Length, numEntries);
+		Entries.AssertMatch(Magic_Entries);
 		for (int i = 0; i < Entries.Values.Length; i++)
 		{
 			Entries.Values[i] = new Entry(r, xds);

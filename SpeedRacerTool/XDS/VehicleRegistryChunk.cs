@@ -77,7 +77,7 @@ internal sealed class VehicleRegistryChunk : XDSChunk
 		}
 	}
 
-	public MagicValue Magic_Entries;
+	public Magic_OneAyyArray Magic_Entries;
 	public string Timestamp;
 
 	// Node data
@@ -89,8 +89,7 @@ internal sealed class VehicleRegistryChunk : XDSChunk
 		XDSFile.AssertValue(OpCode, 0x0106);
 		XDSFile.AssertValue(NumNodes, 0x0001);
 
-		uint numDrivers = xds.ReadFileUInt32(r);
-		Magic_Entries = new MagicValue(r);
+		Magic_Entries = new Magic_OneAyyArray(r, xds);
 
 		Timestamp = r.ReadString_Count_TrimNullTerminators(0x20);
 
@@ -98,7 +97,7 @@ internal sealed class VehicleRegistryChunk : XDSChunk
 		XDSFile.ReadNodeStart(r);
 
 		Entries = new OneAyyArray<Entry>(r);
-		XDSFile.AssertValue((ulong)Entries.Values.Length, numDrivers);
+		Entries.AssertMatch(Magic_Entries);
 		for (int i = 0; i < Entries.Values.Length; i++)
 		{
 			Entries.Values[i] = new Entry(r, xds);

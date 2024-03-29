@@ -19,6 +19,20 @@ internal struct OneAyyArray<T>
 		Values = num == 0 ? [] : new T[num];
 	}
 
+	internal static void ReadEmpty(EndianBinaryReader r)
+	{
+		XDSFile.AssertValue(r.ReadUInt16(), 0x001A);
+		XDSFile.AssertValue(r.ReadUInt16(), 0x0002);
+		XDSFile.AssertValue(r.ReadUInt16(), 0x0000);
+	}
+	internal readonly void AssertMatch(Magic_OneAyyArray magic)
+	{
+		if (magic.ArrayLen != Values.Length)
+		{
+			throw new Exception();
+		}
+	}
+
 	/// <summary>Does not write the elements</summary>
 	internal readonly void Write(EndianBinaryWriter w)
 	{

@@ -43,11 +43,11 @@ internal sealed class PhysicsPropsChunk : XDSChunk
 		}
 
 		public MagicValue Magic_CollisionShape;
-		public MagicValue Magic_ConvexArray1;
-		public MagicValue Magic_ConvexArray2;
+		public Magic_OneAyyArray Magic_ConvexArray1;
+		public Magic_OneAyyArray Magic_ConvexArray2;
 		public uint HeightfieldWL1; // Which is width and which is length?
 		public uint HeightfieldWL2;
-		public MagicValue Magic_HeightfieldData;
+		public Magic_OneAyyArray Magic_HeightfieldData;
 		public float Radius;
 		public float CapsuleHeight;
 		public Vector3 BoxScale;
@@ -63,29 +63,14 @@ internal sealed class PhysicsPropsChunk : XDSChunk
 		internal Entry(EndianBinaryReader r, XDSFile xds)
 		{
 			Magic_CollisionShape = new MagicValue(r);
-
-			XDSFile.AssertValue(r.ReadUInt32(), 0x00000000);
-
-			uint numConvex1 = xds.ReadFileUInt32(r);
-			Magic_ConvexArray1 = new MagicValue(r);
-			uint numConvex2 = xds.ReadFileUInt32(r);
-			Magic_ConvexArray2 = new MagicValue(r);
+			MagicValue.ReadEmpty(r); // Magic value for the empty string
+			Magic_ConvexArray1 = new Magic_OneAyyArray(r, xds);
+			Magic_ConvexArray2 = new Magic_OneAyyArray(r, xds);
 			HeightfieldWL1 = xds.ReadFileUInt32(r);
 			HeightfieldWL2 = xds.ReadFileUInt32(r);
-
-			for (int i = 0; i < 2; i++)
-			{
-				XDSFile.AssertValue(r.ReadUInt32(), 0x00000000);
-			}
-
-			uint numHeightfieldData = xds.ReadFileUInt32(r);
-			Magic_HeightfieldData = new MagicValue(r);
-
-			for (int i = 0; i < 2; i++)
-			{
-				XDSFile.AssertValue(r.ReadUInt32(), 0x00000000);
-			}
-
+			Magic_OneAyyArray.ReadEmpty(r);
+			Magic_HeightfieldData = new Magic_OneAyyArray(r, xds);
+			Magic_OneAyyArray.ReadEmpty(r);
 			Radius = xds.ReadFileSingle(r);
 			CapsuleHeight = xds.ReadFileSingle(r);
 			BoxScale = xds.ReadFileVector3(r);
@@ -106,9 +91,9 @@ internal sealed class PhysicsPropsChunk : XDSChunk
 					XDSFile.AssertValueNot(BoxScale, Vector3.Zero);
 					XDSFile.AssertValue(HeightfieldWL1, 0);
 					XDSFile.AssertValue(HeightfieldWL2, 0);
-					XDSFile.AssertValue(numConvex1, 0);
-					XDSFile.AssertValue(numConvex2, 0);
-					XDSFile.AssertValue(numHeightfieldData, 0);
+					Magic_ConvexArray1.AssertIs0();
+					Magic_ConvexArray2.AssertIs0();
+					Magic_HeightfieldData.AssertIs0();
 					break;
 				}
 				case "CAPSULE":
@@ -118,9 +103,9 @@ internal sealed class PhysicsPropsChunk : XDSChunk
 					XDSFile.AssertValue(BoxScale, Vector3.Zero);
 					XDSFile.AssertValue(HeightfieldWL1, 0);
 					XDSFile.AssertValue(HeightfieldWL2, 0);
-					XDSFile.AssertValue(numConvex1, 0);
-					XDSFile.AssertValue(numConvex2, 0);
-					XDSFile.AssertValue(numHeightfieldData, 0);
+					Magic_ConvexArray1.AssertIs0();
+					Magic_ConvexArray2.AssertIs0();
+					Magic_HeightfieldData.AssertIs0();
 					break;
 				}
 				case "CONVEX": // WII version doesn't use this
@@ -132,9 +117,9 @@ internal sealed class PhysicsPropsChunk : XDSChunk
 					XDSFile.AssertValue(Pos, Vector3.Zero);
 					XDSFile.AssertValue(HeightfieldWL1, 0);
 					XDSFile.AssertValue(HeightfieldWL2, 0);
-					XDSFile.AssertValueNot(numConvex1, 0);
-					XDSFile.AssertValueNot(numConvex2, 0);
-					XDSFile.AssertValue(numHeightfieldData, 0);
+					Magic_ConvexArray1.AssertNot0();
+					Magic_ConvexArray2.AssertNot0();
+					Magic_HeightfieldData.AssertIs0();
 					break;
 				}
 				case "HEIGHTFIELD":
@@ -144,10 +129,9 @@ internal sealed class PhysicsPropsChunk : XDSChunk
 					XDSFile.AssertValueNot(BoxScale, Vector3.Zero);
 					XDSFile.AssertValueNot(HeightfieldWL1, 0);
 					XDSFile.AssertValueNot(HeightfieldWL2, 0);
-					XDSFile.AssertValue(numConvex1, 0);
-					XDSFile.AssertValue(numConvex2, 0);
-					XDSFile.AssertValueNot(numHeightfieldData, 0);
-					XDSFile.AssertValue(numHeightfieldData, HeightfieldWL1 * HeightfieldWL2);
+					Magic_ConvexArray1.AssertIs0();
+					Magic_ConvexArray2.AssertIs0();
+					Magic_HeightfieldData.AssertEqual(HeightfieldWL1 * HeightfieldWL2);
 					break;
 				}
 				case "MESH": // PS2 version doesn't use this
@@ -159,9 +143,9 @@ internal sealed class PhysicsPropsChunk : XDSChunk
 					XDSFile.AssertValue(Pos, Vector3.Zero);
 					XDSFile.AssertValue(HeightfieldWL1, 0);
 					XDSFile.AssertValue(HeightfieldWL2, 0);
-					XDSFile.AssertValueNot(numConvex1, 0);
-					XDSFile.AssertValueNot(numConvex2, 0);
-					XDSFile.AssertValue(numHeightfieldData, 0);
+					Magic_ConvexArray1.AssertNot0();
+					Magic_ConvexArray2.AssertNot0();
+					Magic_HeightfieldData.AssertIs0();
 					break;
 				}
 				case "SPHERE":
@@ -171,40 +155,37 @@ internal sealed class PhysicsPropsChunk : XDSChunk
 					XDSFile.AssertValue(BoxScale, Vector3.Zero);
 					XDSFile.AssertValue(HeightfieldWL1, 0);
 					XDSFile.AssertValue(HeightfieldWL2, 0);
-					XDSFile.AssertValue(numConvex1, 0);
-					XDSFile.AssertValue(numConvex2, 0);
-					XDSFile.AssertValue(numHeightfieldData, 0);
+					Magic_ConvexArray1.AssertIs0();
+					Magic_ConvexArray2.AssertIs0();
+					Magic_HeightfieldData.AssertIs0();
 					break;
 				}
 				default: throw new InvalidDataException();
 			}
 
-			var emptyStr = new OneBeeString(r);
-			XDSFile.AssertValue((ulong)emptyStr.Str.Length, 0);
+			OneBeeString.ReadEmpty(r);
 
 			ConvexArray1 = new OneAyyArray<ConvexData1>(r);
-			XDSFile.AssertValue((ulong)ConvexArray1.Values.Length, numConvex1);
+			ConvexArray1.AssertMatch(Magic_ConvexArray1);
 			for (int i = 0; i < ConvexArray1.Values.Length; i++)
 			{
 				ConvexArray1.Values[i] = new ConvexData1(r, xds);
 			}
 
 			ConvexArray2 = new OneAyyArray<ConvexData2>(r);
-			XDSFile.AssertValue((ulong)ConvexArray2.Values.Length, numConvex2);
+			ConvexArray2.AssertMatch(Magic_ConvexArray2);
 			for (int i = 0; i < ConvexArray2.Values.Length; i++)
 			{
 				ConvexArray2.Values[i] = new ConvexData2(r, xds);
 			}
 
-			var emptyArr = new OneAyyArray<object>(r);
-			XDSFile.AssertValue((ulong)emptyArr.Values.Length, 0);
+			OneAyyArray<object>.ReadEmpty(r);
 
 			HeightfieldData = new OneAyyArray<uint>(r);
-			XDSFile.AssertValue((ulong)HeightfieldData.Values.Length, numHeightfieldData);
+			HeightfieldData.AssertMatch(Magic_HeightfieldData);
 			r.ReadUInt32s(HeightfieldData.Values);
 
-			emptyArr = new OneAyyArray<object>(r);
-			XDSFile.AssertValue((ulong)emptyArr.Values.Length, 0);
+			OneAyyArray<object>.ReadEmpty(r);
 
 			XDSFile.ReadNodeEnd(r);
 			// NODE END
@@ -270,7 +251,7 @@ internal sealed class PhysicsPropsChunk : XDSChunk
 	}
 
 	public MagicValue Magic_Name;
-	public MagicValue Magic_Entries;
+	public Magic_OneAyyArray Magic_Entries;
 
 	// Node data
 	public OneBeeString Name;
@@ -283,16 +264,11 @@ internal sealed class PhysicsPropsChunk : XDSChunk
 		XDSFile.AssertValue(NumNodes, 0x0001);
 
 		Magic_Name = new MagicValue(r);
+		Magic_OneAyyArray.ReadEmpty(r);
+		Magic_Entries = new Magic_OneAyyArray(r, xds);
+		Magic_OneAyyArray.ReadEmpty(r);
 
-		for (int i = 0; i < 2; i++)
-		{
-			XDSFile.AssertValue(r.ReadUInt32(), 0x00000000);
-		}
-
-		uint numEntries = xds.ReadFileUInt32(r);
-		Magic_Entries = new MagicValue(r);
-
-		for (int i = 0; i < 8; i++)
+		for (int i = 0; i < 6; i++)
 		{
 			XDSFile.AssertValue(r.ReadUInt32(), 0x00000000);
 		}
@@ -302,18 +278,16 @@ internal sealed class PhysicsPropsChunk : XDSChunk
 
 		Name = new OneBeeString(r);
 
-		var emptyArr = new OneAyyArray<object>(r);
-		XDSFile.AssertValue((ulong)emptyArr.Values.Length, 0);
+		OneAyyArray<object>.ReadEmpty(r);
 
 		Entries = new OneAyyArray<Entry>(r);
-		XDSFile.AssertValue((ulong)Entries.Values.Length, numEntries);
+		Entries.AssertMatch(Magic_Entries);
 		for (int i = 0; i < Entries.Values.Length; i++)
 		{
 			Entries.Values[i] = new Entry(r, xds);
 		}
 
-		emptyArr = new OneAyyArray<object>(r);
-		XDSFile.AssertValue((ulong)emptyArr.Values.Length, 0);
+		OneAyyArray<object>.ReadEmpty(r);
 
 		XDSFile.ReadNodeEnd(r);
 		// NODE END

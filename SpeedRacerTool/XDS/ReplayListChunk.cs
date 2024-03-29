@@ -4,7 +4,7 @@ namespace Kermalis.SpeedRacerTool.XDS;
 
 internal sealed class ReplayListChunk : XDSChunk
 {
-	public MagicValue Magic_Entries;
+	public Magic_OneAyyArray Magic_Entries;
 
 	// Node data
 	public OneAyyArray<string> Entries;
@@ -15,14 +15,13 @@ internal sealed class ReplayListChunk : XDSChunk
 		XDSFile.AssertValue(OpCode, 0x0106);
 		XDSFile.AssertValue(NumNodes, 0x0001);
 
-		uint numTracks = xds.ReadFileUInt32(r); // 5 for both... skorost is missing in PS2 version
-		Magic_Entries = new MagicValue(r);
+		Magic_Entries = new Magic_OneAyyArray(r, xds); // 5 for both... skorost is missing in PS2 version
 
 		// NODE START
 		XDSFile.ReadNodeStart(r);
 
 		Entries = new OneAyyArray<string>(r);
-		XDSFile.AssertValue((ulong)Entries.Values.Length, numTracks);
+		Entries.AssertMatch(Magic_Entries);
 		for (int i = 0; i < Entries.Values.Length; i++)
 		{
 			Entries.Values[i] = r.ReadString_Count_TrimNullTerminators(0x22);

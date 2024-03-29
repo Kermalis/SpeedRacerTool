@@ -53,7 +53,7 @@ internal sealed class InterestingEventGeneratorsChunk : XDSChunk
 		}
 	}
 
-	public MagicValue Magic_Entries;
+	public Magic_OneAyyArray Magic_Entries;
 
 	// Node data
 	public OneAyyArray<Entry> Entries;
@@ -64,14 +64,13 @@ internal sealed class InterestingEventGeneratorsChunk : XDSChunk
 		XDSFile.AssertValue(OpCode, 0x0108);
 		XDSFile.AssertValue(NumNodes, 0x0001);
 
-		uint numEntries = xds.ReadFileUInt32(r);
-		Magic_Entries = new MagicValue(r);
+		Magic_Entries = new Magic_OneAyyArray(r, xds);
 
 		// NODE START
 		XDSFile.ReadNodeStart(r);
 
 		Entries = new OneAyyArray<Entry>(r);
-		XDSFile.AssertValue((ulong)Entries.Values.Length, numEntries);
+		Entries.AssertMatch(Magic_Entries);
 		for (int i = 0; i < Entries.Values.Length; i++)
 		{
 			Entries.Values[i] = new Entry(r);
