@@ -13,9 +13,11 @@ internal sealed class VehicleRegistryChunk : XDSChunk
 		public string CarName;
 		public string UIFilename;
 		public string CarFilename;
+		/// <summary>ChimChim's value is cut off lol</summary>
 		public string VehicleSettingsXML;
 		public byte Unk1;
 		public byte Unk2;
+		/// <summary>The first 4 values seem to be car stats</summary>
 		public float[] Unk3;
 
 		internal Entry(EndianBinaryReader r, XDSFile xds)
@@ -33,10 +35,40 @@ internal sealed class VehicleRegistryChunk : XDSChunk
 			Unk2 = r.ReadByte();
 			XDSFile.AssertValue(r.ReadUInt16(), 0x0000);
 
-			Unk3 = new float[8];
+			Unk3 = new float[7];
 			xds.ReadFileSingles(r, Unk3);
 
+			XDSFile.AssertValue(xds.ReadFileSingle(r), 1f);
+
 			XDSFile.AssertValue(r.ReadUInt16(), 0x0000);
+		}
+
+		internal void DebugStr(XDSStringBuilder sb, int index)
+		{
+			sb.AppendLine_ArrayElement(index);
+			sb.NewObject();
+
+			sb.AppendLine_Quotes(CarID);
+			sb.AppendLine_Quotes(NameWithNickname);
+			sb.AppendLine_Quotes(Name);
+			sb.AppendLine_Quotes(Employer);
+			sb.AppendLine_Quotes(CarName);
+			sb.AppendLine_Quotes(UIFilename);
+			sb.AppendLine_Quotes(CarFilename);
+			sb.AppendLine_Quotes(VehicleSettingsXML);
+
+			sb.AppendLine(nameof(Unk1), Unk1);
+			sb.AppendLine(nameof(Unk2), Unk2);
+
+			sb.NewArray(Unk3.Length);
+			for (int i = 0; i < Unk3.Length; i++)
+			{
+				sb.Append_ArrayElement(i);
+				sb.AppendLine(Unk3[i], indent: false);
+			}
+			sb.EndArray();
+
+			sb.EndObject();
 		}
 
 		public override string ToString()
@@ -48,12 +80,14 @@ internal sealed class VehicleRegistryChunk : XDSChunk
 	public MagicValue Magic;
 	public string Timestamp;
 
+	// Node data
 	public OneAyyArray<Entry> Entries;
 
-	internal VehicleRegistryChunk(EndianBinaryReader r, XDSFile xds)
+	internal VehicleRegistryChunk(EndianBinaryReader r, XDSFile xds, int offset, ushort opcode, ushort numNodes)
+		: base(offset, opcode, numNodes)
 	{
-		XDSFile.AssertValue(xds.Unk24, 0x06);
-		XDSFile.AssertValue(xds.NumMabStreamNodes, 0x0001);
+		XDSFile.AssertValue(OpCode, 0x0106);
+		XDSFile.AssertValue(NumNodes, 0x0001);
 
 		uint numDrivers = xds.ReadFileUInt32(r);
 		Magic = new MagicValue(r);
@@ -72,41 +106,21 @@ internal sealed class VehicleRegistryChunk : XDSChunk
 
 		XDSFile.ReadNodeEnd(r);
 		// NODE END
-
-		XDSFile.ReadChunkEnd(r);
 	}
 
-	// vehicle_registry.xds - driver data
-	//  0x00-0x0F = Header
-	//   fileType = 0x9056EE72
-	//  0x10-0x25 = MabStream header
-	//   len = 0x1CEC in PS2, 0x172E in WII
-	//   Unk24 = 0x06
-	//   NumNodes = 0x0001
+	protected override void DebugStr(XDSStringBuilder sb)
+	{
+		sb.AppendLine_Quotes(Timestamp);
 
-	//  0x28 (uint) = amount of drivers (Uses file endianness). 25 in PS2, 20 in WII
-	//  0x2C (uint_LE) = [magic1] 0x00422008 in PS2, 0x003ACD68 in WII
+		sb.NewNode();
 
-	//  0x30-0x4F = timestamp ascii, 00 padded
-	//  0x50 (LE)0x0009
-	//  <
-	//   0x52 [OneAyyArray](25 in PS2, 20 in WII) // each driver entry is exactly 0x126 bytes
-	//   {
-	//    0x20 ascii chars - car id
-	//    0x20 ascii chars - name with nickname
-	//    0x20 ascii chars - name only
-	//    0x20 ascii chars - employer
-	//    0x20 ascii chars - car name
-	//    0x20 ascii chars - ui filename
-	//    0x20 ascii chars - car filename
-	//    0x20 ascii chars - vehicle settings xml (cut off for chimchim)
-	//    u8 - ???
-	//    u8 - ???
-	//    0x0000
-	//    8 floats using file endianness
-	//    0x0000
-	//   }
-	//   (LE)0x001C
-	//  >
-	//  (LE)0x0000
+		sb.NewArray(Entries.Values.Length);
+		for (int i = 0; i < Entries.Values.Length; i++)
+		{
+			Entries.Values[i].DebugStr(sb, i);
+		}
+		sb.EndArray();
+
+		sb.EndNode();
+	}
 }

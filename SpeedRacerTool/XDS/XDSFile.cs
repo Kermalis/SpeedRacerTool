@@ -1,5 +1,6 @@
 ﻿using Kermalis.EndianBinaryIO;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Numerics;
 
@@ -9,15 +10,13 @@ internal sealed class XDSFile
 {
 	public readonly Endianness Endianness;
 	public uint FileType;
-	public byte Unk24;
-	/// <summary>The amount of nodes in the MabStream (not nodes within nodes)</summary>
-	public ushort NumMabStreamNodes;
-
-	public readonly XDSChunk? Chunk;
+	public readonly List<XDSChunk> Chunks;
 
 	public XDSFile(Stream s, bool throwIfNotSupported)
 	{
 		var r = new EndianBinaryReader(s, ascii: true);
+
+		// Read header
 
 		Span<char> header = stackalloc char[8];
 		r.ReadChars(header);
@@ -52,39 +51,69 @@ internal sealed class XDSFile
 
 		AssertValue(r.ReadUInt16(), 0x0100); // Unk1E
 
-		uint fileLength = r.ReadUInt32();
-		Unk24 = r.ReadByte();
+		uint streamLength = r.ReadUInt32();
+		AssertValue(streamLength, (ulong)(r.Stream.Length - r.Stream.Position) - 2);
 
-		AssertValue(r.ReadByte(), 0x01); // Unk25
+		// Read chunks
+		Chunks = new List<XDSChunk>(1);
 
-		// Validate fileLength
-		AssertValue(fileLength, (ulong)(r.Stream.Length - r.Stream.Position));
-
-		NumMabStreamNodes = r.ReadUInt16();
-		AssertValueNot(NumMabStreamNodes, 0x0000);
-
-		Chunk = ReadChunk(r);
-
-		Console.WriteLine("FileType=0x{0:X8}, Unk24=0x{1:X2}, NumNodes=0x{2:X4}, ToolType={3}",
-			FileType, Unk24, NumMabStreamNodes, Chunk?.GetType().Name);
-		Console.WriteLine();
-
-		if (throwIfNotSupported && Chunk is null)
+		while (true)
 		{
-			throw new Exception($"Type not supported: 0x{FileType:X8}");
+			int offset = (int)r.Stream.Position;
+
+			ushort opcode = r.ReadUInt16();
+			if (r.Stream.Position == r.Stream.Length)
+			{
+				AssertValue(opcode, 0x0000);
+				break;
+			}
+			else
+			{
+				AssertValueNot(opcode, 0x0000);
+			}
+
+			AssertValue(opcode >> 8, 0x01); // OpCodes must be 0x1XX
+
+			ushort numNodes = r.ReadUInt16();
+			AssertValueNot(numNodes, 0x0000);
+
+			var c = XDSChunk.ReadChunk(r, this, offset, opcode, numNodes);
+
+			if (throwIfNotSupported && c is XDSUnsupportedChunk)
+			{
+				throw new Exception($"XDS type not yet supported: 0x{FileType:X8}");
+			}
+
+			Chunks.Add(c);
 		}
+
+		// Debug
+
+		var sb = new XDSStringBuilder();
+
+		sb.AppendLine(string.Format("FileType=0x{0:X8} | ({1} chunks) =", FileType, Chunks.Count));
+		sb.AppendLine('[');
+		sb.Indent(+1);
+		for (int i = 0; i < Chunks.Count; i++)
+		{
+			Chunks[i].DebugStr(sb, i);
+		}
+		sb.Indent(-1);
+		sb.AppendLine(']');
+
+		Console.WriteLine(sb.ToString());
 
 		// TODO NOTES:
 		// All files end with (LE)0x001C (LE)0x0000. Maybe the 0x1C is like an end tag in an xml, and the 0x00 is a "end file" operation
 		// Opcodes seem to be 2 bytes, always LE
-		// [magic1] = Some uint_LE that they are similar between files. PS2 values are 0x34XXXX or 0x42XXXX. WII values are 0x3AXXXX. Might be an allocator for OneAyyArray below
+		// [magic1] = Some uint_LE that they are similar between files. PS2 values are 0x34XXXX, 0x42XXXX, 0x46XXXX, or 0x4EXXXX. WII values are 0x3AXXXX or 0xB0XXXX. Might be an allocator for OneAyyArray below
 
 		// These come after a (LE)0x0009 (which seems to indicate "new node"). It comes shortly after a "magic1" value
 		//  [OneAyyArray] = (LE)0x001A (LE)0x0002. seems to be an opcode for "ushort_LE (len)" followed by entries of variable structure and size
 		//  [OneBeeString] = (LE)0x001B (LE)0x0002. Seems to be an opcode for "ushort_LE (len)" followed by ascii chars
 		//  (LE)0x001C seems to end the node as stated above
 
-		// MabStream chunk:
+		// MabStream header:
 		//  (LE)0x0002 (LE)0x000A seems to be the opcode
 		//  The following byte is the length of the str (always "MabStream")
 		//  (LE)0x0100
@@ -243,6 +272,13 @@ internal sealed class XDSFile
 		r.Endianness = Endianness.LittleEndian;
 		return val;
 	}
+	internal Vector2 ReadFileVector2(EndianBinaryReader r)
+	{
+		r.Endianness = Endianness;
+		Vector2 val = r.ReadVector2();
+		r.Endianness = Endianness.LittleEndian;
+		return val;
+	}
 	internal Vector3 ReadFileVector3(EndianBinaryReader r)
 	{
 		r.Endianness = Endianness;
@@ -270,21 +306,5 @@ internal sealed class XDSFile
 	internal static void ReadNodeEnd(EndianBinaryReader r)
 	{
 		AssertValue(r.ReadUInt16(), 0x001C);
-	}
-	internal static void ReadChunkEnd(EndianBinaryReader r)
-	{
-		AssertValue(r.ReadUInt16(), 0x0000);
-	}
-
-	private XDSChunk? ReadChunk(EndianBinaryReader r)
-	{
-		switch (FileType)
-		{
-			case 0x51C55993: return new SpeechStringsChunk(r, this); // track_registry.xds - These two just happen to look the same.
-			case 0x9056EE72: return new VehicleRegistryChunk(r, this);
-			case 0x91DB494E: return new SpeechStringsChunk(r, this);
-			case 0xAB90DE70: return new PhysicsPropsChunk(r, this);
-		}
-		return null;
 	}
 }

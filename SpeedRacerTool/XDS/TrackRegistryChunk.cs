@@ -2,7 +2,7 @@
 
 namespace Kermalis.SpeedRacerTool.XDS;
 
-internal sealed class SpeechStringsChunk : XDSChunk
+internal sealed class TrackRegistryChunk : XDSChunk
 {
 	public sealed class Entry
 	{
@@ -40,7 +40,7 @@ internal sealed class SpeechStringsChunk : XDSChunk
 
 	public Entry[] Entries;
 
-	internal SpeechStringsChunk(EndianBinaryReader r, int offset, ushort opcode, ushort numNodes)
+	internal TrackRegistryChunk(EndianBinaryReader r, int offset, ushort opcode, ushort numNodes)
 		: base(offset, opcode, numNodes)
 	{
 		XDSFile.AssertValue(OpCode, 0x0106);

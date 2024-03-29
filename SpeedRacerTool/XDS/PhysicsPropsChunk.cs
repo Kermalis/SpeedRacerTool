@@ -19,6 +19,11 @@ internal sealed class PhysicsPropsChunk : XDSChunk
 				xds.ReadFileUInt16s(r, VertexIndices);
 				XDSFile.AssertValue(r.ReadUInt16(), 0x0000);
 			}
+
+			public override readonly string ToString()
+			{
+				return string.Join(", ", VertexIndices);
+			}
 		}
 		/// <summary>The vertices that are available to the convex</summary>
 		public struct ConvexData2
@@ -29,6 +34,11 @@ internal sealed class PhysicsPropsChunk : XDSChunk
 			{
 				Data = xds.ReadFileVector3(r);
 				XDSFile.AssertValue(r.ReadUInt16(), 0x0000);
+			}
+
+			public override readonly string ToString()
+			{
+				return Data.ToString();
 			}
 		}
 
@@ -44,6 +54,7 @@ internal sealed class PhysicsPropsChunk : XDSChunk
 		public Vector3 EulerRot; // TODO: Verify
 		public Vector3 Pos; // TODO: Verify
 
+		// Node data
 		public OneBeeString CollisionShape;
 		public OneAyyArray<ConvexData1> ConvexArray1;
 		public OneAyyArray<ConvexData2> ConvexArray2;
@@ -199,6 +210,59 @@ internal sealed class PhysicsPropsChunk : XDSChunk
 			// NODE END
 		}
 
+		internal void DebugStr(XDSStringBuilder sb, int index)
+		{
+			sb.AppendLine_ArrayElement(index);
+			sb.NewObject();
+
+			sb.AppendLine(nameof(HeightfieldWL1), HeightfieldWL1, hex: false);
+			sb.AppendLine(nameof(HeightfieldWL2), HeightfieldWL2, hex: false);
+			sb.AppendLine(nameof(Radius), Radius);
+			sb.AppendLine(nameof(CapsuleHeight), CapsuleHeight);
+			sb.AppendLine(nameof(BoxScale), BoxScale);
+			sb.AppendLine(nameof(EulerRot), EulerRot);
+			sb.AppendLine(nameof(Pos), Pos);
+
+			// TODO
+			sb.NewNode();
+
+			sb.AppendLine(CollisionShape);
+
+			sb.EmptyArray();
+
+			sb.NewArray(ConvexArray1.Values.Length);
+			for (int i = 0; i < ConvexArray1.Values.Length; i++)
+			{
+				sb.Append_ArrayElement(i);
+				sb.AppendLine(ConvexArray1.Values[i].ToString(), indent: false);
+			}
+			sb.EndArray();
+
+			sb.NewArray(ConvexArray2.Values.Length);
+			for (int i = 0; i < ConvexArray2.Values.Length; i++)
+			{
+				sb.Append_ArrayElement(i);
+				sb.AppendLine(ConvexArray2.Values[i].Data, indent: false);
+			}
+			sb.EndArray();
+
+			sb.EmptyArray();
+
+			sb.NewArray(HeightfieldData.Values.Length);
+			for (int i = 0; i < HeightfieldData.Values.Length; i++)
+			{
+				sb.Append_ArrayElement(i);
+				sb.AppendLine("0x" + HeightfieldData.Values[i].ToString("X"), indent: false);
+			}
+			sb.EndArray();
+
+			sb.EmptyArray();
+
+			sb.EndNode();
+
+			sb.EndObject();
+		}
+
 		public override string ToString()
 		{
 			return CollisionShape.ToString();
@@ -208,13 +272,15 @@ internal sealed class PhysicsPropsChunk : XDSChunk
 	public MagicValue Magic28;
 	public MagicValue Magic38;
 
+	// Node data
 	public OneBeeString Name;
 	public OneAyyArray<Entry> Entries;
 
-	internal PhysicsPropsChunk(EndianBinaryReader r, XDSFile xds)
+	internal PhysicsPropsChunk(EndianBinaryReader r, XDSFile xds, int offset, ushort opcode, ushort numNodes)
+		: base(offset, opcode, numNodes)
 	{
-		XDSFile.AssertValue(xds.Unk24, 0x24);
-		XDSFile.AssertValue(xds.NumMabStreamNodes, 0x0001);
+		XDSFile.AssertValue(OpCode, 0x0124);
+		XDSFile.AssertValue(NumNodes, 0x0001);
 
 		Magic28 = new MagicValue(r);
 
@@ -251,47 +317,24 @@ internal sealed class PhysicsPropsChunk : XDSChunk
 
 		XDSFile.ReadNodeEnd(r);
 		// NODE END
-
-		XDSFile.ReadChunkEnd(r);
 	}
 
-	// t01_phx_props_nodmg.xds - track data
-	//  0x00-0x0F = Header
-	//   fileType = 0xAB90DE70
-	//  0x10-0x25 = MabStream header
-	//   len = 0x50F
-	//   Unk24 = 0x24
-	//   NumNodes = 0x0001
-	//  0x28 = (uint_LE) = [magic1] 0x0034BA98 in PS2, 0x003ABCC0 in WII
-	//  0x2C-0x33 = all 00s (8 00s to be exact, which is room for 2 uints)
+	protected override void DebugStr(XDSStringBuilder sb)
+	{
+		sb.NewNode();
 
-	//  0x34 (uint) = 8 (Uses file endianness)
-	//  0x38 = (uint_LE) = [magic1] 0x0034BAB8 in PS2, 0x003ABCE0 in WII
+		sb.AppendLine(Name);
+		sb.EmptyArray();
 
-	//  0x3C-0x5B = all 00s (room for 8 uints)
-	//  0x5C = (LE)0x0009
-	//  <
-	//   0x5E: [OneBeeString] = "t01_phx_props_nodmg"
-	//   0x77: [OneAyyArray](0)
-	//   0x7D: [OneAyyArray](8) // each entry is variable length
-	//   {
-	//    [magic1]
-	//    0x3C 00s (which is room for 16 uints)
-	//    9 floats using file endianness
-	//    (LE)0x0009
-	//    <
-	//     [OneBeeString] // collision shape
-	//     [OneBeeString] = ""
-	//     [OneAyyArray](0)
-	//     [OneAyyArray](0)
-	//     [OneAyyArray](0)
-	//     [OneAyyArray](0)
-	//     [OneAyyArray](0)
-	//     (LE)0x001C
-	//    >
-	//   }
-	//   [OneAyyArray](0)
-	//   (LE)0x001C
-	//  >
-	//  (LE)0x0000
+		sb.NewArray(Entries.Values.Length);
+		for (int i = 0; i < Entries.Values.Length; i++)
+		{
+			Entries.Values[i].DebugStr(sb, i);
+		}
+		sb.EndArray();
+
+		sb.EmptyArray();
+
+		sb.EndNode();
+	}
 }
