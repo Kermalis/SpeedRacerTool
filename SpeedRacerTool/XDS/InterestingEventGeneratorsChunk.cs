@@ -14,17 +14,7 @@ internal sealed class InterestingEventGeneratorsChunk : XDSChunk
 
 		internal Entry(EndianBinaryReader r)
 		{
-			long offset = r.Stream.Position;
-
-			// 0x40 ascii chars, or maybe 0x3C ascii chars with a (uint of file endianness) at the end which happens to be 0
-			EventID = r.ReadString_NullTerminated();
-
-			offset += 0x40;
-			while (r.Stream.Position != offset)
-			{
-				XDSFile.AssertValue(r.ReadByte(), 0);
-			}
-
+			EventID = r.ReadString_Count_TrimNullTerminators(0x40);
 			Magic_EventParams = new MagicValue(r);
 
 			// NODE START
