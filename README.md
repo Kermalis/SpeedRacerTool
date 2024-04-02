@@ -4,6 +4,8 @@
 
 ![PropsWow](https://github.com/Kermalis/SpeedRacerTool/assets/29823718/e4ff604c-f1e9-42e4-b5f3-b34c1e737528)
 
+![FooGee](https://github.com/Kermalis/SpeedRacerTool/assets/29823718/90d0c9ee-80b2-4cfb-98f0-6a87bfbfed7e)
+
 
 # TODO
 * Write a readme lol
