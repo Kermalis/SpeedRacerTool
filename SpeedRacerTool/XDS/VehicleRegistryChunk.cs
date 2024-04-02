@@ -33,14 +33,14 @@ internal sealed class VehicleRegistryChunk : XDSChunk
 
 			Unk1 = r.ReadByte();
 			Unk2 = r.ReadByte();
-			XDSFile.AssertValue(r.ReadUInt16(), 0x0000);
+			SRAssert.Equal(r.ReadUInt16(), 0x0000);
 
 			Unk3 = new float[7];
 			xds.ReadFileSingles(r, Unk3);
 
-			XDSFile.AssertValue(xds.ReadFileSingle(r), 1f);
+			SRAssert.Equal(xds.ReadFileSingle(r), 1f);
 
-			XDSFile.AssertValue(r.ReadUInt16(), 0x0000);
+			SRAssert.Equal(r.ReadUInt16(), 0x0000);
 		}
 
 		internal void DebugStr(XDSStringBuilder sb, int index)
@@ -86,8 +86,8 @@ internal sealed class VehicleRegistryChunk : XDSChunk
 	internal VehicleRegistryChunk(EndianBinaryReader r, XDSFile xds, int offset, ushort opcode, ushort numNodes)
 		: base(offset, opcode, numNodes)
 	{
-		XDSFile.AssertValue(OpCode, 0x0106);
-		XDSFile.AssertValue(NumNodes, 0x0001);
+		SRAssert.Equal(OpCode, 0x0106);
+		SRAssert.Equal(NumNodes, 0x0001);
 
 		Magic_Entries = new Magic_OneAyyArray(r, xds);
 

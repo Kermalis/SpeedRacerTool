@@ -15,29 +15,32 @@ internal sealed class Program
 		PatchISO_PS2,
 		TestNIF,
 		TestXDS,
+		TestEveryNIF,
 		TestEveryXDS,
 	}
 
 	// For doubles but also works for float
 	public const string TOSTRING_NO_SCIENTIFIC = "0.###################################################################################################################################################################################################################################################################################################################################################";
 
+	private const string LOG_PATH = @"Log.txt";
+	private const string ISO_PATH = @"C:\Users\Kermalis\Documents\Emulation\PS2\Games\";
+	private const string MODDED_PS2_ZIP_FILE = @"C:\Users\Kermalis\Documents\Emulation\PS2\Hacking\Speed Racer PS2 and WII rip\Mod Test\ISO Contents\DATA\PS2.ZIP";
+
+	private const string RIPPED_PATH = @"C:\Users\Kermalis\Documents\Emulation\PS2\Hacking\Speed Racer PS2 and WII rip\";
+	private const string RIPPED_PS2_PATH = RIPPED_PATH + @"Original PS2.ZIP ps2_ps2\";
+	private const string RIPPED_WII_PATH = RIPPED_PATH + @"Original WII rip\";
+
+	private const string OUT_OBJ_PATH = @"C:\Users\Kermalis\Downloads\Output\";
+
 	private static readonly StringBuilder _sb = new();
 
 	private static void Main()
 	{
-		const string LOG_PATH = @"Log.txt";
-		const string ISO_PATH = @"C:\Users\Kermalis\Documents\Emulation\PS2\Games\";
-		const string MODDED_PS2_ZIP_FILE = @"C:\Users\Kermalis\Documents\Emulation\PS2\Hacking\Speed Racer PS2 and WII rip\Mod Test\ISO Contents\DATA\PS2.ZIP";
-
-		const string RIPPED_PATH = @"C:\Users\Kermalis\Documents\Emulation\PS2\Hacking\Speed Racer PS2 and WII rip\";
-		const string RIPPED_PS2_PATH = RIPPED_PATH + @"Original PS2.ZIP ps2_ps2\";
-		const string RIPPED_WII_PATH = RIPPED_PATH + @"Original WII rip\";
-
 		using (StreamWriter log = File.CreateText(LOG_PATH))
 		{
 			Console.SetOut(log);
 
-			ProgramAction a = ProgramAction.TestEveryXDS;
+			ProgramAction a = ProgramAction.TestEveryNIF;
 
 			switch (a)
 			{
@@ -56,6 +59,12 @@ internal sealed class Program
 				case ProgramAction.TestXDS:
 				{
 					TestXDS();
+					break;
+				}
+				case ProgramAction.TestEveryNIF:
+				{
+					TestEveryNIF(RIPPED_PS2_PATH);
+					TestEveryNIF(RIPPED_WII_PATH);
 					break;
 				}
 				case ProgramAction.TestEveryXDS:
@@ -84,11 +93,11 @@ internal sealed class Program
 	}
 	private static void TestEveryXDS(string dir)
 	{
-		foreach (string PATH in Directory.GetFiles(dir, "*.xds", SearchOption.AllDirectories))
+		foreach (string path in Directory.EnumerateFiles(dir, "*.xds", SearchOption.AllDirectories))
 		{
-			Console.WriteLine("Opening {0}", PATH);
+			Console.WriteLine("Opening {0}", path);
 
-			using (FileStream s = File.OpenRead(PATH))
+			using (FileStream s = File.OpenRead(path))
 			{
 				var xds = new XDSFile(s, false);
 
@@ -128,8 +137,6 @@ internal sealed class Program
 		outFile.Dispose();
 
 		Console.WriteLine("PS2.ZIP injected with {0} bytes of padding", numPaddingNeeded);
-
-		;
 	}
 	private static void TestNIF()
 	{
@@ -149,13 +156,24 @@ internal sealed class Program
 		// Its texture is @"C:\Users\Kermalis\Documents\Emulation\PS2\Hacking\Speed Racer PS2 and WII rip\Original WII rip\tracks\t01\t01ttrk1_colr.dds"
 		//const string PATH = @"C:\Users\Kermalis\Documents\Emulation\PS2\Hacking\Speed Racer PS2 and WII rip\Original PS2.ZIP ps2_ps2\tracks\t01\geo\fwd_short.nif";
 
+		// Fuji forward long trk geo (PS2)
+		// Its texture is @"C:\Users\Kermalis\Documents\Emulation\PS2\Hacking\Speed Racer PS2 and WII rip\Original WII rip\tracks\t03\t03ttrk1_colr.dds"
+		//const string PATH = @"C:\Users\Kermalis\Documents\Emulation\PS2\Hacking\Speed Racer PS2 and WII rip\Original PS2.ZIP ps2_ps2\tracks\t03\geo\fwd_long.nif";
+
 		// Aurora forward long trk geo (PS2)
 		// Its texture is @"C:\Users\Kermalis\Documents\Emulation\PS2\Hacking\Speed Racer PS2 and WII rip\Original WII rip\tracks\t04\t04ttrk1_colr.dds"
 		//const string PATH = @"C:\Users\Kermalis\Documents\Emulation\PS2\Hacking\Speed Racer PS2 and WII rip\Original PS2.ZIP ps2_ps2\tracks\t04\geo\fwd_long.nif";
 
 		// GrandPrix forward long trk geo (PS2)
 		// Its texture is @"C:\Users\Kermalis\Documents\Emulation\PS2\Hacking\Speed Racer PS2 and WII rip\Original WII rip\tracks\t05\t05ttrk1_colr.dds"
-		const string PATH = @"C:\Users\Kermalis\Documents\Emulation\PS2\Hacking\Speed Racer PS2 and WII rip\Original PS2.ZIP ps2_ps2\tracks\t05\geo\fwd_long.nif";
+		//const string PATH = @"C:\Users\Kermalis\Documents\Emulation\PS2\Hacking\Speed Racer PS2 and WII rip\Original PS2.ZIP ps2_ps2\tracks\t05\geo\fwd_long.nif";
+
+		// Skorost forward long trk geo (PS2)
+		// Its texture is @"C:\Users\Kermalis\Documents\Emulation\PS2\Hacking\Speed Racer PS2 and WII rip\Original WII rip\tracks\t05\t05ttrk1_colr.dds"
+		//const string PATH = @"C:\Users\Kermalis\Documents\Emulation\PS2\Hacking\Speed Racer PS2 and WII rip\Original PS2.ZIP ps2_ps2\tracks\t06\geo\fwd_long.nif";
+
+		// Fuji test (PS2)
+		const string PATH = @"C:\Users\Kermalis\Documents\Emulation\PS2\Hacking\Speed Racer PS2 and WII rip\Original PS2.ZIP ps2_ps2\tracks\t03\models\t03gfji.nif";
 
 
 
@@ -176,10 +194,40 @@ internal sealed class Program
 				Console.WriteLine(c.DebugStr(nif));
 			}
 
+			string objDir = GetNIFOutputDir(PATH);
 			var testC = (NiPS2GeometryStreamer?)Array.Find(nif.BlockDatas, a => a is NiPS2GeometryStreamer);
-			testC?.TestOBJ(nif);
-			;
+			testC?.TestOBJ(nif, objDir, true);
 		}
+	}
+	private static void TestEveryNIF(string dir)
+	{
+		foreach (string path in Directory.EnumerateFiles(dir, "*.*", SearchOption.AllDirectories))
+		{
+			if (!path.EndsWith(".nif") && !path.EndsWith(".trk"))
+			{
+				continue;
+			}
+
+			//Console.WriteLine("Opening {0}", path);
+
+			using (FileStream s = File.OpenRead(path))
+			{
+				var nif = new NIFFile(s);
+
+				string objDir = GetNIFOutputDir(path);
+				var testC = (NiPS2GeometryStreamer?)Array.Find(nif.BlockDatas, a => a is NiPS2GeometryStreamer);
+				testC?.TestOBJ(nif, objDir, true);
+			}
+		}
+
+		;
+	}
+
+	private static string GetNIFOutputDir(string nifPath)
+	{
+		string a = Path.GetRelativePath(RIPPED_PATH, nifPath);
+		a = a.Remove(a.Length - 4, 4); // remove ".nif" or ".trk"
+		return Path.Combine(OUT_OBJ_PATH, a);
 	}
 
 	public static string GetBytesString(ReadOnlySpan<byte> data)

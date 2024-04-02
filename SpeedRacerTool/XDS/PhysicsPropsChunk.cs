@@ -17,7 +17,7 @@ internal sealed class PhysicsPropsChunk : XDSChunk
 			{
 				VertexIndices = new ushort[3];
 				xds.ReadFileUInt16s(r, VertexIndices);
-				XDSFile.AssertValue(r.ReadUInt16(), 0x0000);
+				SRAssert.Equal(r.ReadUInt16(), 0x0000);
 			}
 
 			public override readonly string ToString()
@@ -33,7 +33,7 @@ internal sealed class PhysicsPropsChunk : XDSChunk
 			internal ConvexData2(EndianBinaryReader r, XDSFile xds)
 			{
 				Data = xds.ReadFileVector3(r);
-				XDSFile.AssertValue(r.ReadUInt16(), 0x0000);
+				SRAssert.Equal(r.ReadUInt16(), 0x0000);
 			}
 
 			public override readonly string ToString()
@@ -86,11 +86,11 @@ internal sealed class PhysicsPropsChunk : XDSChunk
 			{
 				case "BOX":
 				{
-					XDSFile.AssertValue(Radius, 0);
-					XDSFile.AssertValue(CapsuleHeight, 0);
-					XDSFile.AssertValueNot(BoxScale, Vector3.Zero);
-					XDSFile.AssertValue(HeightfieldWL1, 0);
-					XDSFile.AssertValue(HeightfieldWL2, 0);
+					SRAssert.Equal(Radius, 0);
+					SRAssert.Equal(CapsuleHeight, 0);
+					SRAssert.NotEqual(BoxScale, Vector3.Zero);
+					SRAssert.Equal(HeightfieldWL1, 0);
+					SRAssert.Equal(HeightfieldWL2, 0);
 					Magic_ConvexArray1.AssertIs0();
 					Magic_ConvexArray2.AssertIs0();
 					Magic_HeightfieldData.AssertIs0();
@@ -98,11 +98,11 @@ internal sealed class PhysicsPropsChunk : XDSChunk
 				}
 				case "CAPSULE":
 				{
-					XDSFile.AssertValueNot(Radius, 0);
-					XDSFile.AssertValueNot(CapsuleHeight, 0);
-					XDSFile.AssertValue(BoxScale, Vector3.Zero);
-					XDSFile.AssertValue(HeightfieldWL1, 0);
-					XDSFile.AssertValue(HeightfieldWL2, 0);
+					SRAssert.NotEqual(Radius, 0);
+					SRAssert.NotEqual(CapsuleHeight, 0);
+					SRAssert.Equal(BoxScale, Vector3.Zero);
+					SRAssert.Equal(HeightfieldWL1, 0);
+					SRAssert.Equal(HeightfieldWL2, 0);
 					Magic_ConvexArray1.AssertIs0();
 					Magic_ConvexArray2.AssertIs0();
 					Magic_HeightfieldData.AssertIs0();
@@ -110,13 +110,13 @@ internal sealed class PhysicsPropsChunk : XDSChunk
 				}
 				case "CONVEX": // WII version doesn't use this
 				{
-					XDSFile.AssertValue(Radius, 0);
-					XDSFile.AssertValue(CapsuleHeight, 0);
-					XDSFile.AssertValue(BoxScale, Vector3.Zero);
-					XDSFile.AssertValue(EulerRot, Vector3.Zero);
-					XDSFile.AssertValue(Pos, Vector3.Zero);
-					XDSFile.AssertValue(HeightfieldWL1, 0);
-					XDSFile.AssertValue(HeightfieldWL2, 0);
+					SRAssert.Equal(Radius, 0);
+					SRAssert.Equal(CapsuleHeight, 0);
+					SRAssert.Equal(BoxScale, Vector3.Zero);
+					SRAssert.Equal(EulerRot, Vector3.Zero);
+					SRAssert.Equal(Pos, Vector3.Zero);
+					SRAssert.Equal(HeightfieldWL1, 0);
+					SRAssert.Equal(HeightfieldWL2, 0);
 					Magic_ConvexArray1.AssertNot0();
 					Magic_ConvexArray2.AssertNot0();
 					Magic_HeightfieldData.AssertIs0();
@@ -124,11 +124,11 @@ internal sealed class PhysicsPropsChunk : XDSChunk
 				}
 				case "HEIGHTFIELD":
 				{
-					XDSFile.AssertValue(Radius, 0);
-					XDSFile.AssertValue(CapsuleHeight, 0);
-					XDSFile.AssertValueNot(BoxScale, Vector3.Zero);
-					XDSFile.AssertValueNot(HeightfieldWL1, 0);
-					XDSFile.AssertValueNot(HeightfieldWL2, 0);
+					SRAssert.Equal(Radius, 0);
+					SRAssert.Equal(CapsuleHeight, 0);
+					SRAssert.NotEqual(BoxScale, Vector3.Zero);
+					SRAssert.NotEqual(HeightfieldWL1, 0);
+					SRAssert.NotEqual(HeightfieldWL2, 0);
 					Magic_ConvexArray1.AssertIs0();
 					Magic_ConvexArray2.AssertIs0();
 					Magic_HeightfieldData.AssertEqual(HeightfieldWL1 * HeightfieldWL2);
@@ -136,13 +136,13 @@ internal sealed class PhysicsPropsChunk : XDSChunk
 				}
 				case "MESH": // PS2 version doesn't use this
 				{
-					XDSFile.AssertValue(Radius, 0);
-					XDSFile.AssertValue(CapsuleHeight, 0);
-					XDSFile.AssertValue(BoxScale, Vector3.Zero);
-					XDSFile.AssertValue(EulerRot, Vector3.Zero);
-					XDSFile.AssertValue(Pos, Vector3.Zero);
-					XDSFile.AssertValue(HeightfieldWL1, 0);
-					XDSFile.AssertValue(HeightfieldWL2, 0);
+					SRAssert.Equal(Radius, 0);
+					SRAssert.Equal(CapsuleHeight, 0);
+					SRAssert.Equal(BoxScale, Vector3.Zero);
+					SRAssert.Equal(EulerRot, Vector3.Zero);
+					SRAssert.Equal(Pos, Vector3.Zero);
+					SRAssert.Equal(HeightfieldWL1, 0);
+					SRAssert.Equal(HeightfieldWL2, 0);
 					Magic_ConvexArray1.AssertNot0();
 					Magic_ConvexArray2.AssertNot0();
 					Magic_HeightfieldData.AssertIs0();
@@ -150,11 +150,11 @@ internal sealed class PhysicsPropsChunk : XDSChunk
 				}
 				case "SPHERE":
 				{
-					XDSFile.AssertValueNot(Radius, 0);
-					XDSFile.AssertValue(CapsuleHeight, 0);
-					XDSFile.AssertValue(BoxScale, Vector3.Zero);
-					XDSFile.AssertValue(HeightfieldWL1, 0);
-					XDSFile.AssertValue(HeightfieldWL2, 0);
+					SRAssert.NotEqual(Radius, 0);
+					SRAssert.Equal(CapsuleHeight, 0);
+					SRAssert.Equal(BoxScale, Vector3.Zero);
+					SRAssert.Equal(HeightfieldWL1, 0);
+					SRAssert.Equal(HeightfieldWL2, 0);
 					Magic_ConvexArray1.AssertIs0();
 					Magic_ConvexArray2.AssertIs0();
 					Magic_HeightfieldData.AssertIs0();
@@ -260,8 +260,8 @@ internal sealed class PhysicsPropsChunk : XDSChunk
 	internal PhysicsPropsChunk(EndianBinaryReader r, XDSFile xds, int offset, ushort opcode, ushort numNodes)
 		: base(offset, opcode, numNodes)
 	{
-		XDSFile.AssertValue(OpCode, 0x0124);
-		XDSFile.AssertValue(NumNodes, 0x0001);
+		SRAssert.Equal(OpCode, 0x0124);
+		SRAssert.Equal(NumNodes, 0x0001);
 
 		Magic_Name = new MagicValue(r);
 		Magic_OneAyyArray.ReadEmpty(r);
@@ -270,7 +270,7 @@ internal sealed class PhysicsPropsChunk : XDSChunk
 
 		for (int i = 0; i < 6; i++)
 		{
-			XDSFile.AssertValue(r.ReadUInt32(), 0x00000000);
+			SRAssert.Equal(r.ReadUInt32(), 0x00000000);
 		}
 
 		// NODE START

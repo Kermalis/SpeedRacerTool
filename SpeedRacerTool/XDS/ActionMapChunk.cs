@@ -111,8 +111,8 @@ internal sealed class ActionMapChunk : XDSChunk
 	internal ActionMapChunk(EndianBinaryReader r, XDSFile xds, int offset, ushort opcode, ushort numNodes)
 		: base(offset, opcode, numNodes)
 	{
-		XDSFile.AssertValue(OpCode, 0x010F);
-		XDSFile.AssertValue(NumNodes, 0x0001);
+		SRAssert.Equal(OpCode, 0x010F);
+		SRAssert.Equal(NumNodes, 0x0001);
 
 		Magic_ActionGroupName = new MagicValue(r);
 		Magic_Entries = new Magic_OneAyyArray(r, xds);

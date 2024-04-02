@@ -34,6 +34,7 @@ internal abstract class NiGeometryData : NiObject
 		: base(offset)
 	{
 		GroupID = r.ReadInt32();
+		SRAssert.Equal(GroupID, 0);
 		NumVerts = r.ReadUInt16();
 		KeepFlags = r.ReadByte();
 		CompressFlags = r.ReadByte();

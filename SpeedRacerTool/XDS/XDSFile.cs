@@ -20,10 +20,7 @@ internal sealed class XDSFile
 
 		Span<char> header = stackalloc char[8];
 		r.ReadChars(header);
-		if (!header.SequenceEqual("XDS!0303"))
-		{
-			throw new InvalidDataException("Header not found");
-		}
+		SRAssert.SequenceEqual(header, "XDS!0303", error: "Header not found");
 
 		char endianChar = r.ReadChar();
 		switch (endianChar)
@@ -33,26 +30,23 @@ internal sealed class XDSFile
 			default: throw new InvalidDataException("Invalid endianness: " + endianChar);
 		}
 
-		AssertValue(r.ReadByte(), 4); // Unk9
-		AssertValue(r.ReadUInt16(), 0x0001); // UnkA
+		SRAssert.Equal(r.ReadByte(), 4); // Unk9
+		SRAssert.Equal(r.ReadUInt16(), 0x0001); // UnkA
 
 		FileType = r.ReadUInt32();
 
-		AssertValue(r.ReadUInt16(), 0x0002); // Unk10
-		AssertValue(r.ReadUInt16(), 0x000A); // Unk12
-		AssertValue(r.ReadByte(), 0x09); // Unk14
+		SRAssert.Equal(r.ReadUInt16(), 0x0002); // Unk10
+		SRAssert.Equal(r.ReadUInt16(), 0x000A); // Unk12
+		SRAssert.Equal(r.ReadByte(), 0x09); // Unk14
 
 		Span<char> mabStream = stackalloc char[9];
 		r.ReadChars(mabStream);
-		if (!mabStream.SequenceEqual("MabStream"))
-		{
-			throw new Exception();
-		}
+		SRAssert.SequenceEqual(mabStream, "MabStream");
 
-		AssertValue(r.ReadUInt16(), 0x0100); // Unk1E
+		SRAssert.Equal(r.ReadUInt16(), 0x0100); // Unk1E
 
 		uint streamLength = r.ReadUInt32();
-		AssertValue(streamLength, (ulong)(r.Stream.Length - r.Stream.Position) - 2);
+		SRAssert.Equal(streamLength, (uint)(r.Stream.Length - r.Stream.Position) - 2);
 
 		// Read chunks
 		Chunks = new List<XDSChunk>(1);
@@ -64,18 +58,18 @@ internal sealed class XDSFile
 			ushort opcode = r.ReadUInt16();
 			if (r.Stream.Position == r.Stream.Length)
 			{
-				AssertValue(opcode, 0x0000);
+				SRAssert.Equal(opcode, 0x0000);
 				break;
 			}
 			else
 			{
-				AssertValueNot(opcode, 0x0000);
+				SRAssert.NotEqual(opcode, 0x0000);
 			}
 
-			AssertValue(opcode >> 8, 0x01); // OpCodes must be 0x1XX
+			SRAssert.Equal(opcode >> 8, 0x01); // OpCodes must be 0x1XX
 
 			ushort numNodes = r.ReadUInt16();
-			AssertValueNot(numNodes, 0x0000);
+			SRAssert.NotEqual(numNodes, 0x0000);
 
 			var c = XDSChunk.ReadChunk(r, this, offset, opcode, numNodes);
 
@@ -104,41 +98,6 @@ internal sealed class XDSFile
 		Console.WriteLine(sb.ToString());
 	}
 
-	internal static void AssertValue(ulong value, ulong expected)
-	{
-		if (value != expected)
-		{
-			throw new Exception();
-		}
-	}
-	internal static void AssertValue(float value, float expected)
-	{
-		if (value != expected)
-		{
-			throw new Exception();
-		}
-	}
-	internal static void AssertValue(Vector3 value, Vector3 expected)
-	{
-		if (value != expected)
-		{
-			throw new Exception();
-		}
-	}
-	internal static void AssertValueNot(float value, float expected)
-	{
-		if (value == expected)
-		{
-			throw new Exception();
-		}
-	}
-	internal static void AssertValueNot(Vector3 value, Vector3 expected)
-	{
-		if (value == expected)
-		{
-			throw new Exception();
-		}
-	}
 	internal uint ReadFileUInt32(EndianBinaryReader r)
 	{
 		r.Endianness = Endianness;
@@ -182,11 +141,11 @@ internal sealed class XDSFile
 
 	internal static void ReadNodeStart(EndianBinaryReader r)
 	{
-		AssertValue(r.ReadUInt16(), 0x0009);
+		SRAssert.Equal(r.ReadUInt16(), 0x0009);
 	}
 	internal static void ReadNodeEnd(EndianBinaryReader r)
 	{
-		AssertValue(r.ReadUInt16(), 0x001C);
+		SRAssert.Equal(r.ReadUInt16(), 0x001C);
 	}
 
 	internal static string DEBUG_READ_SAFE_STR(EndianBinaryReader r, int numChars)
@@ -197,7 +156,7 @@ internal sealed class XDSFile
 		offset += numChars;
 		while (r.Stream.Position != offset)
 		{
-			AssertValue(r.ReadByte(), 0);
+			SRAssert.Equal(r.ReadByte(), 0);
 		}
 
 		return str;

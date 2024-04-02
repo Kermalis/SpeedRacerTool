@@ -12,8 +12,8 @@ internal sealed class ReplayListChunk : XDSChunk
 	internal ReplayListChunk(EndianBinaryReader r, XDSFile xds, int offset, ushort opcode, ushort numNodes)
 		: base(offset, opcode, numNodes)
 	{
-		XDSFile.AssertValue(OpCode, 0x0106);
-		XDSFile.AssertValue(NumNodes, 0x0001);
+		SRAssert.Equal(OpCode, 0x0106);
+		SRAssert.Equal(NumNodes, 0x0001);
 
 		Magic_Entries = new Magic_OneAyyArray(r, xds); // 5 for both... skorost is missing in PS2 version
 

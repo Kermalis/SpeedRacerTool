@@ -16,7 +16,7 @@ internal struct Magic_OneAyyArray
 
 	internal static void ReadEmpty(EndianBinaryReader r)
 	{
-		XDSFile.AssertValue(r.ReadUInt64(), 0);
+		SRAssert.Equal(r.ReadUInt64(), 0);
 	}
 	internal readonly void AssertIs0()
 	{

@@ -25,25 +25,27 @@ internal abstract class NIFChunk
 
 		switch (chunkType)
 		{
-			case SRTrackPieceSaveData.NAME:
-				c = new SRTrackPieceSaveData(r, ofs, chunkSize); break;
-			case SRTrackGeometrySaveExtraData.NAME:
-				c = new SRTrackGeometrySaveExtraData(r, ofs, chunkSize); break;
 			case SRGbRangeLODData.NAME:
 				c = new SRGbRangeLODData(r, ofs, chunkSize); break;
-			case NiPS2GeometryStreamer.NAME:
-				c = new NiPS2GeometryStreamer(r, ofs); break;
+			case SRTrackGeometrySaveExtraData.NAME:
+				c = new SRTrackGeometrySaveExtraData(r, ofs, chunkSize); break;
+			case SRTrackPieceSaveData.NAME:
+				c = new SRTrackPieceSaveData(r, ofs, chunkSize); break;
 
 			case NiNode.NAME:
 				c = new NiNode(r, ofs); break;
+			case NiPS2GeometryStreamer.NAME:
+				c = new NiPS2GeometryStreamer(r, ofs); break;
 			case NiStringExtraData.NAME:
 				c = new NiStringExtraData(r, ofs, chunkSize); break;
-			case NiZBufferProperty.NAME:
-				c = new NiZBufferProperty(r, ofs); break;
+			case NiTriShapeData.NAME:
+				c = new NiTriShapeData(r, ofs); break;
 			case NiTriStrips.NAME:
 				c = new NiTriStrips(r, ofs); break;
 			case NiTriStripsData.NAME:
 				c = new NiTriStripsData(r, ofs, userVersion); break;
+			case NiZBufferProperty.NAME:
+				c = new NiZBufferProperty(r, ofs); break;
 
 			default:
 				c = new NIFUnknownChunk(r, ofs, chunkType, chunkSize); break;

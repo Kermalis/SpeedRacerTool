@@ -18,7 +18,7 @@ internal sealed class PS2TrackChunk : XDSChunk
 					Data = new float[10];
 					xds.ReadFileSingles(r, Data);
 
-					XDSFile.AssertValue(r.ReadUInt16(), 0x0000);
+					SRAssert.Equal(r.ReadUInt16(), 0x0000);
 				}
 
 				internal readonly void DebugStr(XDSStringBuilder sb, int index)
@@ -102,7 +102,7 @@ internal sealed class PS2TrackChunk : XDSChunk
 				Data = new float[6];
 				xds.ReadFileSingles(r, Data);
 
-				XDSFile.AssertValue(r.ReadUInt16(), 0x0000);
+				SRAssert.Equal(r.ReadUInt16(), 0x0000);
 			}
 
 			internal void DebugStr(XDSStringBuilder sb, int index)
@@ -137,7 +137,7 @@ internal sealed class PS2TrackChunk : XDSChunk
 				Data = new float[8];
 				xds.ReadFileSingles(r, Data);
 
-				XDSFile.AssertValue(r.ReadUInt16(), 0x0000);
+				SRAssert.Equal(r.ReadUInt16(), 0x0000);
 			}
 
 			internal readonly void DebugStr(XDSStringBuilder sb, int index)
@@ -177,12 +177,12 @@ internal sealed class PS2TrackChunk : XDSChunk
 
 			Magic1 = new Magic_OneAyyArray(r, xds);
 
-			XDSFile.AssertValue(r.ReadUInt32(), 0);
-			XDSFile.AssertValue(r.ReadUInt32(), 0);
-			XDSFile.AssertValue(r.ReadUInt32(), 0);
-			XDSFile.AssertValue(r.ReadUInt32(), 0);
-			XDSFile.AssertValue(r.ReadUInt32(), 0x80000000);
-			XDSFile.AssertValue(r.ReadUInt32(), 0);
+			SRAssert.Equal(r.ReadUInt32(), 0);
+			SRAssert.Equal(r.ReadUInt32(), 0);
+			SRAssert.Equal(r.ReadUInt32(), 0);
+			SRAssert.Equal(r.ReadUInt32(), 0);
+			SRAssert.Equal(r.ReadUInt32(), 0x80000000);
+			SRAssert.Equal(r.ReadUInt32(), 0);
 
 			UnkUshort1 = r.ReadUInt16();
 			UnkUshort2 = r.ReadUInt16();
@@ -267,7 +267,7 @@ internal sealed class PS2TrackChunk : XDSChunk
 			JoinID = r.ReadString_Count_TrimNullTerminators(0x20);
 			Piece1 = r.ReadString_Count_TrimNullTerminators(0x24);
 			Piece2 = r.ReadString_Count_TrimNullTerminators(0x24);
-			XDSFile.AssertValue(r.ReadUInt16(), 0x0000);
+			SRAssert.Equal(r.ReadUInt16(), 0x0000);
 		}
 
 		internal void DebugStr(XDSStringBuilder sb, int index)
@@ -294,7 +294,7 @@ internal sealed class PS2TrackChunk : XDSChunk
 				JoinID = r.ReadString_Count_TrimNullTerminators(0x20);
 				UnkBool = r.ReadBoolean();
 
-				XDSFile.AssertValue(r.ReadUInt16(), 0x0000);
+				SRAssert.Equal(r.ReadUInt16(), 0x0000);
 			}
 
 			internal readonly void DebugStr(XDSStringBuilder sb, int index)
@@ -370,7 +370,7 @@ internal sealed class PS2TrackChunk : XDSChunk
 			internal ArrArr1Data(EndianBinaryReader r, XDSFile xds)
 			{
 				Value = xds.ReadFileVector3(r);
-				XDSFile.AssertValue(r.ReadUInt16(), 0x0000);
+				SRAssert.Equal(r.ReadUInt16(), 0x0000);
 			}
 
 			public override readonly string ToString()
@@ -402,9 +402,9 @@ internal sealed class PS2TrackChunk : XDSChunk
 			UnkStr3 = r.ReadString_Count_TrimNullTerminators(0x20);
 			UnkStr4 = r.ReadString_Count_TrimNullTerminators(0x20);
 			UnkStr5 = r.ReadString_Count_TrimNullTerminators(0x2C);
-			XDSFile.AssertValue(r.ReadUInt32(), 0x80000000);
+			SRAssert.Equal(r.ReadUInt32(), 0x80000000);
 			UnkFloat2 = xds.ReadFileSingle(r);
-			XDSFile.AssertValue(r.ReadUInt32(), 0x80000000);
+			SRAssert.Equal(r.ReadUInt32(), 0x80000000);
 			UnkFloat3 = xds.ReadFileSingle(r);
 			Magic = new Magic_OneAyyArray(r, xds); // Still has value even when 0
 
@@ -468,8 +468,8 @@ internal sealed class PS2TrackChunk : XDSChunk
 	internal PS2TrackChunk(EndianBinaryReader r, XDSFile xds, int offset, ushort opcode, ushort numNodes)
 		: base(offset, opcode, numNodes)
 	{
-		XDSFile.AssertValue(OpCode, 0x0131);
-		XDSFile.AssertValue(NumNodes, 0x0001);
+		SRAssert.Equal(OpCode, 0x0131);
+		SRAssert.Equal(NumNodes, 0x0001);
 
 		UnkXML = r.ReadString_Count_TrimNullTerminators(0x48);
 		Magic1 = new Magic_OneAyyArray(r, xds);

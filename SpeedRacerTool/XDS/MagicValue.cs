@@ -29,7 +29,7 @@ internal struct MagicValue
 
 	internal static void ReadEmpty(EndianBinaryReader r)
 	{
-		XDSFile.AssertValue(r.ReadUInt32(), 0);
+		SRAssert.Equal(r.ReadUInt32(), 0);
 	}
 
 	internal readonly void Write(EndianBinaryWriter w)

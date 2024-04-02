@@ -9,17 +9,17 @@ internal struct OneBeeString
 
 	internal OneBeeString(EndianBinaryReader r)
 	{
-		XDSFile.AssertValue(r.ReadUInt16(), 0x001B);
-		XDSFile.AssertValue(r.ReadUInt16(), 0x0002);
+		SRAssert.Equal(r.ReadUInt16(), 0x001B);
+		SRAssert.Equal(r.ReadUInt16(), 0x0002);
 
 		Str = r.ReadString_Count(r.ReadUInt16());
 	}
 
 	internal static void ReadEmpty(EndianBinaryReader r)
 	{
-		XDSFile.AssertValue(r.ReadUInt16(), 0x001B);
-		XDSFile.AssertValue(r.ReadUInt16(), 0x0002);
-		XDSFile.AssertValue(r.ReadUInt16(), 0x0000);
+		SRAssert.Equal(r.ReadUInt16(), 0x001B);
+		SRAssert.Equal(r.ReadUInt16(), 0x0002);
+		SRAssert.Equal(r.ReadUInt16(), 0x0000);
 	}
 
 	internal readonly void Write(EndianBinaryWriter w)

@@ -51,8 +51,8 @@ internal sealed class InterestingEventGeneratorsChunk : XDSChunk
 	internal InterestingEventGeneratorsChunk(EndianBinaryReader r, XDSFile xds, int offset, ushort opcode, ushort numNodes)
 		: base(offset, opcode, numNodes)
 	{
-		XDSFile.AssertValue(OpCode, 0x0108);
-		XDSFile.AssertValue(NumNodes, 0x0001);
+		SRAssert.Equal(OpCode, 0x0108);
+		SRAssert.Equal(NumNodes, 0x0001);
 
 		Magic_Entries = new Magic_OneAyyArray(r, xds);
 

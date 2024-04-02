@@ -12,8 +12,8 @@ internal sealed class SplinesChunk : XDSChunk
 		internal Array1Data(EndianBinaryReader r, XDSFile xds)
 		{
 			Pos = xds.ReadFileVector2(r);
-			XDSFile.AssertValue(r.ReadUInt32(), 0);
-			XDSFile.AssertValue(r.ReadUInt16(), 0);
+			SRAssert.Equal(r.ReadUInt32(), 0);
+			SRAssert.Equal(r.ReadUInt16(), 0);
 		}
 
 		public override readonly string ToString()
@@ -31,9 +31,9 @@ internal sealed class SplinesChunk : XDSChunk
 			Val = xds.ReadFileSingle(r);
 			if (mustBeOneIDK)
 			{
-				XDSFile.AssertValue(Val, 1f);
+				SRAssert.Equal(Val, 1f);
 			}
-			XDSFile.AssertValue(r.ReadUInt16(), 0);
+			SRAssert.Equal(r.ReadUInt16(), 0);
 		}
 
 		public override readonly string ToString()
@@ -64,8 +64,8 @@ internal sealed class SplinesChunk : XDSChunk
 	internal SplinesChunk(EndianBinaryReader r, XDSFile xds, int offset, ushort opcode, ushort numNodes)
 		: base(offset, opcode, numNodes)
 	{
-		XDSFile.AssertValue(OpCode, 0x0111);
-		XDSFile.AssertValue(NumNodes, 0x0001);
+		SRAssert.Equal(OpCode, 0x0111);
+		SRAssert.Equal(NumNodes, 0x0001);
 
 		Name = r.ReadString_Count_TrimNullTerminators(0x20);
 		Unk48 = xds.ReadFileUInt32(r); // ???
@@ -76,7 +76,7 @@ internal sealed class SplinesChunk : XDSChunk
 		Magic_UnkArray2 = new Magic_OneAyyArray(r, xds);
 		Magic_UnkArray3 = new Magic_OneAyyArray(r, xds);
 		Magic_EmptyArray = new Magic_OneAyyArray(r, xds);
-		XDSFile.AssertValue(r.ReadUInt32(), 0);
+		SRAssert.Equal(r.ReadUInt32(), 0);
 		Unk7C = xds.ReadFileSingle(r);
 		UnitOfMeasurement = r.ReadString_Count_TrimNullTerminators(0x10);
 
@@ -85,9 +85,9 @@ internal sealed class SplinesChunk : XDSChunk
 
 		UnkArray1 = new OneAyyArray<Array1Data>(r);
 		UnkArray1.AssertMatch(Magic_UnkArray1);
-		XDSFile.AssertValue((ulong)UnkArray1.Values.Length, Unk48 + Unk4C);
-		XDSFile.AssertValue((ulong)UnkArray1.Values.Length, unk5C); // If these are all equal, don't need to check them again below
-		XDSFile.AssertValue((ulong)UnkArray1.Values.Length, Magic_UnkArray2.ArrayLen);
+		SRAssert.Equal((uint)UnkArray1.Values.Length, Unk48 + Unk4C);
+		SRAssert.Equal((uint)UnkArray1.Values.Length, unk5C); // If these are all equal, don't need to check them again below
+		SRAssert.Equal((uint)UnkArray1.Values.Length, Magic_UnkArray2.ArrayLen);
 		for (int i = 0; i < UnkArray1.Values.Length; i++)
 		{
 			UnkArray1.Values[i] = new Array1Data(r, xds);
@@ -95,8 +95,8 @@ internal sealed class SplinesChunk : XDSChunk
 
 		UnkArray2 = new OneAyyArray<Array2_3Data>(r);
 		UnkArray2.AssertMatch(Magic_UnkArray2);
-		XDSFile.AssertValue((ulong)UnkArray2.Values.Length, Unk48 + Unk4C);
-		XDSFile.AssertValue((ulong)UnkArray2.Values.Length, unk5C);
+		SRAssert.Equal((uint)UnkArray2.Values.Length, Unk48 + Unk4C);
+		SRAssert.Equal((uint)UnkArray2.Values.Length, unk5C);
 		for (int i = 0; i < UnkArray2.Values.Length; i++)
 		{
 			UnkArray2.Values[i] = new Array2_3Data(r, xds, true);
@@ -104,7 +104,7 @@ internal sealed class SplinesChunk : XDSChunk
 
 		UnkArray3 = new OneAyyArray<Array2_3Data>(r);
 		UnkArray3.AssertMatch(Magic_UnkArray3);
-		XDSFile.AssertValue((ulong)UnkArray3.Values.Length, Unk48 + unk5C + 1);
+		SRAssert.Equal((uint)UnkArray3.Values.Length, Unk48 + unk5C + 1);
 		for (int i = 0; i < UnkArray3.Values.Length; i++)
 		{
 			UnkArray3.Values[i] = new Array2_3Data(r, xds, false);

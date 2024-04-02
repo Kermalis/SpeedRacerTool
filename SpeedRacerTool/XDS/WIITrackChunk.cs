@@ -9,8 +9,8 @@ internal sealed class WIITrackChunk : XDSChunk
 	internal WIITrackChunk(EndianBinaryReader r, XDSFile xds, int offset, ushort opcode, ushort numNodes)
 		: base(offset, opcode, numNodes)
 	{
-		XDSFile.AssertValue(OpCode, 0x012F);
-		XDSFile.AssertValue(NumNodes, 0x0001);
+		SRAssert.Equal(OpCode, 0x012F);
+		SRAssert.Equal(NumNodes, 0x0001);
 
 		UnkXML = XDSFile.DEBUG_READ_SAFE_STR(r, 0x48);
 

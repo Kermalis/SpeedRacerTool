@@ -12,8 +12,8 @@ internal struct OneAyyArray<T>
 	/// <summary>Does not read the elements</summary>
 	internal OneAyyArray(EndianBinaryReader r)
 	{
-		XDSFile.AssertValue(r.ReadUInt16(), 0x001A);
-		XDSFile.AssertValue(r.ReadUInt16(), 0x0002);
+		SRAssert.Equal(r.ReadUInt16(), 0x001A);
+		SRAssert.Equal(r.ReadUInt16(), 0x0002);
 
 		ushort num = r.ReadUInt16();
 		Values = num == 0 ? [] : new T[num];
@@ -21,9 +21,9 @@ internal struct OneAyyArray<T>
 
 	internal static void ReadEmpty(EndianBinaryReader r)
 	{
-		XDSFile.AssertValue(r.ReadUInt16(), 0x001A);
-		XDSFile.AssertValue(r.ReadUInt16(), 0x0002);
-		XDSFile.AssertValue(r.ReadUInt16(), 0x0000);
+		SRAssert.Equal(r.ReadUInt16(), 0x001A);
+		SRAssert.Equal(r.ReadUInt16(), 0x0002);
+		SRAssert.Equal(r.ReadUInt16(), 0x0000);
 	}
 	internal readonly void AssertMatch(Magic_OneAyyArray magic)
 	{
