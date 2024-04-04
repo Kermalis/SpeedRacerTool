@@ -9,9 +9,11 @@ public sealed class GLTFNode
 	internal readonly int Index;
 	internal readonly GLTFScene Parent;
 
+	internal GLTFWriter Writer => Parent.Parent;
+
 	public string? Name;
 	public Vector3? Translation;
-	public GLTFMesh? Mesh;
+	public GLTFMesh? Mesh { get; private set; }
 
 	internal GLTFNode(int index, GLTFScene parent)
 	{
@@ -26,7 +28,7 @@ public sealed class GLTFNode
 			throw new Exception();
 		}
 
-		Mesh = Parent.Parent.CreateMesh(this);
+		Mesh = Writer.CreateMesh(this);
 		return Mesh;
 	}
 
