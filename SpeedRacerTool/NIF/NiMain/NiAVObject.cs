@@ -13,8 +13,8 @@ internal abstract class NiAVObject : NiObjectNET
 	public readonly ChunkRef<NiProperty>[] Properties;
 	public readonly NullableChunkRef<NIFUnknownChunk> CollisionObject; // TODO: NullableChunkRef<NiCollisionObject>
 
-	protected NiAVObject(EndianBinaryReader r, int offset)
-		: base(r, offset)
+	protected NiAVObject(EndianBinaryReader r, int index, int offset)
+		: base(r, index, offset)
 	{
 		Flags = r.ReadUInt16();
 		Translation = r.ReadVector3();
@@ -22,9 +22,11 @@ internal abstract class NiAVObject : NiObjectNET
 		Scale = r.ReadSingle();
 
 		Properties = new ChunkRef<NiProperty>[r.ReadInt32()];
-		ChunkRef<NiProperty>.ReadArray(r, Properties);
+		r.ReadArray(Properties);
 
 		CollisionObject = new NullableChunkRef<NIFUnknownChunk>(r);
+
+		SRAssert.Equal(CollisionObject.ChunkIndex, -1);
 	}
 
 	public override void SetParentAndChildren(NIFFile nif, NiObject? parent)
@@ -36,5 +38,24 @@ internal abstract class NiAVObject : NiObjectNET
 			r.Resolve(nif).SetParentAndChildren(nif, this);
 		}
 		CollisionObject.Resolve(nif)?.SetParentAndChildren(nif, this);
+	}
+
+	protected override void DebugStr(NIFFile nif, NIFStringBuilder sb)
+	{
+		base.DebugStr(nif, sb);
+
+		sb.AppendLine(nameof(Flags), Flags);
+		sb.AppendLine(nameof(Translation), Translation);
+		sb.AppendLine(nameof(Rotation), Rotation);
+		sb.AppendLine(nameof(Scale), Scale);
+
+		sb.NewArray(nameof(Properties), Properties.Length);
+		for (int i = 0; i < Properties.Length; i++)
+		{
+			sb.WriteChunk(i, nif, Properties[i].Resolve(nif));
+		}
+		sb.EndArray();
+
+		sb.WriteChunk(nameof(CollisionObject), nif, CollisionObject.Resolve(nif));
 	}
 }

@@ -61,11 +61,11 @@ internal sealed class NIFFile
 		BlockDatas = new NiObject[numBlocks];
 		for (int i = 0; i < BlockDatas.Length; i++)
 		{
-			BlockDatas[i] = NiObject.ReadChunk(r, BlockTypes[BlockTypeIndices[i] & 0x7FFF], BlockSizes[i], UserVersion);
+			BlockDatas[i] = NiObject.ReadChunk(r, i, this);
 		}
 
 		Roots = new ChunkPtr<NiObject>[r.ReadUInt32()];
-		ChunkPtr<NiObject>.ReadArray(r, Roots);
+		r.ReadArray(Roots);
 
 		HandleHierarchy();
 	}
@@ -114,6 +114,13 @@ internal sealed class NIFFile
 
 	public void PrintHierarchy()
 	{
-
+		var sb = new NIFStringBuilder();
+		sb.NewArray("NIF Roots", Roots.Length);
+		for (int i = 0; i < Roots.Length; i++)
+		{
+			sb.WriteChunk(i, this, Roots[i].Resolve(this));
+		}
+		sb.EndArray();
+		Console.WriteLine(sb.ToString());
 	}
 }

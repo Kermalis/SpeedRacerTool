@@ -31,11 +31,11 @@ internal sealed class OBJBuilder
 	public void AddVertex(Vector3 pos)
 	{
 		_sb.Append("v ");
-		_sb.Append(pos.X.ToString(Program.TOSTRING_NO_SCIENTIFIC));
+		_sb.Append(pos.X.ToString(SRUtils.TOSTRING_NO_SCIENTIFIC));
 		_sb.Append(' ');
-		_sb.Append(pos.Y.ToString(Program.TOSTRING_NO_SCIENTIFIC));
+		_sb.Append(pos.Y.ToString(SRUtils.TOSTRING_NO_SCIENTIFIC));
 		_sb.Append(' ');
-		_sb.AppendLine(pos.Z.ToString(Program.TOSTRING_NO_SCIENTIFIC));
+		_sb.AppendLine(pos.Z.ToString(SRUtils.TOSTRING_NO_SCIENTIFIC));
 	}
 	/// <summary>Not a part of the .obj standard. Blender won't load colors unless all 3 components are [0, 1]</summary>
 	public void AddVertex(Vector3 pos, Vector3 color)
@@ -47,17 +47,17 @@ internal sealed class OBJBuilder
 			throw new ArgumentOutOfRangeException(nameof(color), color, null);
 		}
 		_sb.Append("v ");
-		_sb.Append(pos.X.ToString(Program.TOSTRING_NO_SCIENTIFIC));
+		_sb.Append(pos.X.ToString(SRUtils.TOSTRING_NO_SCIENTIFIC));
 		_sb.Append(' ');
-		_sb.Append(pos.Y.ToString(Program.TOSTRING_NO_SCIENTIFIC));
+		_sb.Append(pos.Y.ToString(SRUtils.TOSTRING_NO_SCIENTIFIC));
 		_sb.Append(' ');
-		_sb.Append(pos.Z.ToString(Program.TOSTRING_NO_SCIENTIFIC));
+		_sb.Append(pos.Z.ToString(SRUtils.TOSTRING_NO_SCIENTIFIC));
 		_sb.Append(' ');
-		_sb.Append(color.X.ToString(Program.TOSTRING_NO_SCIENTIFIC));
+		_sb.Append(color.X.ToString(SRUtils.TOSTRING_NO_SCIENTIFIC));
 		_sb.Append(' ');
-		_sb.Append(color.Y.ToString(Program.TOSTRING_NO_SCIENTIFIC));
+		_sb.Append(color.Y.ToString(SRUtils.TOSTRING_NO_SCIENTIFIC));
 		_sb.Append(' ');
-		_sb.AppendLine(color.Z.ToString(Program.TOSTRING_NO_SCIENTIFIC));
+		_sb.AppendLine(color.Z.ToString(SRUtils.TOSTRING_NO_SCIENTIFIC));
 	}
 
 	public void AddFace(int vertID1, int vertID2, int vertID3)

@@ -21,8 +21,8 @@ internal abstract class NiGeometryData : NiObject
 	public readonly ConsistencyType ConsistencyFlags;
 	public readonly ChunkRef<NIFUnknownChunk> AdditionalData; // TODO: Ref<AbstractAdditionalGeometryData>
 
-	protected NiGeometryData(EndianBinaryReader r, int offset)
-		: base(offset)
+	protected NiGeometryData(EndianBinaryReader r, int index, int offset)
+		: base(index, offset)
 	{
 		GroupID = r.ReadInt32();
 		SRAssert.Equal(GroupID, 0);
@@ -96,5 +96,12 @@ internal abstract class NiGeometryData : NiObject
 		ConsistencyFlags = r.ReadEnum<ConsistencyType>();
 
 		AdditionalData = new ChunkRef<NIFUnknownChunk>(r);
+	}
+
+	protected override void DebugStr(NIFFile nif, NIFStringBuilder sb)
+	{
+		base.DebugStr(nif, sb);
+
+		sb.WriteTODO(nameof(NiGeometryData));
 	}
 }

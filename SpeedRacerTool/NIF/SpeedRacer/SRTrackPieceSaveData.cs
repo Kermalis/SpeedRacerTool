@@ -9,8 +9,8 @@ internal sealed class SRTrackPieceSaveData : NiObject
 	// TODO
 	public readonly float[] Data;
 
-	internal SRTrackPieceSaveData(EndianBinaryReader r, int offset, uint size)
-		: base(offset)
+	internal SRTrackPieceSaveData(EndianBinaryReader r, int index, int offset, uint size)
+		: base(index, offset)
 	{
 		if (size != 8)
 		{
@@ -21,8 +21,16 @@ internal sealed class SRTrackPieceSaveData : NiObject
 		r.ReadSingles(Data);
 	}
 
-	internal override string DebugStr(NIFFile nif)
+	protected override void DebugStr(NIFFile nif, NIFStringBuilder sb)
 	{
-		return DebugStr(nameof(SRTrackPieceSaveData), string.Format("{0} | {1}", Data[0], Data[1]));
+		base.DebugStr(nif, sb);
+
+		sb.NewArray(nameof(Data), Data.Length);
+		for (int i = 0; i < Data.Length; i++)
+		{
+			sb.AppendLine_ArrayElement(i);
+			sb.AppendLine(Data[i], indent: false);
+		}
+		sb.EndArray();
 	}
 }

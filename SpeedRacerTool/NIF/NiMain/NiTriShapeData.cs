@@ -34,8 +34,8 @@ internal sealed class NiTriShapeData : NiTriBasedGeomData
 	/// <summary>The shared normals</summary>
 	public readonly MatchGroup[] MatchGroups;
 
-	internal NiTriShapeData(EndianBinaryReader r, int offset)
-		: base(r, offset)
+	internal NiTriShapeData(EndianBinaryReader r, int index, int offset)
+		: base(r, index, offset)
 	{
 		NumTrianglePoints = r.ReadUInt32();
 
@@ -58,5 +58,12 @@ internal sealed class NiTriShapeData : NiTriBasedGeomData
 		{
 			MatchGroups[i] = new MatchGroup(r);
 		}
+	}
+
+	protected override void DebugStr(NIFFile nif, NIFStringBuilder sb)
+	{
+		base.DebugStr(nif, sb);
+
+		sb.WriteTODO(nameof(NiTriShapeData));
 	}
 }

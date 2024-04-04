@@ -10,8 +10,8 @@ internal sealed class SRTrackGeometrySaveExtraData : NiObject
 	public readonly float[] Floats;
 	public readonly byte Byte; // Always [1,3] in fwd_short.trk. Haven't checked others
 
-	internal SRTrackGeometrySaveExtraData(EndianBinaryReader r, int offset, uint size)
-		: base(offset)
+	internal SRTrackGeometrySaveExtraData(EndianBinaryReader r, int index, int offset, uint size)
+		: base(index, offset)
 	{
 		if (size != 21)
 		{
@@ -23,8 +23,18 @@ internal sealed class SRTrackGeometrySaveExtraData : NiObject
 		Byte = r.ReadByte();
 	}
 
-	internal override string DebugStr(NIFFile nif)
+	protected override void DebugStr(NIFFile nif, NIFStringBuilder sb)
 	{
-		return DebugStr(nameof(SRTrackGeometrySaveExtraData), string.Join(", ", Floats) + " | 0x" + Byte.ToString("X2"));
+		base.DebugStr(nif, sb);
+
+		sb.NewArray(nameof(Floats), Floats.Length);
+		for (int i = 0; i < Floats.Length; i++)
+		{
+			sb.AppendLine_ArrayElement(i);
+			sb.AppendLine(Floats[i], indent: false);
+		}
+		sb.EndArray();
+
+		sb.AppendLine(nameof(Byte), Byte);
 	}
 }

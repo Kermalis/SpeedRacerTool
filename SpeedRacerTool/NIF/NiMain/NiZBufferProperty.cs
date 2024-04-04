@@ -7,16 +7,16 @@ internal sealed class NiZBufferProperty : NiProperty
 {
 	public readonly ZBufferFlags Flags;
 
-	internal NiZBufferProperty(EndianBinaryReader r, int offset)
-		: base(r, offset)
+	internal NiZBufferProperty(EndianBinaryReader r, int index, int offset)
+		: base(r, index, offset)
 	{
 		Flags = r.ReadEnum<ZBufferFlags>();
 	}
 
-	internal override string DebugStr(NIFFile nif)
+	protected override void DebugStr(NIFFile nif, NIFStringBuilder sb)
 	{
-		return DebugStr(nameof(NiZBufferProperty), string.Format("Name=\"{0}\" | Flags=({1})",
-			Name.Resolve(nif),
-			Flags));
+		base.DebugStr(nif, sb);
+
+		sb.AppendLine(nameof(Flags), Flags.ToString());
 	}
 }

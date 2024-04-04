@@ -19,7 +19,7 @@ internal sealed class SplinesChunk : XDSChunk
 		public override readonly string ToString()
 		{
 			return string.Format("({0}f, {1}f)",
-				Pos.X.ToString(Program.TOSTRING_NO_SCIENTIFIC), Pos.Y.ToString(Program.TOSTRING_NO_SCIENTIFIC));
+				Pos.X.ToString(SRUtils.TOSTRING_NO_SCIENTIFIC), Pos.Y.ToString(SRUtils.TOSTRING_NO_SCIENTIFIC));
 		}
 	}
 	public struct Array2_3Data
@@ -38,7 +38,7 @@ internal sealed class SplinesChunk : XDSChunk
 
 		public override readonly string ToString()
 		{
-			return Val.ToString(Program.TOSTRING_NO_SCIENTIFIC) + 'f';
+			return Val.ToString(SRUtils.TOSTRING_NO_SCIENTIFIC) + 'f';
 		}
 	}
 

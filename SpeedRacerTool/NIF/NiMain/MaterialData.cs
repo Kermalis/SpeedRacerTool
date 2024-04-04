@@ -15,7 +15,7 @@ internal sealed class MaterialData
 		int numMats = r.ReadInt32();
 
 		MaterialNames = new StringIndex[numMats];
-		StringIndex.ReadArray(r, MaterialNames);
+		r.ReadArray(MaterialNames);
 
 		MaterialExtraDatas = new int[numMats];
 		r.ReadInt32s(MaterialExtraDatas);

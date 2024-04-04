@@ -1,6 +1,4 @@
 ﻿using Kermalis.EndianBinaryIO;
-using System;
-using System.Runtime.InteropServices;
 
 namespace Kermalis.SpeedRacerTool.NIF.NiMain;
 
@@ -23,11 +21,5 @@ internal readonly struct NullableChunkRef<T> where T : NiObject
 		}
 		NiObject o = nif.BlockDatas[ChunkIndex]; // Don't 1-line. I'm debugging chunks I haven't added yet
 		return (T)o;
-	}
-
-	public static void ReadArray(EndianBinaryReader r, ChunkRef<T>[] arr)
-	{
-		Span<int> arrInt = MemoryMarshal.Cast<ChunkRef<T>, int>(arr);
-		r.ReadInt32s(arrInt);
 	}
 }

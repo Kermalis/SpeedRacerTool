@@ -22,8 +22,8 @@ internal sealed class NiCamera : NiAVObject
 	public readonly uint UnkUint1;
 	public readonly uint UnkUint2;
 
-	public NiCamera(EndianBinaryReader r, int offset)
-		: base(r, offset)
+	public NiCamera(EndianBinaryReader r, int index, int offset)
+		: base(r, index, offset)
 	{
 		UnkUshort1 = r.ReadUInt16();
 		FrustumLeft = r.ReadSingle();
@@ -41,5 +41,12 @@ internal sealed class NiCamera : NiAVObject
 		UnkLink = new ChunkRef<NiObject>(r);
 		UnkUint1 = r.ReadUInt32();
 		UnkUint2 = r.ReadUInt32();
+	}
+
+	protected override void DebugStr(NIFFile nif, NIFStringBuilder sb)
+	{
+		base.DebugStr(nif, sb);
+
+		sb.WriteTODO(nameof(NiCamera));
 	}
 }

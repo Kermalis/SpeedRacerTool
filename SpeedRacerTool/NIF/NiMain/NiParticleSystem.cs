@@ -8,12 +8,19 @@ internal class NiParticleSystem : NiParticles
 	public readonly bool IsWorldSpace;
 	public readonly ChunkRef<NIFUnknownChunk>[] Modifiers; // TODO: Ref<NiPSysModifier>
 
-	internal NiParticleSystem(EndianBinaryReader r, int offset)
-		: base(r, offset)
+	internal NiParticleSystem(EndianBinaryReader r, int index, int offset)
+		: base(r, index, offset)
 	{
 		IsWorldSpace = r.ReadBoolean();
 
 		Modifiers = new ChunkRef<NIFUnknownChunk>[r.ReadUInt32()];
-		ChunkRef<NIFUnknownChunk>.ReadArray(r, Modifiers);
+		r.ReadArray(Modifiers);
+	}
+
+	protected override void DebugStr(NIFFile nif, NIFStringBuilder sb)
+	{
+		base.DebugStr(nif, sb);
+
+		sb.WriteTODO(nameof(NiParticleSystem));
 	}
 }

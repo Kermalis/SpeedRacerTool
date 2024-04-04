@@ -16,8 +16,8 @@ internal sealed class NiTextureEffect : NiDynamicEffect
 	public readonly Vector3 Unk100;
 	public readonly float Unk0;
 
-	internal NiTextureEffect(EndianBinaryReader r, int offset)
-		: base(r, offset)
+	internal NiTextureEffect(EndianBinaryReader r, int index, int offset)
+		: base(r, index, offset)
 	{
 		ProjectionMat = new Matrix3x3(r);
 		ProjectionTrans = r.ReadVector3();
@@ -29,5 +29,12 @@ internal sealed class NiTextureEffect : NiDynamicEffect
 		Clipping = r.ReadByte();
 		Unk100 = r.ReadVector3();
 		Unk0 = r.ReadSingle();
+	}
+
+	protected override void DebugStr(NIFFile nif, NIFStringBuilder sb)
+	{
+		base.DebugStr(nif, sb);
+
+		sb.WriteTODO(nameof(NiTextureEffect));
 	}
 }

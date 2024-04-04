@@ -6,16 +6,16 @@ internal sealed class NiShadeProperty : NiProperty
 {
 	public readonly ShadeFlags Flags;
 
-	public NiShadeProperty(EndianBinaryReader r, int offset)
-		: base(r, offset)
+	public NiShadeProperty(EndianBinaryReader r, int index, int offset)
+		: base(r, index, offset)
 	{
 		Flags = r.ReadEnum<ShadeFlags>();
 	}
 
-	internal override string DebugStr(NIFFile nif)
+	protected override void DebugStr(NIFFile nif, NIFStringBuilder sb)
 	{
-		return DebugStr(nameof(NiShadeProperty), string.Format("Name=\"{0}\" | Flags=({1})",
-			Name.Resolve(nif),
-			Flags));
+		base.DebugStr(nif, sb);
+
+		sb.AppendLine(nameof(Flags), Flags.ToString());
 	}
 }

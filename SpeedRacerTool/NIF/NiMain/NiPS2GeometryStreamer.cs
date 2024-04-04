@@ -32,9 +32,9 @@ internal sealed class NiPS2GeometryStreamer : NiObject
 			public override readonly string ToString()
 			{
 				return string.Format("(X={0} | Y={1} | Z={2} | D=0x{3:X})",
-					Pos.X.ToString(Program.TOSTRING_NO_SCIENTIFIC),
-					Pos.Y.ToString(Program.TOSTRING_NO_SCIENTIFIC),
-					Pos.Z.ToString(Program.TOSTRING_NO_SCIENTIFIC),
+					Pos.X.ToString(SRUtils.TOSTRING_NO_SCIENTIFIC),
+					Pos.Y.ToString(SRUtils.TOSTRING_NO_SCIENTIFIC),
+					Pos.Z.ToString(SRUtils.TOSTRING_NO_SCIENTIFIC),
 					D);
 			}
 		}
@@ -70,7 +70,7 @@ internal sealed class NiPS2GeometryStreamer : NiObject
 			{
 				string s16 = string.Format("({0} | {1})", A, B);
 				string u16 = string.Format("(0x{0:X4} | 0x{1:X4})", (ushort)A, (ushort)B);
-				string half = string.Format("({0} | {1})", BitConverter.Int16BitsToHalf(A).ToString(Program.TOSTRING_NO_SCIENTIFIC), BitConverter.Int16BitsToHalf(B).ToString(Program.TOSTRING_NO_SCIENTIFIC));
+				string half = string.Format("({0} | {1})", BitConverter.Int16BitsToHalf(A).ToString(SRUtils.TOSTRING_NO_SCIENTIFIC), BitConverter.Int16BitsToHalf(B).ToString(SRUtils.TOSTRING_NO_SCIENTIFIC));
 				uint u = (ushort)A | ((uint)B << 16);
 				string s32 = string.Format("{0}", (int)u);
 				string u32 = string.Format("0x{0:X8}", u);
@@ -104,7 +104,7 @@ internal sealed class NiPS2GeometryStreamer : NiObject
 			{
 				string s16 = string.Format("({0} | {1})", Shade, B);
 				string u16 = string.Format("(0x{0:X4} | 0x{1:X4})", (ushort)Shade, B);
-				string half = string.Format("({0} | {1})", BitConverter.Int16BitsToHalf(Shade).ToString(Program.TOSTRING_NO_SCIENTIFIC), BitConverter.Int16BitsToHalf((short)B).ToString(Program.TOSTRING_NO_SCIENTIFIC));
+				string half = string.Format("({0} | {1})", BitConverter.Int16BitsToHalf(Shade).ToString(SRUtils.TOSTRING_NO_SCIENTIFIC), BitConverter.Int16BitsToHalf((short)B).ToString(SRUtils.TOSTRING_NO_SCIENTIFIC));
 				uint u = (ushort)Shade | ((uint)B << 16);
 				string s32 = string.Format("{0}", (int)u);
 				string u32 = string.Format("0x{0:X8}", u);
@@ -318,8 +318,8 @@ internal sealed class NiPS2GeometryStreamer : NiObject
 
 	private readonly Mesh[] _meshes;
 
-	internal NiPS2GeometryStreamer(EndianBinaryReader r, int offset)
-		: base(offset)
+	internal NiPS2GeometryStreamer(EndianBinaryReader r, int index, int offset)
+		: base(index, offset)
 	{
 		//Console.WriteLine("NiPS2GeometryStreamer found in " + ((FileStream)r.Stream).Name);
 
@@ -331,6 +331,13 @@ internal sealed class NiPS2GeometryStreamer : NiObject
 		}
 
 		//Console.WriteLine();
+	}
+
+	protected override void DebugStr(NIFFile nif, NIFStringBuilder sb)
+	{
+		base.DebugStr(nif, sb);
+
+		sb.WriteTODO(nameof(NiPS2GeometryStreamer));
 	}
 
 	public void TestOBJ(NIFFile nif, string dir, bool overwrite)

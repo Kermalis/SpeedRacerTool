@@ -14,8 +14,8 @@ internal abstract class ATextureRenderData : NiObject
 	public readonly uint BytesPerPixel;
 	public readonly MipMap[] Mips;
 
-	protected ATextureRenderData(EndianBinaryReader r, int offset)
-		: base(offset)
+	protected ATextureRenderData(EndianBinaryReader r, int index, int offset)
+		: base(index, offset)
 	{
 		PixFormat = r.ReadEnum<PixelFormat>();
 		BitsPerPixel = r.ReadByte();
@@ -49,5 +49,12 @@ internal abstract class ATextureRenderData : NiObject
 		base.SetParentAndChildren(nif, parent);
 
 		Palette.Resolve(nif).SetParentAndChildren(nif, this);
+	}
+
+	protected override void DebugStr(NIFFile nif, NIFStringBuilder sb)
+	{
+		base.DebugStr(nif, sb);
+
+		sb.WriteTODO(nameof(ATextureRenderData));
 	}
 }

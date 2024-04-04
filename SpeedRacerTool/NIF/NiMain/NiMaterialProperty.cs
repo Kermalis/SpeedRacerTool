@@ -13,8 +13,8 @@ internal sealed class NiMaterialProperty : NiProperty
 	/// <summary>The material transparency (1=non-transparant). When alpha is not 1, refer to a <see cref="NiAlphaProperty"/> in this material's parent <see cref="NiTriShape"/>.</summary>
 	public readonly float Alpha;
 
-	public NiMaterialProperty(EndianBinaryReader r, int offset)
-		: base(r, offset)
+	public NiMaterialProperty(EndianBinaryReader r, int index, int offset)
+		: base(r, index, offset)
 	{
 		AmbientColor = r.ReadVector3();
 		DiffuseColor = r.ReadVector3();
@@ -22,5 +22,12 @@ internal sealed class NiMaterialProperty : NiProperty
 		EmissiveColor = r.ReadVector3();
 		Glossiness = r.ReadSingle();
 		Alpha = r.ReadSingle();
+	}
+
+	protected override void DebugStr(NIFFile nif, NIFStringBuilder sb)
+	{
+		base.DebugStr(nif, sb);
+
+		sb.WriteTODO(nameof(NiMaterialProperty));
 	}
 }

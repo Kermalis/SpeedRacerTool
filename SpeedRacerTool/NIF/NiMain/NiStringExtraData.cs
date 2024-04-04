@@ -5,23 +5,22 @@ namespace Kermalis.SpeedRacerTool.NIF.NiMain;
 
 internal sealed class NiStringExtraData : NiExtraData
 {
-	public readonly StringIndex StringData;
+	public readonly StringIndex Data;
 
-	internal NiStringExtraData(EndianBinaryReader r, int offset, uint size)
-		: base(r, offset)
+	internal NiStringExtraData(EndianBinaryReader r, int index, int offset, uint size)
+		: base(r, index, offset)
 	{
 		if (size != 8)
 		{
 			throw new Exception();
 		}
 
-		StringData = new StringIndex(r);
+		Data = new StringIndex(r);
 	}
 
-	internal override string DebugStr(NIFFile nif)
+	protected override void DebugStr(NIFFile nif, NIFStringBuilder sb)
 	{
-		return DebugStr(nameof(NiStringExtraData), string.Format("Name=\"{0}\" | Str=\"{1}\"",
-			Name.Resolve(nif),
-			StringData.Resolve(nif)));
+		base.DebugStr(nif, sb);
+		sb.AppendLine(nameof(Data), Data.Resolve(nif));
 	}
 }

@@ -18,9 +18,6 @@ internal sealed class Program
 		TestEveryXDS,
 	}
 
-	// For doubles but also works for float
-	public const string TOSTRING_NO_SCIENTIFIC = "0.###################################################################################################################################################################################################################################################################################################################################################";
-
 	private const string LOG_PATH = @"Log.txt";
 	private const string ISO_PATH = @"C:\Users\Kermalis\Documents\Emulation\PS2\Games\";
 	private const string MODDED_PS2_ZIP_FILE = @"C:\Users\Kermalis\Documents\Emulation\PS2\Hacking\Speed Racer PS2 and WII rip\Mod Test\ISO Contents\DATA\PS2.ZIP";

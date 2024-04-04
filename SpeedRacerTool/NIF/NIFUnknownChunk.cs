@@ -9,8 +9,8 @@ internal sealed class NIFUnknownChunk : NiObject
 	public readonly string Type;
 	public readonly byte[] Data;
 
-	internal NIFUnknownChunk(EndianBinaryReader r, int offset, string type, uint size)
-		: base(offset)
+	internal NIFUnknownChunk(EndianBinaryReader r, int index, int offset, string type, uint size)
+		: base(index, offset)
 	{
 		Type = type;
 		Data = new byte[size];
@@ -19,7 +19,7 @@ internal sealed class NIFUnknownChunk : NiObject
 
 	public override string ToString()
 	{
-		return DebugStr(Type, string.Format("byte[{0}]",
-			Data.Length));
+		return string.Format("{0} => byte[{1}]",
+			Type, Data.Length);
 	}
 }

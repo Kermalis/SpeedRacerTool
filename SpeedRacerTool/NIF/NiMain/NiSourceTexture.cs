@@ -14,8 +14,8 @@ internal sealed class NiSourceTexture : NiTexture
 	public readonly bool IsDirectRender;
 	public readonly bool ShouldPersistData;
 
-	public NiSourceTexture(EndianBinaryReader r, int offset)
-		: base(r, offset)
+	public NiSourceTexture(EndianBinaryReader r, int index, int offset)
+		: base(r, index, offset)
 	{
 		IsExternal = r.ReadBoolean();
 		FileName = new StringIndex(r);
@@ -33,5 +33,12 @@ internal sealed class NiSourceTexture : NiTexture
 		base.SetParentAndChildren(nif, parent);
 
 		PixelData.Resolve(nif).SetParentAndChildren(nif, this);
+	}
+
+	protected override void DebugStr(NIFFile nif, NIFStringBuilder sb)
+	{
+		base.DebugStr(nif, sb);
+
+		sb.WriteTODO(nameof(NiSourceTexture));
 	}
 }

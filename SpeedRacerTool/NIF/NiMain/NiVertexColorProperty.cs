@@ -11,9 +11,16 @@ internal sealed class NiVertexColorProperty : NiProperty
 	/// Bits 4-5: Vertex Mode?</summary>
 	public readonly ushort Flags;
 
-	public NiVertexColorProperty(EndianBinaryReader r, int offset)
-		: base(r, offset)
+	public NiVertexColorProperty(EndianBinaryReader r, int index, int offset)
+		: base(r, index, offset)
 	{
 		Flags = r.ReadUInt16();
+	}
+
+	protected override void DebugStr(NIFFile nif, NIFStringBuilder sb)
+	{
+		base.DebugStr(nif, sb);
+
+		sb.WriteTODO(nameof(NiVertexColorProperty));
 	}
 }

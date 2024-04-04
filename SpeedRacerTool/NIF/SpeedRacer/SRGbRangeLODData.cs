@@ -8,8 +8,8 @@ internal sealed class SRGbRangeLODData : NiObject
 {
 	public readonly float[] Data;
 
-	internal SRGbRangeLODData(EndianBinaryReader r, int offset, uint size)
-		: base(offset)
+	internal SRGbRangeLODData(EndianBinaryReader r, int index, int offset, uint size)
+		: base(index, offset)
 	{
 		if (size != 28)
 		{
@@ -20,8 +20,16 @@ internal sealed class SRGbRangeLODData : NiObject
 		r.ReadSingles(Data);
 	}
 
-	internal override string DebugStr(NIFFile nif)
+	protected override void DebugStr(NIFFile nif, NIFStringBuilder sb)
 	{
-		return DebugStr(nameof(SRGbRangeLODData), string.Join(", ", Data));
+		base.DebugStr(nif, sb);
+
+		sb.NewArray(nameof(Data), Data.Length);
+		for (int i = 0; i < Data.Length; i++)
+		{
+			sb.AppendLine_ArrayElement(i);
+			sb.AppendLine(Data[i], indent: false);
+		}
+		sb.EndArray();
 	}
 }

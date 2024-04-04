@@ -7,9 +7,16 @@ internal abstract class NiTriBasedGeomData : NiGeometryData
 {
 	public readonly ushort NumTris;
 
-	protected NiTriBasedGeomData(EndianBinaryReader r, int offset)
-		: base(r, offset)
+	protected NiTriBasedGeomData(EndianBinaryReader r, int index, int offset)
+		: base(r, index, offset)
 	{
 		NumTris = r.ReadUInt16();
+	}
+
+	protected override void DebugStr(NIFFile nif, NIFStringBuilder sb)
+	{
+		base.DebugStr(nif, sb);
+
+		sb.WriteTODO(nameof(NiTriBasedGeomData));
 	}
 }
