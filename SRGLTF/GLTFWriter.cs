@@ -123,76 +123,76 @@ public sealed class GLTFWriter : IDisposable
 		{
 			Indented = false,
 		};
-		var w = new Utf8JsonWriter(stream, options: opt);
-
-		w.WriteStartObject();
-
-		// Asset property
-		w.WriteStartObject("asset");
-		w.WriteString("version", "2.0"); // The version is supposed to be a string, not a number
-		w.WriteEndObject();
-
-		if (_accessors is not null)
+		// This using statement doesn't dispose the stream thankfully
+		using (var w = new Utf8JsonWriter(stream, options: opt))
 		{
-			w.WriteStartArray("accessors");
-			foreach (GLTFAccessor a in _accessors)
-			{
-				a.Write(w);
-			}
-			w.WriteEndArray();
-		}
-		if (_buffers is not null)
-		{
-			w.WriteStartArray("buffers");
-			foreach (GLTFBuffer b in _buffers)
-			{
-				b.Write(w);
-			}
-			w.WriteEndArray();
-		}
-		if (_bufferViews is not null)
-		{
-			w.WriteStartArray("bufferViews");
-			foreach (GLTFBufferView bv in _bufferViews)
-			{
-				bv.Write(w);
-			}
-			w.WriteEndArray();
-		}
-		if (_meshes is not null)
-		{
-			w.WriteStartArray("meshes");
-			foreach (GLTFMesh m in _meshes)
-			{
-				m.Write(w);
-			}
-			w.WriteEndArray();
-		}
-		if (_nodes is not null)
-		{
-			w.WriteStartArray("nodes");
-			foreach (GLTFNode n in _nodes)
-			{
-				n.Write(w);
-			}
-			w.WriteEndArray();
-		}
-		if (_scenes is not null)
-		{
-			w.WriteStartArray("scenes");
-			foreach (GLTFScene s in _scenes)
-			{
-				s.Write(w);
-			}
-			w.WriteEndArray();
+			w.WriteStartObject();
 
-			// Hardcode the first scene to be the visible one
-			w.WriteNumber("scene", 0);
+			// Asset property
+			w.WriteStartObject("asset");
+			w.WriteString("version", "2.0"); // The version is supposed to be a string, not a number
+			w.WriteEndObject();
+
+			if (_accessors is not null)
+			{
+				w.WriteStartArray("accessors");
+				foreach (GLTFAccessor a in _accessors)
+				{
+					a.Write(w);
+				}
+				w.WriteEndArray();
+			}
+			if (_buffers is not null)
+			{
+				w.WriteStartArray("buffers");
+				foreach (GLTFBuffer b in _buffers)
+				{
+					b.Write(w);
+				}
+				w.WriteEndArray();
+			}
+			if (_bufferViews is not null)
+			{
+				w.WriteStartArray("bufferViews");
+				foreach (GLTFBufferView bv in _bufferViews)
+				{
+					bv.Write(w);
+				}
+				w.WriteEndArray();
+			}
+			if (_meshes is not null)
+			{
+				w.WriteStartArray("meshes");
+				foreach (GLTFMesh m in _meshes)
+				{
+					m.Write(w);
+				}
+				w.WriteEndArray();
+			}
+			if (_nodes is not null)
+			{
+				w.WriteStartArray("nodes");
+				foreach (GLTFNode n in _nodes)
+				{
+					n.Write(w);
+				}
+				w.WriteEndArray();
+			}
+			if (_scenes is not null)
+			{
+				w.WriteStartArray("scenes");
+				foreach (GLTFScene s in _scenes)
+				{
+					s.Write(w);
+				}
+				w.WriteEndArray();
+
+				// Hardcode the first scene to be the visible one
+				w.WriteNumber("scene", 0);
+			}
+
+			w.WriteEndObject();
 		}
-
-		w.WriteEndObject();
-
-		w.Flush();
 	}
 
 	private static void WriteBINChunk(EndianBinaryWriter w, GLTFBinBuffer bin)
