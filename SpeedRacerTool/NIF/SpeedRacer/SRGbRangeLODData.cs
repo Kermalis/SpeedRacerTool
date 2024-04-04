@@ -5,8 +5,6 @@ namespace Kermalis.SpeedRacerTool.NIF.SpeedRacer;
 
 internal sealed class SRGbRangeLODData : NIFChunk
 {
-	public const string NAME = "SRGbRangeLODData";
-
 	public readonly float[] Data;
 
 	internal SRGbRangeLODData(EndianBinaryReader r, int offset, uint size)
@@ -23,6 +21,6 @@ internal sealed class SRGbRangeLODData : NIFChunk
 
 	internal override string DebugStr(NIFFile nif)
 	{
-		return DebugStr(NAME, string.Join(", ", Data));
+		return DebugStr(nameof(SRGbRangeLODData), string.Join(", ", Data));
 	}
 }

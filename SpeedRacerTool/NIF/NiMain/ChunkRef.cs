@@ -16,7 +16,12 @@ internal readonly struct ChunkRef<T> where T : NIFChunk
 
 	public T? Resolve(NIFFile nif)
 	{
-		return ChunkIndex == -1 ? null : (T)nif.BlockDatas[ChunkIndex];
+		if (ChunkIndex == -1)
+		{
+			return null;
+		}
+		NIFChunk c = nif.BlockDatas[ChunkIndex]; // Don't 1-line. I'm debugging chunks I haven't added yet
+		return (T)c;
 	}
 
 	public static void ReadArray(EndianBinaryReader r, ChunkRef<T>[] arr)

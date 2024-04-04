@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.9.34616.47
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpeedRacerTool", "SpeedRacerTool\SpeedRacerTool.csproj", "{D5092560-70EC-426B-8F19-5C1FC5BEF9A9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpeedRacerTool", "SpeedRacerTool\SpeedRacerTool.csproj", "{D5092560-70EC-426B-8F19-5C1FC5BEF9A9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SRGLTF", "SRGLTF\SRGLTF.csproj", "{8CAEAB0E-CAEC-4264-9656-E21818501997}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{D5092560-70EC-426B-8F19-5C1FC5BEF9A9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D5092560-70EC-426B-8F19-5C1FC5BEF9A9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D5092560-70EC-426B-8F19-5C1FC5BEF9A9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8CAEAB0E-CAEC-4264-9656-E21818501997}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8CAEAB0E-CAEC-4264-9656-E21818501997}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8CAEAB0E-CAEC-4264-9656-E21818501997}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8CAEAB0E-CAEC-4264-9656-E21818501997}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

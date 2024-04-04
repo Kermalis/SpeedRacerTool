@@ -6,15 +6,6 @@ namespace Kermalis.SpeedRacerTool.NIF.NiMain;
 /// <summary>Mesh data: vertices, vertex normals, etc.</summary>
 internal abstract class NiGeometryData : NiObject
 {
-	/// <summary>Used by NiGeometryData to control the volatility of the mesh.
-	/// Consistency Type is masked to only the upper 4 bits(0xF000). Dirty mask is the lower 12 (0x0FFF) but only used at runtime.</summary>
-	public enum ConsistencyType : ushort
-	{
-		CT_MUTABLE = 0x0000,
-		CT_STATIC = 0x4000,
-		CT_VOLATILE = 0x8000,
-	}
-
 	public readonly int GroupID;
 	public readonly ushort NumVerts;
 	public readonly byte KeepFlags;

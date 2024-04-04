@@ -5,8 +5,6 @@ namespace Kermalis.SpeedRacerTool.NIF.NiMain;
 /// <summary>Holds mesh data using strips of triangles.</summary>
 internal sealed class NiTriStripsData : NiTriBasedGeomData
 {
-	public const string NAME = "NiTriStripsData";
-
 	public readonly ushort[] StripLengths;
 	public readonly ushort[][] Points;
 
@@ -44,7 +42,7 @@ internal sealed class NiTriStripsData : NiTriBasedGeomData
 
 	internal override string DebugStr(NIFFile nif)
 	{
-		return DebugStr(NAME, string.Format("NumVerts={0} | NumTris={1} | NumStrips={2}",
+		return DebugStr(nameof(NiTriStripsData), string.Format("NumVerts={0} | NumTris={1} | NumStrips={2}",
 			NumVerts, NumTris, StripLengths.Length));
 	}
 }

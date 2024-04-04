@@ -5,8 +5,6 @@ namespace Kermalis.SpeedRacerTool.NIF.SpeedRacer;
 
 internal sealed class SRTrackPieceSaveData : NIFChunk
 {
-	public const string NAME = "SRTrackPieceSaveData";
-
 	public readonly float[] Data;
 
 	internal SRTrackPieceSaveData(EndianBinaryReader r, int offset, uint size)
@@ -23,6 +21,6 @@ internal sealed class SRTrackPieceSaveData : NIFChunk
 
 	internal override string DebugStr(NIFFile nif)
 	{
-		return DebugStr(NAME, string.Format("{0} | {1}", Data[0], Data[1]));
+		return DebugStr(nameof(SRTrackPieceSaveData), string.Format("{0} | {1}", Data[0], Data[1]));
 	}
 }

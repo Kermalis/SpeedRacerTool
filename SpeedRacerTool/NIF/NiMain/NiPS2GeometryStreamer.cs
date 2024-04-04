@@ -1,4 +1,5 @@
 ﻿using Kermalis.EndianBinaryIO;
+using Kermalis.SRGLTF;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -10,8 +11,6 @@ namespace Kermalis.SpeedRacerTool.NIF.NiMain;
 
 internal sealed class NiPS2GeometryStreamer : NIFChunk
 {
-	public const string NAME = "NiPS2GeometryStreamer";
-
 	private sealed class Mesh
 	{
 		private struct Vertex
@@ -162,8 +161,8 @@ internal sealed class NiPS2GeometryStreamer : NIFChunk
 			long end = r.Stream.Position + remainingByteLen;
 
 			int expectNear = (numVertices * 4 * sizeof(float)) + (numVertices * 2 * sizeof(short)) + (numVertices * 2 * sizeof(short));
-			Console.WriteLine("Mesh @ 0x{0:X}: Verts = {1} | ExpectNear = 0x{2:X} | Len = 0x{3:X} | Kind = {4} | Unk = {5}",
-				start, numVertices, expectNear, remainingByteLen, Kind, Unk);
+			//Console.WriteLine("Mesh @ 0x{0:X}: Verts = {1} | ExpectNear = 0x{2:X} | Len = 0x{3:X} | Kind = {4} | Unk = {5}",
+			//start, numVertices, expectNear, remainingByteLen, Kind, Unk);
 
 			long dataBegin = r.Stream.Position;
 			long portionBegin = dataBegin;
@@ -307,6 +306,14 @@ internal sealed class NiPS2GeometryStreamer : NIFChunk
 				}
 			}
 		}
+		public void Output(GLTFNode node, NIFFile nif)
+		{
+			NiTriBasedGeomData data = TriData.Resolve(nif)!;
+
+			node.Translation = data.BoundingSphere.Center;
+
+			GLTFMesh mesh = node.CreateMesh();
+		}
 	}
 
 	private readonly Mesh[] _meshes;
@@ -314,16 +321,16 @@ internal sealed class NiPS2GeometryStreamer : NIFChunk
 	internal NiPS2GeometryStreamer(EndianBinaryReader r, int offset)
 		: base(offset)
 	{
-		Console.WriteLine("NiPS2GeometryStreamer found in " + ((FileStream)r.Stream).Name);
+		//Console.WriteLine("NiPS2GeometryStreamer found in " + ((FileStream)r.Stream).Name);
 
-		_meshes = new Mesh[r.ReadUInt32()]; // Matches the number of NiTriStripsData in the .nif
+		_meshes = new Mesh[r.ReadUInt32()]; // Matches the number of NiTriStripsData/NiTriShapeData in the .nif
 
 		for (int i = 0; i < _meshes.Length; i++)
 		{
 			_meshes[i] = new Mesh(r);
 		}
 
-		Console.WriteLine();
+		//Console.WriteLine();
 	}
 
 	public void TestOBJ(NIFFile nif, string dir, bool overwrite)
@@ -357,34 +364,28 @@ internal sealed class NiPS2GeometryStreamer : NIFChunk
 			File.WriteAllText(Path.Combine(dir, i + ".txt"), sbDebug.ToString());
 		}
 	}
-	public void TestGLTF(NIFFile nif)
+	public void TestGLTF(NIFFile nif, string name)
 	{
-		using (FileStream s = File.Create(@"C:\Users\Kermalis\Downloads\Test.gltf"))
+		// TODO: Rotation per mesh. For example, t06gsk mesh 255 is part of the rocket in skorost. it should be between two tracks but it's rotated the wrong way atm.
+		// There also seems to be a transform, for example the skorost flags are offset from the base itself, not rotated. There's no way to rotate from their origin to where they are without offsetting the positions
+		// With GLTF, we should be able to specify the object origin and its rotation. But where is the rotation defined?
+
+		using (var gltf = new GLTFWriter())
 		{
-			var w = new EndianBinaryWriter(s, ascii: true);
+			GLTFScene scene = gltf.CreateScene();
+			scene.Name = name;
 
-			w.WriteChars("glTF");
-			w.WriteUInt32(2); // Version 2.0
-			w.WriteUInt32(0); // Length, come back to it later
-
-			// First chunk must be JSON
-			w.WriteUInt32(0); // Length, come back to it later
-			w.WriteChars("JSON");
-			w.WriteUInt32(0); // Binary data trailing 0x20s, TODO
-
-			// Second chunk must be BIN unless the data is empty
-			w.WriteUInt32(0); // Len, fix later
-			w.WriteChars("BIN ");
-			w.WriteUInt32(0); // Binary data trailing 0x00s, TODO
-
-			/*for (int i = 0; i < _meshes.Length; i++)
+			for (int i = 0; i < _meshes.Length; i++)
 			{
-				sb.Clear();
+				GLTFNode node = scene.CreateNode();
+				node.Name = $"[{i}]";
+				_meshes[i].Output(node, nif);
+			}
 
-				_meshes[i].Output(sb, nif);
-
-				File.WriteAllText(string.Format("{0}{1}.obj", DIR, i), sb.ToString());
-			}*/
+			using (FileStream s = File.Create(@"C:\Users\Kermalis\Downloads\Test.glb"))
+			{
+				gltf.WriteGLB(s);
+			}
 		}
 	}
 }

@@ -28,8 +28,6 @@ internal sealed class NiTriShapeData : NiTriBasedGeomData
 		}
 	}
 
-	public const string NAME = "NiTriShapeData";
-
 	/// <summary>Num Triangles times 3</summary>
 	public readonly uint NumTrianglePoints;
 	public readonly Tri[]? Triangles;

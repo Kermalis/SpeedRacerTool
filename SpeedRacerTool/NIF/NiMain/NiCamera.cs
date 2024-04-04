@@ -1,0 +1,45 @@
+﻿using Kermalis.EndianBinaryIO;
+
+namespace Kermalis.SpeedRacerTool.NIF.NiMain;
+
+internal sealed class NiCamera : NiAVObject
+{
+	public readonly ushort UnkUshort1;
+	public readonly float FrustumLeft;
+	public readonly float FrustumRight;
+	public readonly float FrustumTop;
+	public readonly float FrustumBottom;
+	public readonly float FrustumNear;
+	public readonly float FrustumFar;
+	public readonly bool IsOrtho;
+	public readonly float ViewportLeft;
+	public readonly float ViewportRight;
+	public readonly float ViewportTop;
+	public readonly float ViewportBottom;
+	public readonly float LODAdjust;
+	public readonly ChunkRef<NiObject> UnkLink;
+	// These two are unknown. Changing value crashes viewer according to nifskope
+	public readonly uint UnkUint1;
+	public readonly uint UnkUint2;
+
+	public NiCamera(EndianBinaryReader r, int offset)
+		: base(r, offset)
+	{
+		UnkUshort1 = r.ReadUInt16();
+		FrustumLeft = r.ReadSingle();
+		FrustumRight = r.ReadSingle();
+		FrustumTop = r.ReadSingle();
+		FrustumBottom = r.ReadSingle();
+		FrustumNear = r.ReadSingle();
+		FrustumFar = r.ReadSingle();
+		IsOrtho = r.ReadBoolean();
+		ViewportLeft = r.ReadSingle();
+		ViewportRight = r.ReadSingle();
+		ViewportTop = r.ReadSingle();
+		ViewportBottom = r.ReadSingle();
+		LODAdjust = r.ReadSingle();
+		UnkLink = new ChunkRef<NiObject>(r);
+		UnkUint1 = r.ReadUInt32();
+		UnkUint2 = r.ReadUInt32();
+	}
+}
