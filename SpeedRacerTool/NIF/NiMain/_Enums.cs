@@ -1,5 +1,15 @@
 ﻿namespace Kermalis.SpeedRacerTool.NIF.NiMain;
 
+// TODO: Are these const names from some leaked source/debugging, or are they simply from nifskope?
+
+internal enum AlphaFormat : uint
+{
+	ALPHA_NONE = 0,
+	ALPHA_BINARY = 1,
+	ALPHA_SMOOTH = 2,
+	ALPHA_DEFAULT = 3,
+}
+
 internal enum BillboardMode : ushort
 {
 	ALWAYS_FACE_CAMERA = 0,
@@ -9,6 +19,26 @@ internal enum BillboardMode : ushort
 	ALWAYS_FACE_CENTER = 3,
 	RIGID_FACE_CENTER = 4,
 	ROTATE_ABOUT_UP2 = 9,
+}
+
+internal enum ChannelConvention : uint
+{
+	CC_FIXED = 0,
+	/// <summary>Palette</summary>
+	CC_INDEX = 3,
+	CC_COMPRESSED = 4,
+	CC_EMPTY = 5,
+}
+
+internal enum ChannelType : uint
+{
+	CHNL_RED = 0,
+	CHNL_GREEN = 1,
+	CHNL_BLUE = 2,
+	CHNL_ALPHA = 3,
+	CHNL_COMPRESSED = 4,
+	CHNL_INDEX = 16,
+	CHNL_EMPTY = 19,
 }
 
 /// <summary>Used by NiGeometryData to control the volatility of the mesh.
@@ -36,6 +66,36 @@ internal enum EffectType : uint
 	EFFECT_PROJECTED_SHADOW = 1,
 	EFFECT_ENVIRONMENT_MAP = 2,
 	EFFECT_FOG_MAP = 3,
+}
+
+internal enum MipMapFormat : uint
+{
+	MIP_FMT_NO = 0,
+	MIP_FMT_YES = 1,
+	MIP_FMT_DEFAULT = 2,
+}
+
+internal enum PixelFormat : uint
+{
+	PX_FMT_RGB8 = 0,
+	PX_FMT_RGBA8 = 1,
+	PX_FMT_PAL8 = 2,
+	PX_FMT_DXT1 = 4,
+	PX_FMT_DXT5 = 5,
+	PX_FMT_DXT5_ALT = 6, // Maybe for normals?
+}
+
+internal enum PixelLayout : uint
+{
+	/// <summary>Texture is in 8-bit palette format.</summary>
+	PIX_LAY_PALETTISED = 0,
+	PIX_LAY_HIGH_COLOR_16 = 1,
+	PIX_LAY_TRUE_COLOR_32 = 2,
+	PIX_LAY_COMPRESSED = 3,
+	PIX_LAY_BUMPMAP = 4,
+	/// <summary>Texture is in 4-bit palette format.</summary>
+	PIX_LAY_PALETTISED_4 = 5,
+	PIX_LAY_DEFAULT = 6,
 }
 
 internal enum TexClampMode : uint

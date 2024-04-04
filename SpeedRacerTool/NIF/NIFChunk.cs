@@ -25,15 +25,6 @@ internal abstract class NIFChunk
 
 		switch (chunkType)
 		{
-			case nameof(SRGbGeometryGroup):
-				c = new SRGbGeometryGroup(r, ofs, chunkSize); break;
-			case nameof(SRGbRangeLODData):
-				c = new SRGbRangeLODData(r, ofs, chunkSize); break;
-			case nameof(SRTrackGeometrySaveExtraData):
-				c = new SRTrackGeometrySaveExtraData(r, ofs, chunkSize); break;
-			case nameof(SRTrackPieceSaveData):
-				c = new SRTrackPieceSaveData(r, ofs, chunkSize); break;
-
 			case nameof(NiAmbientLight):
 				c = new NiAmbientLight(r, ofs); break;
 			case nameof(NiBillboardNode):
@@ -48,10 +39,14 @@ internal abstract class NIFChunk
 				c = new NiNode(r, ofs); break;
 			case nameof(NiParticleSystem):
 				c = new NiParticleSystem(r, ofs); break;
+			case nameof(NiPixelData):
+				c = new NiPixelData(r, ofs); break;
 			case nameof(NiPointLight):
 				c = new NiPointLight(r, ofs); break;
 			case nameof(NiPS2GeometryStreamer):
 				c = new NiPS2GeometryStreamer(r, ofs); break;
+			case nameof(NiSourceTexture):
+				c = new NiSourceTexture(r, ofs); break;
 			case nameof(NiSpotLight):
 				c = new NiSpotLight(r, ofs); break;
 			case nameof(NiStringExtraData):
@@ -68,6 +63,15 @@ internal abstract class NIFChunk
 				c = new NiTriStripsData(r, ofs, userVersion); break;
 			case nameof(NiZBufferProperty):
 				c = new NiZBufferProperty(r, ofs); break;
+
+			case nameof(SRGbGeometryGroup):
+				c = new SRGbGeometryGroup(r, ofs, chunkSize); break;
+			case nameof(SRGbRangeLODData):
+				c = new SRGbRangeLODData(r, ofs, chunkSize); break;
+			case nameof(SRTrackGeometrySaveExtraData):
+				c = new SRTrackGeometrySaveExtraData(r, ofs, chunkSize); break;
+			case nameof(SRTrackPieceSaveData):
+				c = new SRTrackPieceSaveData(r, ofs, chunkSize); break;
 
 			default:
 				c = new NIFUnknownChunk(r, ofs, chunkType, chunkSize); break;

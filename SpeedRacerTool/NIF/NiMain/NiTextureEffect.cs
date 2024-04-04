@@ -11,7 +11,7 @@ internal sealed class NiTextureEffect : NiDynamicEffect
 	public readonly TexClampMode TexClamp;
 	public readonly EffectType TexType;
 	public readonly CoordGenType CoordGen;
-	public readonly ChunkRef<NIFUnknownChunk> SourceTex; // TODO: Ref<NiSourceTexture>
+	public readonly ChunkRef<NiSourceTexture> SourceTex;
 	public readonly byte Clipping;
 	public readonly Vector3 Unk100;
 	public readonly float Unk0;
@@ -25,7 +25,7 @@ internal sealed class NiTextureEffect : NiDynamicEffect
 		TexClamp = r.ReadEnum<TexClampMode>();
 		TexType = r.ReadEnum<EffectType>();
 		CoordGen = r.ReadEnum<CoordGenType>();
-		SourceTex = new ChunkRef<NIFUnknownChunk>(r);
+		SourceTex = new ChunkRef<NiSourceTexture>(r);
 		Clipping = r.ReadByte();
 		Unk100 = r.ReadVector3();
 		Unk0 = r.ReadSingle();
