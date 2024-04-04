@@ -2,7 +2,7 @@
 
 namespace Kermalis.SpeedRacerTool.NIF.NiMain;
 
-internal abstract class NiExtraData : NIFChunk
+internal abstract class NiExtraData : NiObject
 {
 	public readonly StringIndex Name;
 

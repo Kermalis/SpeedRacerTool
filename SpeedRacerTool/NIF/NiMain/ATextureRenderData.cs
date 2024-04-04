@@ -6,8 +6,6 @@ internal abstract class ATextureRenderData : NiObject
 {
 	public readonly PixelFormat PixFormat;
 	public readonly byte BitsPerPixel;
-	public readonly int UnkInt1; // Ref?
-	public readonly int UnkInt2;
 	public readonly byte Flags;
 	public readonly uint UnkUint1;
 	public readonly byte UnkByte1;
@@ -21,13 +19,9 @@ internal abstract class ATextureRenderData : NiObject
 	{
 		PixFormat = r.ReadEnum<PixelFormat>();
 		BitsPerPixel = r.ReadByte();
-		UnkInt1 = r.ReadInt32();
 
-		SRAssert.Equal(UnkInt1, -1);
-
-		UnkInt2 = r.ReadInt32();
-
-		SRAssert.Equal(UnkInt2, 0);
+		SRAssert.Equal(r.ReadInt32(), -1); // Ref?
+		SRAssert.Equal(r.ReadInt32(), 0);
 
 		Flags = r.ReadByte();
 		UnkUint1 = r.ReadUInt32();
@@ -48,5 +42,12 @@ internal abstract class ATextureRenderData : NiObject
 		{
 			Mips[i] = new MipMap(r);
 		}
+	}
+
+	public override void SetParentAndChildren(NIFFile nif, NiObject? parent)
+	{
+		base.SetParentAndChildren(nif, parent);
+
+		Palette.Resolve(nif).SetParentAndChildren(nif, this);
 	}
 }

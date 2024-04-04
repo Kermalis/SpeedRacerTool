@@ -9,7 +9,7 @@ using System.Text;
 
 namespace Kermalis.SpeedRacerTool.NIF.NiMain;
 
-internal sealed class NiPS2GeometryStreamer : NIFChunk
+internal sealed class NiPS2GeometryStreamer : NiObject
 {
 	private sealed class Mesh
 	{

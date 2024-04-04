@@ -1,6 +1,5 @@
 ﻿using Kermalis.EndianBinaryIO;
 using Kermalis.SpeedRacerTool.NIF;
-using Kermalis.SpeedRacerTool.NIF.NiMain;
 using Kermalis.SpeedRacerTool.XDS;
 using System;
 using System.IO;
@@ -40,7 +39,7 @@ internal sealed class Program
 		{
 			Console.SetOut(log);
 
-			ProgramAction a = ProgramAction.TestEveryNIF;
+			ProgramAction a = ProgramAction.TestNIF;
 
 			switch (a)
 			{
@@ -159,7 +158,7 @@ internal sealed class Program
 
 		// Fuji forward long trk geo (PS2)
 		// Its texture is @"C:\Users\Kermalis\Documents\Emulation\PS2\Hacking\Speed Racer PS2 and WII rip\Original WII rip\tracks\t03\t03ttrk1_colr.dds"
-		const string PATH = @"C:\Users\Kermalis\Documents\Emulation\PS2\Hacking\Speed Racer PS2 and WII rip\Original PS2.ZIP ps2_ps2\tracks\t03\geo\fwd_long.nif";
+		//const string PATH = @"C:\Users\Kermalis\Documents\Emulation\PS2\Hacking\Speed Racer PS2 and WII rip\Original PS2.ZIP ps2_ps2\tracks\t03\geo\fwd_long.nif";
 
 		// Aurora forward long trk geo (PS2)
 		// Its texture is @"C:\Users\Kermalis\Documents\Emulation\PS2\Hacking\Speed Racer PS2 and WII rip\Original WII rip\tracks\t04\t04ttrk1_colr.dds"
@@ -178,6 +177,10 @@ internal sealed class Program
 
 
 
+		// PS2 TESTING
+		const string PATH = @"C:\Users\Kermalis\Documents\Emulation\PS2\Hacking\Speed Racer PS2 and WII rip\Original PS2.ZIP ps2_ps2\tracks\t01\models\t01ldir.nif";
+
+
 		// Thunderhead track_tunnelcap (WII)
 		//const string PATH = @"C:\Users\Kermalis\Documents\Emulation\PS2\Hacking\Speed Racer PS2 and WII rip\Original WII rip\tracks\t01\models\t01gtunn.nif";
 
@@ -190,15 +193,12 @@ internal sealed class Program
 		{
 			var nif = new NIFFile(s);
 
-			foreach (NIFChunk c in nif.BlockDatas)
-			{
-				Console.WriteLine(c.DebugStr(nif));
-			}
+			nif.PrintHierarchy();
 
-			string objDir = GetNIFOutputDir(PATH);
-			var testC = (NiPS2GeometryStreamer?)Array.Find(nif.BlockDatas, a => a is NiPS2GeometryStreamer);
+			//string objDir = GetNIFOutputDir(PATH);
+			//var testC = (NiPS2GeometryStreamer?)Array.Find(nif.BlockDatas, a => a is NiPS2GeometryStreamer);
 			//testC?.TestOBJ(nif, objDir, true);
-			testC?.TestGLTF(nif, Path.GetFileName(PATH));
+			//testC?.TestGLTF(nif, Path.GetFileName(PATH));
 		}
 	}
 	private static void TestEveryNIF(string dir)
@@ -216,10 +216,7 @@ internal sealed class Program
 			{
 				var nif = new NIFFile(s);
 
-				foreach (NIFChunk c in nif.BlockDatas)
-				{
-					Console.WriteLine(c.DebugStr(nif));
-				}
+				nif.PrintHierarchy();
 
 				//string objDir = GetNIFOutputDir(path);
 				//var testC = (NiPS2GeometryStreamer?)Array.Find(nif.BlockDatas, a => a is NiPS2GeometryStreamer);

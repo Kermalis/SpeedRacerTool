@@ -11,7 +11,7 @@ internal abstract class NiAVObject : NiObjectNET
 	public readonly Matrix3x3 Rotation;
 	public readonly float Scale;
 	public readonly ChunkRef<NiProperty>[] Properties;
-	public readonly ChunkRef<NIFUnknownChunk> CollisionObject; // TODO: Ref<NiCollisionObject>
+	public readonly NullableChunkRef<NIFUnknownChunk> CollisionObject; // TODO: NullableChunkRef<NiCollisionObject>
 
 	protected NiAVObject(EndianBinaryReader r, int offset)
 		: base(r, offset)
@@ -24,6 +24,17 @@ internal abstract class NiAVObject : NiObjectNET
 		Properties = new ChunkRef<NiProperty>[r.ReadInt32()];
 		ChunkRef<NiProperty>.ReadArray(r, Properties);
 
-		CollisionObject = new ChunkRef<NIFUnknownChunk>(r);
+		CollisionObject = new NullableChunkRef<NIFUnknownChunk>(r);
+	}
+
+	public override void SetParentAndChildren(NIFFile nif, NiObject? parent)
+	{
+		base.SetParentAndChildren(nif, parent);
+
+		foreach (ChunkRef<NiProperty> r in Properties)
+		{
+			r.Resolve(nif).SetParentAndChildren(nif, this);
+		}
+		CollisionObject.Resolve(nif)?.SetParentAndChildren(nif, this);
 	}
 }

@@ -7,7 +7,7 @@ internal abstract class NiObjectNET : NiObject
 {
 	public readonly StringIndex Name;
 	public readonly ChunkRef<NiExtraData>[] ExtraDataList;
-	public readonly ChunkRef<NIFUnknownChunk> Controller; // TODO: Ref<NiTimeController>
+	public readonly NullableChunkRef<NIFUnknownChunk> Controller; // TODO: Ref<NiTimeController>
 
 	protected NiObjectNET(EndianBinaryReader r, int offset)
 		: base(offset)
@@ -17,6 +17,17 @@ internal abstract class NiObjectNET : NiObject
 		ExtraDataList = new ChunkRef<NiExtraData>[r.ReadInt32()];
 		ChunkRef<NiExtraData>.ReadArray(r, ExtraDataList);
 
-		Controller = new ChunkRef<NIFUnknownChunk>(r);
+		Controller = new NullableChunkRef<NIFUnknownChunk>(r);
+	}
+
+	public override void SetParentAndChildren(NIFFile nif, NiObject? parent)
+	{
+		base.SetParentAndChildren(nif, parent);
+
+		foreach (ChunkRef<NiExtraData> r in ExtraDataList)
+		{
+			r.Resolve(nif).SetParentAndChildren(nif, this);
+		}
+		Controller.Resolve(nif)?.SetParentAndChildren(nif, this);
 	}
 }

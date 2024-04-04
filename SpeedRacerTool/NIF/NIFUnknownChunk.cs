@@ -1,8 +1,10 @@
 ﻿using Kermalis.EndianBinaryIO;
+using Kermalis.SpeedRacerTool.NIF.NiMain;
 
 namespace Kermalis.SpeedRacerTool.NIF;
 
-internal sealed class NIFUnknownChunk : NIFChunk
+// Temporary chunk until all chunks are added
+internal sealed class NIFUnknownChunk : NiObject
 {
 	public readonly string Type;
 	public readonly byte[] Data;

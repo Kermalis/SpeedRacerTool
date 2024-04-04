@@ -1,9 +1,10 @@
 ﻿using Kermalis.EndianBinaryIO;
+using Kermalis.SpeedRacerTool.NIF.NiMain;
 using System;
 
 namespace Kermalis.SpeedRacerTool.NIF.SpeedRacer;
 
-internal sealed class SRTrackPieceSaveData : NIFChunk
+internal sealed class SRTrackPieceSaveData : NiObject
 {
 	// TODO
 	public readonly float[] Data;

@@ -5,6 +5,13 @@ namespace Kermalis.SpeedRacerTool;
 
 internal static class SRAssert
 {
+	internal static void GreaterEqual(long value, long expected)
+	{
+		if (value < expected)
+		{
+			throw new Exception();
+		}
+	}
 	internal static void Equal(long value, long expected)
 	{
 		if (value != expected)

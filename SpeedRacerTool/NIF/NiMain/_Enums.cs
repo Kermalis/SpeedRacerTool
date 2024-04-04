@@ -1,4 +1,6 @@
-﻿namespace Kermalis.SpeedRacerTool.NIF.NiMain;
+﻿using System;
+
+namespace Kermalis.SpeedRacerTool.NIF.NiMain;
 
 // TODO: Are these const names from some leaked source/debugging, or are they simply from nifskope?
 
@@ -98,6 +100,13 @@ internal enum PixelLayout : uint
 	PIX_LAY_DEFAULT = 6,
 }
 
+[Flags]
+internal enum ShadeFlags : ushort
+{
+	SHADING_HARD = 0,
+	SHADING_SMOOTH = 1 << 0,
+}
+
 internal enum TexClampMode : uint
 {
 	CLAMP_S_CLAMP_T = 0,
@@ -114,4 +123,14 @@ internal enum TexFilterMode : uint
 	FILTER_NEAREST_MIPNEAREST = 3,
 	FILTER_NEAREST_MIPLERP = 4,
 	FILTER_BILERP_MIPNEAREST = 5,
+}
+
+// I don't have NifSkope names here
+[Flags]
+internal enum ZBufferFlags : ushort
+{
+	None = 0,
+	EnableZTest = 1 << 0,
+	/// <summary>If this flag isn't set, it's read-only</summary>
+	EnableReadWrite = 1 << 1,
 }

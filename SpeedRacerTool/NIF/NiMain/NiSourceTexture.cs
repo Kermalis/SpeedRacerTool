@@ -27,4 +27,11 @@ internal sealed class NiSourceTexture : NiTexture
 		IsDirectRender = r.ReadBoolean();
 		ShouldPersistData = r.ReadBoolean();
 	}
+
+	public override void SetParentAndChildren(NIFFile nif, NiObject? parent)
+	{
+		base.SetParentAndChildren(nif, parent);
+
+		PixelData.Resolve(nif).SetParentAndChildren(nif, this);
+	}
 }

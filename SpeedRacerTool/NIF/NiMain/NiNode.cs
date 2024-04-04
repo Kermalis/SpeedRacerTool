@@ -36,7 +36,7 @@ internal class NiNode : NiAVObject
 				NiAVObject? cc = c.Resolve(nif);
 				if (cc is not null)
 				{
-					sb.AppendLine(string.Format("\t{0}@0x{1:X} \"{2}\"", cc.GetType().Name, cc.Offset, cc.Name.Resolve(nif)));
+					sb.AppendLine(string.Format("\t{0}@0x{1:X} \"{2}\"", cc.GetType().Name, cc.NIFOffset, cc.Name.Resolve(nif)));
 				}
 				else
 				{
@@ -48,5 +48,19 @@ internal class NiNode : NiAVObject
 		}
 
 		return DebugStr(GetType().Name, sb.ToString());
+	}
+
+	public override void SetParentAndChildren(NIFFile nif, NiObject? parent)
+	{
+		base.SetParentAndChildren(nif, parent);
+
+		foreach (ChunkRef<NiAVObject> r in Children)
+		{
+			r.Resolve(nif).SetParentAndChildren(nif, this);
+		}
+		foreach (ChunkRef<NiDynamicEffect> r in Effects)
+		{
+			r.Resolve(nif).SetParentAndChildren(nif, this);
+		}
 	}
 }

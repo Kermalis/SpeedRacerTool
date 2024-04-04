@@ -1,9 +1,10 @@
 ﻿using Kermalis.EndianBinaryIO;
+using Kermalis.SpeedRacerTool.NIF.NiMain;
 using System;
 
 namespace Kermalis.SpeedRacerTool.NIF.SpeedRacer;
 
-internal sealed class SRGbRangeLODData : NIFChunk
+internal sealed class SRGbRangeLODData : NiObject
 {
 	public readonly float[] Data;
 
