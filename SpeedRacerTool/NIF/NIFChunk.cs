@@ -5,6 +5,9 @@ using System;
 
 namespace Kermalis.SpeedRacerTool.NIF;
 
+// Referring to "nif.xml" in NifSkope to add these
+// Speed Racer is version 20.3.0.9 (0x14030009)
+
 internal abstract class NIFChunk
 {
 	public int Offset;
@@ -17,9 +20,6 @@ internal abstract class NIFChunk
 	internal static NIFChunk ReadChunk(EndianBinaryReader r, string chunkType, uint chunkSize, uint userVersion)
 	{
 		int ofs = (int)r.Stream.Position;
-
-		// Referring to "nif.xml" in NifSkope to add these
-		// Ptr is "tUpLink" type. It usually refers to things prior in the hierarchy
 
 		NIFChunk c;
 

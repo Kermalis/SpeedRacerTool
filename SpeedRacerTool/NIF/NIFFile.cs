@@ -7,8 +7,6 @@ namespace Kermalis.SpeedRacerTool.NIF;
 
 internal sealed class NIFFile
 {
-	// Speed Racer is 20.3.0.9 (0x14030009)
-
 	public readonly string VersionStr;
 	public readonly uint Version;
 	public readonly uint UserVersion;

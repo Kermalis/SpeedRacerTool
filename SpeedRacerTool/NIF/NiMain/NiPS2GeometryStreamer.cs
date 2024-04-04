@@ -122,7 +122,7 @@ internal sealed class NiPS2GeometryStreamer : NIFChunk
 		// TODO: Where are the normals?
 		// TODO: What specifies texture index?
 
-		public readonly ChunkRef<NiTriBasedGeomData> TriData;
+		public readonly ChunkPtr<NiTriBasedGeomData> TriData;
 		public readonly byte Kind;
 		public readonly byte Unk;
 
@@ -140,7 +140,7 @@ internal sealed class NiPS2GeometryStreamer : NIFChunk
 
 			long start = r.Stream.Position;
 
-			TriData = new ChunkRef<NiTriBasedGeomData>(r);
+			TriData = new ChunkPtr<NiTriBasedGeomData>(r);
 
 			// 1: 18/16_644. Example: "ps2_ps2\tracks\t01\models\t01gtl.nif"
 			// 3: 512/16_644. Example: "ps2_ps2\game\models\v01_mach6\v01gsra.nif"
@@ -219,7 +219,7 @@ internal sealed class NiPS2GeometryStreamer : NIFChunk
 			// CompressFlags = always 31 in Fuji (0b0001_1111)
 			// TODO: What are the CompressFlags? Can it explain the nonsense above?
 
-			NiTriBasedGeomData data = TriData.Resolve(nif)!;
+			NiTriBasedGeomData data = TriData.Resolve(nif);
 
 			Console.WriteLine("Saving {0} ({1})", index, data.GetType().Name);
 
@@ -308,7 +308,7 @@ internal sealed class NiPS2GeometryStreamer : NIFChunk
 		}
 		public void Output(GLTFNode node, NIFFile nif)
 		{
-			NiTriBasedGeomData data = TriData.Resolve(nif)!;
+			NiTriBasedGeomData data = TriData.Resolve(nif);
 
 			node.Translation = data.BoundingSphere.Center;
 
