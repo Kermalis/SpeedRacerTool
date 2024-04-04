@@ -5,6 +5,7 @@ namespace Kermalis.SpeedRacerTool.NIF.SpeedRacer;
 
 internal sealed class SRTrackPieceSaveData : NIFChunk
 {
+	// TODO
 	public readonly float[] Data;
 
 	internal SRTrackPieceSaveData(EndianBinaryReader r, int offset, uint size)

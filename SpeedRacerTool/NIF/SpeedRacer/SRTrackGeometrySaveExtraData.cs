@@ -3,6 +3,7 @@ using System;
 
 namespace Kermalis.SpeedRacerTool.NIF.SpeedRacer;
 
+// Probably doesn't inherit NiExtraData since the first Float would be a StringIndex, but doesn't seem to be one
 internal sealed class SRTrackGeometrySaveExtraData : NIFChunk
 {
 	public readonly float[] Floats;

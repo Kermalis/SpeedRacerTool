@@ -5,6 +5,7 @@ namespace Kermalis.SpeedRacerTool.NIF.SpeedRacer;
 
 internal sealed class SRGbGeometryGroup : NiAVObject
 {
+	// TODO
 	public readonly byte[] Data;
 
 	public SRGbGeometryGroup(EndianBinaryReader r, int offset, uint chunkSize)
