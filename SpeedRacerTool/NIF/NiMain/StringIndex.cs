@@ -16,4 +16,9 @@ internal readonly struct StringIndex
 	{
 		return Index == -1 ? null : nif.Strings[Index];
 	}
+
+	public override string ToString()
+	{
+		return string.Format("string ({0})", Index);
+	}
 }

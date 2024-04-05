@@ -22,4 +22,9 @@ internal readonly struct NullableChunkRef<T> where T : NiObject
 		NiObject o = nif.BlockDatas[ChunkIndex]; // Don't 1-line. I'm debugging chunks I haven't added yet
 		return (T)o;
 	}
+
+	public override string ToString()
+	{
+		return string.Format("{0} ({1})", typeof(T).Name, ChunkIndex);
+	}
 }
