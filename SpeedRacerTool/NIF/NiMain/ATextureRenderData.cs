@@ -9,6 +9,7 @@ internal abstract class ATextureRenderData : NiObject
 	public readonly byte Flags;
 	public readonly ChannelData[] Channels;
 	public readonly NullableChunkRef<NIFUnknownChunk> Palette; // TODO: NullableChunkRef<NiPalette>
+	/// <summary>Can be 0. For example, 4 bits per pixel</summary>
 	public readonly uint BytesPerPixel;
 	public readonly MipMap[] Mips;
 
