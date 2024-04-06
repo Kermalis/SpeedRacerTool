@@ -2,10 +2,10 @@
 
 internal sealed class XDSStringBuilder : DebugStringBuilder
 {
-	public void AppendLine(OneBeeString str)
+	public void AppendLine(string name, OneBeeString str)
 	{
-		_sb.Append(_curIndentChars);
-		_sb.AppendLine(str.ToString());
+		AppendName(name);
+		_sb.AppendLine(str.ToString()); // Will have quotes
 	}
 
 	public void NewNode()

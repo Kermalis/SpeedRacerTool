@@ -31,11 +31,11 @@ internal sealed class InterestingEventGeneratorsChunk : XDSChunk
 			sb.AppendLine_ArrayElement(index);
 			sb.NewObject();
 
-			sb.AppendLine_Quotes(EventID);
+			sb.AppendLine(nameof(EventID), EventID);
 
 			sb.NewNode();
 
-			sb.AppendLine(EventParams);
+			sb.AppendLine(nameof(EventParams), EventParams);
 
 			sb.EndNode();
 

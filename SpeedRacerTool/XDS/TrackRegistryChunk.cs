@@ -25,7 +25,7 @@ internal sealed class TrackRegistryChunk : XDSChunk
 		{
 			sb.NewNode();
 
-			sb.AppendLine(ToString());
+			sb.AppendLine_NoQuotes(ToString());
 
 			sb.EndNode();
 		}

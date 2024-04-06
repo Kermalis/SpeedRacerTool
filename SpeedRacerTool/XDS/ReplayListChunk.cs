@@ -39,7 +39,7 @@ internal sealed class ReplayListChunk : XDSChunk
 		for (int i = 0; i < Entries.Values.Length; i++)
 		{
 			sb.Append_ArrayElement(i);
-			sb.AppendLine_Quotes(Entries.Values[i], indent: false);
+			sb.AppendLine(Entries.Values[i], indent: false);
 		}
 		sb.EndArray();
 

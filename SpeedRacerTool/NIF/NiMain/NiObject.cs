@@ -73,6 +73,8 @@ internal abstract class NiObject
 				c = new NiStringExtraData(r, index, ofs, chunkSize); break;
 			case nameof(NiTextureEffect):
 				c = new NiTextureEffect(r, index, ofs); break;
+			case nameof(NiTexturingProperty):
+				c = new NiTexturingProperty(r, index, ofs); break;
 			case nameof(NiTransformController):
 				c = new NiTransformController(r, index, ofs); break;
 			case nameof(NiTransformInterpolator):
@@ -115,7 +117,7 @@ internal abstract class NiObject
 
 	internal void DebugID(NIFStringBuilder sb)
 	{
-		sb.AppendLine(string.Format("\"{0} (#{1}) @ 0x{2:X}\"", GetType().Name, NIFIndex, NIFOffset), indent: false);
+		sb.AppendLine_NoQuotes(string.Format("\"{0} (#{1}) @ 0x{2:X}\"", GetType().Name, NIFIndex, NIFOffset), indent: false);
 	}
 	internal void DebugStr_Wrap(NIFFile nif, NIFStringBuilder sb)
 	{

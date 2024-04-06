@@ -38,7 +38,7 @@ internal abstract class XDSChunk
 	internal void DebugStr(XDSStringBuilder sb, int i)
 	{
 		sb.Append_ArrayElement(i);
-		sb.AppendLine(string.Format("ChunkType={0}@0x{1:X}, OpCode=0x{2:X4}, NumNodes=0x{3:X4}", GetType().Name, Offset, OpCode, NumNodes), indent: false);
+		sb.AppendLine_NoQuotes(string.Format("ChunkType={0}@0x{1:X}, OpCode=0x{2:X4}, NumNodes=0x{3:X4}", GetType().Name, Offset, OpCode, NumNodes), indent: false);
 		sb.NewObject();
 
 		DebugStr(sb);
@@ -47,6 +47,6 @@ internal abstract class XDSChunk
 	}
 	protected virtual void DebugStr(XDSStringBuilder sb)
 	{
-		sb.AppendLine(GetType().ToString());
+		sb.AppendLine_NoQuotes(GetType().ToString());
 	}
 }

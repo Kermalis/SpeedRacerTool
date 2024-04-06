@@ -48,14 +48,14 @@ internal sealed class VehicleRegistryChunk : XDSChunk
 			sb.AppendLine_ArrayElement(index);
 			sb.NewObject();
 
-			sb.AppendLine_Quotes(CarID);
-			sb.AppendLine_Quotes(NameWithNickname);
-			sb.AppendLine_Quotes(Name);
-			sb.AppendLine_Quotes(Employer);
-			sb.AppendLine_Quotes(CarName);
-			sb.AppendLine_Quotes(UIFilename);
-			sb.AppendLine_Quotes(CarFilename);
-			sb.AppendLine_Quotes(VehicleSettingsXML);
+			sb.AppendLine(nameof(CarID), CarID);
+			sb.AppendLine(nameof(NameWithNickname), NameWithNickname);
+			sb.AppendLine(nameof(Name), Name);
+			sb.AppendLine(nameof(Employer), Employer);
+			sb.AppendLine(nameof(CarName), CarName);
+			sb.AppendLine(nameof(UIFilename), UIFilename);
+			sb.AppendLine(nameof(CarFilename), CarFilename);
+			sb.AppendLine(nameof(VehicleSettingsXML), VehicleSettingsXML);
 
 			sb.AppendLine(nameof(Unk1), Unk1);
 			sb.AppendLine(nameof(Unk2), Unk2);
@@ -109,7 +109,7 @@ internal sealed class VehicleRegistryChunk : XDSChunk
 
 	protected override void DebugStr(XDSStringBuilder sb)
 	{
-		sb.AppendLine_Quotes(Timestamp);
+		sb.AppendLine(nameof(Timestamp), Timestamp);
 
 		sb.NewNode();
 

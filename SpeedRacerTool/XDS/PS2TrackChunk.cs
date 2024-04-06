@@ -112,8 +112,8 @@ internal sealed class PS2TrackChunk : XDSChunk
 
 				sb.AppendLine(nameof(UnkUint1), UnkUint1);
 				sb.AppendLine(nameof(Unk4), Unk4);
-				sb.AppendLine_Quotes(UnkStr1);
-				sb.AppendLine_Quotes(UnkStr2);
+				sb.AppendLine(nameof(UnkStr1), UnkStr1);
+				sb.AppendLine(nameof(UnkStr2), UnkStr2);
 				sb.AppendLine(nameof(UnkFloat1), UnkFloat1);
 				sb.AppendLine(nameof(UnkUint2), UnkUint2);
 
@@ -222,8 +222,8 @@ internal sealed class PS2TrackChunk : XDSChunk
 			sb.AppendLine_ArrayElement(index);
 			sb.NewObject();
 
-			sb.AppendLine_Quotes(PieceName);
-			sb.AppendLine_Quotes(UnkStr20);
+			sb.AppendLine(nameof(PieceName), PieceName);
+			sb.AppendLine(nameof(UnkStr20), UnkStr20);
 
 			sb.AppendLine(nameof(UnkUshort1), UnkUshort1);
 			sb.AppendLine(nameof(UnkUshort2), UnkUshort2);
@@ -275,9 +275,9 @@ internal sealed class PS2TrackChunk : XDSChunk
 			sb.AppendLine_ArrayElement(index);
 			sb.NewObject();
 
-			sb.AppendLine_Quotes(JoinID);
-			sb.AppendLine_Quotes(Piece1);
-			sb.AppendLine_Quotes(Piece2);
+			sb.AppendLine(nameof(JoinID), JoinID);
+			sb.AppendLine(nameof(Piece1), Piece1);
+			sb.AppendLine(nameof(Piece2), Piece2);
 
 			sb.EndObject();
 		}
@@ -302,7 +302,7 @@ internal sealed class PS2TrackChunk : XDSChunk
 				sb.AppendLine_ArrayElement(index);
 				sb.NewObject();
 
-				sb.AppendLine_Quotes(JoinID);
+				sb.AppendLine(nameof(JoinID), JoinID);
 				sb.AppendLine_Boolean(nameof(UnkBool), UnkBool);
 
 				sb.EndObject();
@@ -345,7 +345,7 @@ internal sealed class PS2TrackChunk : XDSChunk
 			sb.AppendLine_ArrayElement(index);
 			sb.NewObject();
 
-			sb.AppendLine_Quotes(TrackType);
+			sb.AppendLine(nameof(TrackType), TrackType);
 
 			sb.NewNode();
 
@@ -427,13 +427,13 @@ internal sealed class PS2TrackChunk : XDSChunk
 			sb.AppendLine_ArrayElement(index);
 			sb.NewObject();
 
-			sb.AppendLine_Quotes(UnkStr1);
-			sb.AppendLine_Quotes(UnkStr1);
+			sb.AppendLine(nameof(UnkStr1), UnkStr1);
+			sb.AppendLine(nameof(UnkStr2), UnkStr2);
 			sb.AppendLine(nameof(UnkUint1), UnkUint1);
 			sb.AppendLine(nameof(UnkFloat1), UnkFloat1);
-			sb.AppendLine_Quotes(UnkStr1);
-			sb.AppendLine_Quotes(UnkStr1);
-			sb.AppendLine_Quotes(UnkStr1);
+			sb.AppendLine(nameof(UnkStr3), UnkStr3);
+			sb.AppendLine(nameof(UnkStr4), UnkStr4);
+			sb.AppendLine(nameof(UnkStr5), UnkStr5);
 			sb.AppendLine(nameof(UnkFloat2), UnkFloat2);
 			sb.AppendLine(nameof(UnkFloat3), UnkFloat3);
 
@@ -515,7 +515,7 @@ internal sealed class PS2TrackChunk : XDSChunk
 
 	protected override void DebugStr(XDSStringBuilder sb)
 	{
-		sb.AppendLine_Quotes(UnkXML);
+		sb.AppendLine(nameof(UnkXML), UnkXML);
 
 		sb.NewNode();
 

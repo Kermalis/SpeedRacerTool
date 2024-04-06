@@ -1,5 +1,4 @@
-﻿using Kermalis.SpeedRacerTool.NIF.NiMain;
-using System.Numerics;
+﻿using System.Numerics;
 using System.Text;
 
 namespace Kermalis.SpeedRacerTool;
@@ -19,6 +18,16 @@ internal abstract class DebugStringBuilder
 		_curIndentChars = string.Empty;
 	}
 
+	public void Indent(int change)
+	{
+		_curIndentChars = string.Empty;
+		_indentLevel = (byte)(_indentLevel + change);
+		for (int i = 0; i < _indentLevel; i++)
+		{
+			_curIndentChars += INDENT_CHARS;
+		}
+	}
+
 	public void AppendName(string name)
 	{
 		_sb.Append(_curIndentChars);
@@ -26,16 +35,48 @@ internal abstract class DebugStringBuilder
 		_sb.Append(" = ");
 	}
 
-	public void AppendLine_ArrayElement(int i)
+	public void AppendLine_ArrayElement(int index)
 	{
 		_sb.Append(_curIndentChars);
-		_sb.AppendLine($"[{i}] =");
+		_sb.Append('[');
+		_sb.Append(index);
+		_sb.AppendLine("] = ");
 	}
-	public void Append_ArrayElement(int i)
+	public void Append_ArrayElement(int index)
 	{
 		_sb.Append(_curIndentChars);
-		_sb.Append($"[{i}] = ");
+		_sb.Append('[');
+		_sb.Append(index);
+		_sb.Append("] = ");
 	}
+
+	/// <summary>Writes <see langword="null"/> with no indentation or quotes</summary>
+	public void AppendLine_Null()
+	{
+		_sb.AppendLine("null");
+	}
+	public void AppendLine_Null(string name)
+	{
+		AppendName(name);
+		AppendLine_Null();
+	}
+
+	public void AppendLine_Boolean(string name, bool val)
+	{
+		AppendName(name);
+		AppendLine_NoQuotes(val.ToString(), indent: false);
+	}
+
+	public void AppendLine(char c, bool indent = true)
+	{
+		if (indent)
+		{
+			_sb.Append(_curIndentChars);
+		}
+		_sb.Append(c);
+		_sb.AppendLine();
+	}
+
 	public void AppendLine(string name, byte val, bool hex = true)
 	{
 		AppendName(name);
@@ -49,6 +90,13 @@ internal abstract class DebugStringBuilder
 			_sb.AppendLine(val.ToString());
 		}
 	}
+
+	public void AppendLine(string name, short val)
+	{
+		AppendName(name);
+		_sb.AppendLine(val.ToString());
+	}
+
 	public void AppendLine(string name, ushort val, bool hex = true)
 	{
 		AppendName(name);
@@ -62,6 +110,7 @@ internal abstract class DebugStringBuilder
 			_sb.AppendLine(val.ToString());
 		}
 	}
+
 	public void AppendLine(string name, uint val, bool hex = true)
 	{
 		AppendName(name);
@@ -75,71 +124,7 @@ internal abstract class DebugStringBuilder
 			_sb.AppendLine(val.ToString());
 		}
 	}
-	public void AppendLine(string name, float val)
-	{
-		AppendName(name);
-		AppendLine(val, indent: false);
-	}
-	public void AppendLine(string name, Matrix3x3 val)
-	{
-		AppendName(name);
-		AppendLine(val, indent: false);
-	}
-	public void AppendLine(string name, Vector3 val)
-	{
-		AppendName(name);
-		AppendLine(val, indent: false);
-	}
-	public void AppendLine(string name, Quaternion val)
-	{
-		AppendName(name);
-		AppendLine(val, indent: false);
-	}
-	public void AppendLine(string name, string? val)
-	{
-		AppendName(name);
-		if (val is null)
-		{
-			_sb.AppendLine("null");
-		}
-		else
-		{
-			AppendLine_Quotes(val, indent: false);
-		}
-	}
-	public void AppendLine_Boolean(string name, bool val)
-	{
-		AppendName(name);
-		AppendLine(val.ToString(), indent: false);
-	}
 
-	public void Indent(int change)
-	{
-		_curIndentChars = string.Empty;
-		_indentLevel = (byte)(_indentLevel + change);
-		for (int i = 0; i < _indentLevel; i++)
-		{
-			_curIndentChars += INDENT_CHARS;
-		}
-	}
-
-	public void AppendLine(string str, bool indent = true)
-	{
-		if (indent)
-		{
-			_sb.Append(_curIndentChars);
-		}
-		_sb.AppendLine(str);
-	}
-	public void AppendLine(char c, bool indent = true)
-	{
-		if (indent)
-		{
-			_sb.Append(_curIndentChars);
-		}
-		_sb.Append(c);
-		_sb.AppendLine();
-	}
 	public void AppendLine(float val, bool indent = true)
 	{
 		if (indent)
@@ -150,6 +135,12 @@ internal abstract class DebugStringBuilder
 		_sb.Append('f');
 		_sb.AppendLine();
 	}
+	public void AppendLine(string name, float val)
+	{
+		AppendName(name);
+		AppendLine(val, indent: false);
+	}
+
 	public void AppendLine(Vector2 val, bool indent = true)
 	{
 		if (indent)
@@ -162,6 +153,7 @@ internal abstract class DebugStringBuilder
 		_sb.Append(val.Y.ToString(SRUtils.TOSTRING_NO_SCIENTIFIC));
 		_sb.AppendLine("f)");
 	}
+
 	public void AppendLine(Vector3 val, bool indent = true)
 	{
 		if (indent)
@@ -176,6 +168,12 @@ internal abstract class DebugStringBuilder
 		_sb.Append(val.Z.ToString(SRUtils.TOSTRING_NO_SCIENTIFIC));
 		_sb.AppendLine("f)");
 	}
+	public void AppendLine(string name, Vector3 val)
+	{
+		AppendName(name);
+		AppendLine(val, indent: false);
+	}
+
 	public void AppendLine(Quaternion val, bool indent = true)
 	{
 		if (indent)
@@ -192,37 +190,14 @@ internal abstract class DebugStringBuilder
 		_sb.Append(val.W.ToString(SRUtils.TOSTRING_NO_SCIENTIFIC));
 		_sb.AppendLine("f)");
 	}
-	public void AppendLine(Matrix3x3 val, bool indent = true)
+	public void AppendLine(string name, Quaternion val)
 	{
-		if (indent)
-		{
-			_sb.Append(_curIndentChars);
-		}
-		_sb.Append('(');
-
-		_sb.Append(val.A.ToString(SRUtils.TOSTRING_NO_SCIENTIFIC));
-		_sb.Append("f, ");
-		_sb.Append(val.B.ToString(SRUtils.TOSTRING_NO_SCIENTIFIC));
-		_sb.Append("f, ");
-		_sb.Append(val.C.ToString(SRUtils.TOSTRING_NO_SCIENTIFIC));
-		_sb.AppendLine("f,");
-
-		_sb.Append(val.D.ToString(SRUtils.TOSTRING_NO_SCIENTIFIC));
-		_sb.Append("f, ");
-		_sb.Append(val.E.ToString(SRUtils.TOSTRING_NO_SCIENTIFIC));
-		_sb.Append("f, ");
-		_sb.Append(val.F.ToString(SRUtils.TOSTRING_NO_SCIENTIFIC));
-		_sb.AppendLine("f,");
-
-		_sb.Append(val.G.ToString(SRUtils.TOSTRING_NO_SCIENTIFIC));
-		_sb.Append("f, ");
-		_sb.Append(val.H.ToString(SRUtils.TOSTRING_NO_SCIENTIFIC));
-		_sb.Append("f, ");
-		_sb.Append(val.I.ToString(SRUtils.TOSTRING_NO_SCIENTIFIC));
-
-		_sb.AppendLine("f)");
+		AppendName(name);
+		AppendLine(val, indent: false);
 	}
-	public void AppendLine_Quotes(string val, bool indent = true)
+
+	/// <summary>Write string with quotes</summary>
+	public void AppendLine(string val, bool indent = true)
 	{
 		if (indent)
 		{
@@ -232,6 +207,27 @@ internal abstract class DebugStringBuilder
 		_sb.Append(val);
 		_sb.Append('"');
 		_sb.AppendLine();
+	}
+	public void AppendLine(string name, string? val)
+	{
+		AppendName(name);
+		if (val is null)
+		{
+			AppendLine_Null();
+		}
+		else
+		{
+			AppendLine(val, indent: false);
+		}
+	}
+
+	public void AppendLine_NoQuotes(string str, bool indent = true)
+	{
+		if (indent)
+		{
+			_sb.Append(_curIndentChars);
+		}
+		_sb.AppendLine(str);
 	}
 
 	public void NewObject()
@@ -247,19 +243,19 @@ internal abstract class DebugStringBuilder
 
 	public void EmptyArray()
 	{
-		AppendLine("Arr(0) = []");
+		AppendLine_NoQuotes("Arr(0) = []");
 	}
 	public void NewArray(string name, int len)
 	{
 		AppendName(name);
 
-		AppendLine($"Arr({len}) =", indent: false);
+		AppendLine_NoQuotes($"Arr({len}) =", indent: false);
 		AppendLine('[');
 		Indent(+1);
 	}
 	public void NewArray(int len)
 	{
-		AppendLine($"Arr({len}) =");
+		AppendLine_NoQuotes($"Arr({len}) =");
 		AppendLine('[');
 		Indent(+1);
 	}

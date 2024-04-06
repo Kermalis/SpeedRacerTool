@@ -85,7 +85,7 @@ internal sealed class XDSFile
 
 		var sb = new XDSStringBuilder();
 
-		sb.AppendLine(string.Format("FileType=0x{0:X8} | ({1} chunks) =", FileType, Chunks.Count));
+		sb.AppendLine_NoQuotes(string.Format("FileType=0x{0:X8} | ({1} chunks) =", FileType, Chunks.Count));
 		sb.AppendLine('[');
 		sb.Indent(+1);
 		for (int i = 0; i < Chunks.Count; i++)

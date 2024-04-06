@@ -207,7 +207,7 @@ internal sealed class PhysicsPropsChunk : XDSChunk
 			// TODO
 			sb.NewNode();
 
-			sb.AppendLine(CollisionShape);
+			sb.AppendLine(nameof(CollisionShape), CollisionShape);
 
 			sb.EmptyArray();
 
@@ -215,7 +215,7 @@ internal sealed class PhysicsPropsChunk : XDSChunk
 			for (int i = 0; i < ConvexArray1.Values.Length; i++)
 			{
 				sb.Append_ArrayElement(i);
-				sb.AppendLine(ConvexArray1.Values[i].ToString(), indent: false);
+				sb.AppendLine_NoQuotes(ConvexArray1.Values[i].ToString(), indent: false);
 			}
 			sb.EndArray();
 
@@ -233,7 +233,7 @@ internal sealed class PhysicsPropsChunk : XDSChunk
 			for (int i = 0; i < HeightfieldData.Values.Length; i++)
 			{
 				sb.Append_ArrayElement(i);
-				sb.AppendLine("0x" + HeightfieldData.Values[i].ToString("X"), indent: false);
+				sb.AppendLine_NoQuotes("0x" + HeightfieldData.Values[i].ToString("X"), indent: false);
 			}
 			sb.EndArray();
 
@@ -297,7 +297,7 @@ internal sealed class PhysicsPropsChunk : XDSChunk
 	{
 		sb.NewNode();
 
-		sb.AppendLine(Name);
+		sb.AppendLine(nameof(Name), Name);
 		sb.EmptyArray();
 
 		sb.NewArray(Entries.Values.Length);

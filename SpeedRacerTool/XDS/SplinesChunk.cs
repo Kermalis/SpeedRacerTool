@@ -118,12 +118,12 @@ internal sealed class SplinesChunk : XDSChunk
 
 	protected override void DebugStr(XDSStringBuilder sb)
 	{
-		sb.AppendLine_Quotes(Name);
+		sb.AppendLine(nameof(Name), Name);
 		sb.AppendLine(nameof(Unk48), Unk48, hex: false);
 		sb.AppendLine(nameof(Unk4C), Unk4C, hex: false);
 		sb.AppendLine(nameof(Unk50), Unk50);
 		sb.AppendLine(nameof(Unk7C), Unk7C);
-		sb.AppendLine_Quotes(UnitOfMeasurement);
+		sb.AppendLine(nameof(UnitOfMeasurement), UnitOfMeasurement);
 
 		sb.NewNode();
 

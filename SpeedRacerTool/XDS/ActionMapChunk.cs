@@ -41,9 +41,9 @@ internal sealed class ActionMapChunk : XDSChunk
 
 				sb.NewNode();
 
-				sb.AppendLine(Type);
-				sb.AppendLine(KeyFilter);
-				sb.AppendLine(Key);
+				sb.AppendLine(nameof(Type), Type);
+				sb.AppendLine(nameof(KeyFilter), KeyFilter);
+				sb.AppendLine(nameof(Key), Key);
 
 				sb.EndNode();
 
@@ -86,7 +86,7 @@ internal sealed class ActionMapChunk : XDSChunk
 
 			sb.NewNode();
 
-			sb.AppendLine(ActionName);
+			sb.AppendLine(nameof(ActionName), ActionName);
 
 			sb.NewArray(KeyBinds.Values.Length);
 			for (int i = 0; i < KeyBinds.Values.Length; i++)
@@ -137,7 +137,7 @@ internal sealed class ActionMapChunk : XDSChunk
 	{
 		sb.NewNode();
 
-		sb.AppendLine(ActionGroupName);
+		sb.AppendLine(nameof(ActionGroupName), ActionGroupName);
 
 		sb.NewArray(Entries.Values.Length);
 		for (int i = 0; i < Entries.Values.Length; i++)
