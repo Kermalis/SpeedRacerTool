@@ -16,6 +16,6 @@ internal sealed class NiLODNode : NiSwitchNode
 	{
 		base.DebugStr(nif, sb);
 
-		sb.WriteTODO(nameof(NiLODNode));
+		sb.WriteChunk(nameof(LODData), nif, LODData.Resolve(nif));
 	}
 }

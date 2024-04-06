@@ -28,6 +28,11 @@ internal sealed class NiMaterialProperty : NiProperty
 	{
 		base.DebugStr(nif, sb);
 
-		sb.WriteTODO(nameof(NiMaterialProperty));
+		sb.AppendLine(nameof(AmbientColor), AmbientColor);
+		sb.AppendLine(nameof(DiffuseColor), DiffuseColor);
+		sb.AppendLine(nameof(SpecularColor), SpecularColor);
+		sb.AppendLine(nameof(EmissiveColor), EmissiveColor);
+		sb.AppendLine(nameof(Glossiness), Glossiness);
+		sb.AppendLine(nameof(Alpha), Alpha);
 	}
 }

@@ -18,6 +18,7 @@ internal abstract class NiSwitchNode : NiNode
 	{
 		base.DebugStr(nif, sb);
 
-		sb.WriteTODO(nameof(NiSwitchNode));
+		sb.AppendLine(nameof(UnkUshort1), UnkUshort1);
+		sb.AppendLine(nameof(UnkInt1), UnkInt1);
 	}
 }

@@ -20,6 +20,11 @@ internal abstract class NiDynamicEffect : NiAVObject
 	{
 		base.DebugStr(nif, sb);
 
-		sb.WriteTODO(nameof(NiDynamicEffect));
+		sb.NewArray(nameof(AffectedNodes), AffectedNodes.Length);
+		for (int i = 0; i < AffectedNodes.Length; i++)
+		{
+			sb.WriteChunk(i, nif, AffectedNodes[i].Resolve(nif));
+		}
+		sb.EndArray();
 	}
 }

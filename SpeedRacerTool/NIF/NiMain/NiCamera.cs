@@ -61,10 +61,9 @@ internal sealed class NiCamera : NiAVObject
 		sb.AppendLine(nameof(ViewportTop), ViewportTop);
 		sb.AppendLine(nameof(ViewportBottom), ViewportBottom);
 		sb.AppendLine(nameof(LODAdjust), LODAdjust);
-
-		sb.WriteChunk(nameof(UnkLink), nif, UnkLink.Resolve(nif));
-
 		sb.AppendLine(nameof(UnkUint1), UnkUint1);
 		sb.AppendLine(nameof(UnkUint2), UnkUint2);
+
+		sb.WriteChunk(nameof(UnkLink), nif, UnkLink.Resolve(nif));
 	}
 }

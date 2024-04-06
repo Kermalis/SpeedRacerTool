@@ -6,7 +6,7 @@ namespace Kermalis.SpeedRacerTool.NIF.NiMain;
 internal sealed class NiTriStripsData : NiTriBasedGeomData
 {
 	public readonly ushort[] StripLengths;
-	public readonly ushort[][] Points;
+	public readonly ushort[][]? Points;
 
 	internal NiTriStripsData(EndianBinaryReader r, int index, int offset, uint userVersion)
 		: base(r, index, offset)
@@ -16,11 +16,10 @@ internal sealed class NiTriStripsData : NiTriBasedGeomData
 		StripLengths = new ushort[numStrips];
 		r.ReadUInt16s(StripLengths);
 
-		// Only PS2 version has this...
+		// Only PS2 version has this..?
 		if (userVersion != 0)
 		{
-			bool hasPoints = r.ReadSafeBoolean();
-			if (hasPoints)
+			if (r.ReadSafeBoolean())
 			{
 				Points = new ushort[numStrips][];
 				for (int i = 0; i < Points.Length; i++)
@@ -29,14 +28,6 @@ internal sealed class NiTriStripsData : NiTriBasedGeomData
 					r.ReadUInt16s(Points[i]);
 				}
 			}
-			else
-			{
-				Points = [];
-			}
-		}
-		else
-		{
-			Points = [];
 		}
 	}
 

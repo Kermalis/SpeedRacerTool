@@ -20,6 +20,8 @@ internal sealed class NiSpotLight : NiPointLight
 	{
 		base.DebugStr(nif, sb);
 
-		sb.WriteTODO(nameof(NiSpotLight));
+		sb.AppendLine(nameof(CutoffAngle), CutoffAngle);
+		sb.AppendLine(nameof(UnkFloat1), UnkFloat1);
+		sb.AppendLine(nameof(Exponent), Exponent);
 	}
 }

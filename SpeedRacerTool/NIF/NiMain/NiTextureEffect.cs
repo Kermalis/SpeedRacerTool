@@ -11,7 +11,7 @@ internal sealed class NiTextureEffect : NiDynamicEffect
 	public readonly TexClampMode TexClamp;
 	public readonly EffectType TexType;
 	public readonly CoordGenType CoordGen;
-	public readonly ChunkRef<NiSourceTexture> SourceTex;
+	public readonly ChunkRef<NiSourceTexture> SourceTex; // TODO: Child?
 	public readonly byte Clipping;
 	public readonly Vector3 Unk100;
 	public readonly float Unk0;
@@ -35,6 +35,16 @@ internal sealed class NiTextureEffect : NiDynamicEffect
 	{
 		base.DebugStr(nif, sb);
 
-		sb.WriteTODO(nameof(NiTextureEffect));
+		sb.AppendLine(nameof(ProjectionTrans), ProjectionTrans);
+		sb.AppendLine(nameof(TexFilter), TexFilter.ToString());
+		sb.AppendLine(nameof(TexClamp), TexClamp.ToString());
+		sb.AppendLine(nameof(TexType), TexType.ToString());
+		sb.AppendLine(nameof(CoordGen), CoordGen.ToString());
+		sb.AppendLine(nameof(Clipping), Clipping);
+		sb.AppendLine(nameof(Unk100), Unk100);
+		sb.AppendLine(nameof(Unk0), Unk0);
+		sb.AppendLine(nameof(ProjectionMat), ProjectionMat);
+
+		sb.WriteChunk(nameof(SourceTex), nif, SourceTex.Resolve(nif));
 	}
 }

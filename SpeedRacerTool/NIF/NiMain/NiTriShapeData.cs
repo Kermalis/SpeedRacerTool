@@ -39,18 +39,13 @@ internal sealed class NiTriShapeData : NiTriBasedGeomData
 	{
 		NumTrianglePoints = r.ReadUInt32();
 
-		bool hasTris = r.ReadSafeBoolean();
-		if (hasTris)
+		if (r.ReadSafeBoolean())
 		{
 			Triangles = new Tri[NumTris];
 			for (int i = 0; i < Triangles.Length; i++)
 			{
 				Triangles[i] = new Tri(r);
 			}
-		}
-		else
-		{
-			Triangles = [];
 		}
 
 		MatchGroups = new MatchGroup[r.ReadUInt16()];

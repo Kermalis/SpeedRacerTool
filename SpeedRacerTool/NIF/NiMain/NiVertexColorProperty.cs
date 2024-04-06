@@ -21,6 +21,6 @@ internal sealed class NiVertexColorProperty : NiProperty
 	{
 		base.DebugStr(nif, sb);
 
-		sb.WriteTODO(nameof(NiVertexColorProperty));
+		sb.AppendLine(nameof(Flags), Flags);
 	}
 }

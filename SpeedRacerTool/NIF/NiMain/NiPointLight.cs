@@ -21,6 +21,8 @@ internal class NiPointLight : NiLight
 	{
 		base.DebugStr(nif, sb);
 
-		sb.WriteTODO(nameof(NiPointLight));
+		sb.AppendLine(nameof(AttenConstant), AttenConstant);
+		sb.AppendLine(nameof(AttenLinear), AttenLinear);
+		sb.AppendLine(nameof(AttenQuadratic), AttenQuadratic);
 	}
 }

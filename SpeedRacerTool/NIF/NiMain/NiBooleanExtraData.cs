@@ -15,6 +15,7 @@ internal sealed class NiBooleanExtraData : NiExtraData
 	protected override void DebugStr(NIFFile nif, NIFStringBuilder sb)
 	{
 		base.DebugStr(nif, sb);
+
 		sb.AppendLine_Boolean(nameof(Data), Data);
 	}
 }

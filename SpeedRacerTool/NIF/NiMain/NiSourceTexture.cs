@@ -41,14 +41,13 @@ internal sealed class NiSourceTexture : NiTexture
 
 		sb.AppendLine_Boolean(nameof(IsExternal), IsExternal);
 		sb.AppendLine(nameof(FileName), FileName.Resolve(nif));
-
-		sb.WriteChunk(nameof(PixelData), nif, PixelData.Resolve(nif));
-
 		sb.AppendLine(nameof(PixelLayout), PixelLayout.ToString());
 		sb.AppendLine(nameof(MipMap), MipMap.ToString());
 		sb.AppendLine(nameof(Alpha), Alpha.ToString());
 		sb.AppendLine_Boolean(nameof(IsStatic), IsStatic);
 		sb.AppendLine_Boolean(nameof(IsDirectRender), IsDirectRender);
 		sb.AppendLine_Boolean(nameof(ShouldPersistData), ShouldPersistData);
+
+		sb.WriteChunk(nameof(PixelData), nif, PixelData.Resolve(nif));
 	}
 }

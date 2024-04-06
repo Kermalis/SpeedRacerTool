@@ -111,6 +111,12 @@ internal abstract class DebugStringBuilder
 		}
 	}
 
+	public void AppendLine(string name, int val)
+	{
+		AppendName(name);
+		_sb.AppendLine(val.ToString());
+	}
+
 	public void AppendLine(string name, uint val, bool hex = true)
 	{
 		AppendName(name);

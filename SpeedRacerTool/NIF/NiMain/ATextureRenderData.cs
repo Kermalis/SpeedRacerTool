@@ -56,6 +56,7 @@ internal abstract class ATextureRenderData : NiObject
 		sb.AppendLine(nameof(PixFormat), PixFormat.ToString());
 		sb.AppendLine(nameof(BitsPerPixel), BitsPerPixel, hex: false);
 		sb.AppendLine(nameof(Flags), Flags);
+		sb.AppendLine(nameof(BytesPerPixel), BytesPerPixel, hex: false);
 
 		sb.NewArray(nameof(Channels), Channels.Length);
 		for (int i = 0; i < Channels.Length; i++)
@@ -64,14 +65,13 @@ internal abstract class ATextureRenderData : NiObject
 		}
 		sb.EndArray();
 
-		sb.WriteChunk(nameof(Palette), nif, Palette.Resolve(nif));
-		sb.AppendLine(nameof(BytesPerPixel), BytesPerPixel, hex: false);
-
 		sb.NewArray(nameof(Mips), Mips.Length);
 		for (int i = 0; i < Mips.Length; i++)
 		{
 			Mips[i].DebugStr(sb, i);
 		}
 		sb.EndArray();
+
+		sb.WriteChunk(nameof(Palette), nif, Palette.Resolve(nif));
 	}
 }

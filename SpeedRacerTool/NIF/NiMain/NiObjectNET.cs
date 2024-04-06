@@ -35,13 +35,13 @@ internal abstract class NiObjectNET : NiObject
 	{
 		sb.AppendLine(nameof(Name), Name.Resolve(nif));
 
+		sb.WriteChunk(nameof(Controller), nif, Controller.Resolve(nif));
+
 		sb.NewArray(nameof(ExtraDataList), ExtraDataList.Length);
 		for (int i = 0; i < ExtraDataList.Length; i++)
 		{
 			sb.WriteChunk(i, nif, ExtraDataList[i].Resolve(nif));
 		}
 		sb.EndArray();
-
-		sb.WriteChunk(nameof(Controller), nif, Controller.Resolve(nif));
 	}
 }

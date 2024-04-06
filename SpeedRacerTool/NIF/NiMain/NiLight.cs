@@ -23,6 +23,9 @@ internal abstract class NiLight : NiDynamicEffect
 	{
 		base.DebugStr(nif, sb);
 
-		sb.WriteTODO(nameof(NiLight));
+		sb.AppendLine(nameof(Power), Power);
+		sb.AppendLine(nameof(AmbientColor), AmbientColor);
+		sb.AppendLine(nameof(DiffuseColor), DiffuseColor);
+		sb.AppendLine(nameof(SpecularColor), SpecularColor);
 	}
 }

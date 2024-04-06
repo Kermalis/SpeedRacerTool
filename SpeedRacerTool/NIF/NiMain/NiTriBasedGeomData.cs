@@ -17,6 +17,6 @@ internal abstract class NiTriBasedGeomData : NiGeometryData
 	{
 		base.DebugStr(nif, sb);
 
-		sb.WriteTODO(nameof(NiTriBasedGeomData));
+		sb.AppendLine(nameof(NumTris), NumTris, hex: false);
 	}
 }

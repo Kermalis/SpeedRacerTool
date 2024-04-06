@@ -36,17 +36,17 @@ internal class NiNode : NiAVObject
 	{
 		base.DebugStr(nif, sb);
 
-		sb.NewArray(nameof(Children), Children.Length);
-		for (int i = 0; i < Children.Length; i++)
-		{
-			sb.WriteChunk(i, nif, Children[i].Resolve(nif));
-		}
-		sb.EndArray();
-
 		sb.NewArray(nameof(Effects), Effects.Length);
 		for (int i = 0; i < Effects.Length; i++)
 		{
 			sb.WriteChunk(i, nif, Effects[i].Resolve(nif));
+		}
+		sb.EndArray();
+
+		sb.NewArray(nameof(Children), Children.Length);
+		for (int i = 0; i < Children.Length; i++)
+		{
+			sb.WriteChunk(i, nif, Children[i].Resolve(nif));
 		}
 		sb.EndArray();
 	}

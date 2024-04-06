@@ -15,6 +15,7 @@ internal sealed class NiIntegerExtraData : NiExtraData
 	protected override void DebugStr(NIFFile nif, NIFStringBuilder sb)
 	{
 		base.DebugStr(nif, sb);
+
 		sb.AppendLine(nameof(Data), Data);
 	}
 }

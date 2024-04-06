@@ -16,6 +16,6 @@ internal sealed class NiBillboardNode : NiNode
 	{
 		base.DebugStr(nif, sb);
 
-		sb.WriteTODO(nameof(NiBillboardNode));
+		sb.AppendLine(nameof(Mode), Mode.ToString());
 	}
 }

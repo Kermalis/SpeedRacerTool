@@ -21,6 +21,13 @@ internal class NiParticleSystem : NiParticles
 	{
 		base.DebugStr(nif, sb);
 
-		sb.WriteTODO(nameof(NiParticleSystem));
+		sb.AppendLine_Boolean(nameof(IsWorldSpace), IsWorldSpace);
+
+		sb.NewArray(nameof(Modifiers), Modifiers.Length);
+		for (int i = 0; i < Modifiers.Length; i++)
+		{
+			sb.WriteChunk(i, nif, Modifiers[i].Resolve(nif));
+		}
+		sb.EndArray();
 	}
 }

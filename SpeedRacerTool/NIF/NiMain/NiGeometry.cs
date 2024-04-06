@@ -24,8 +24,8 @@ internal abstract class NiGeometry : NiAVObject
 	{
 		base.DebugStr(nif, sb);
 
-		sb.WriteChunk(nameof(Data), nif, Data.Resolve(nif));
-		sb.WriteChunk(nameof(SkinInstance), nif, SkinInstance.Resolve(nif));
 		sb.AppendLine(nameof(MaterialData), "TODO MaterialData");
+		sb.WriteChunk(nameof(SkinInstance), nif, SkinInstance.Resolve(nif));
+		sb.WriteChunk(nameof(Data), nif, Data.Resolve(nif));
 	}
 }

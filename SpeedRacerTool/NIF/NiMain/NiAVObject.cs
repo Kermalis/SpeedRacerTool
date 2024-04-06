@@ -49,13 +49,13 @@ internal abstract class NiAVObject : NiObjectNET
 		sb.AppendLine(nameof(Rotation), Rotation);
 		sb.AppendLine(nameof(Scale), Scale);
 
+		sb.WriteChunk(nameof(CollisionObject), nif, CollisionObject.Resolve(nif));
+
 		sb.NewArray(nameof(Properties), Properties.Length);
 		for (int i = 0; i < Properties.Length; i++)
 		{
 			sb.WriteChunk(i, nif, Properties[i].Resolve(nif));
 		}
 		sb.EndArray();
-
-		sb.WriteChunk(nameof(CollisionObject), nif, CollisionObject.Resolve(nif));
 	}
 }
