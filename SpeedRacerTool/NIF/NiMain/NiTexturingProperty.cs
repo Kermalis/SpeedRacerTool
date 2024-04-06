@@ -193,9 +193,9 @@ internal sealed class NiTexturingProperty : NiProperty
 		TexDesc.DebugStr(nif, sb, nameof(DetailTex), DetailTex);
 		TexDesc.DebugStr(nif, sb, nameof(GlossTex), GlossTex);
 		TexDesc.DebugStr(nif, sb, nameof(GlowTex), GlowTex);
-		TexDesc.DebugStr(nif, sb, nameof(BumpMapTex), BumpMapTex);
+		BumpMapData.DebugStr(nif, sb, nameof(BumpMapTex), BumpMapTex);
 		TexDesc.DebugStr(nif, sb, nameof(NormalTex), NormalTex);
-		TexDesc.DebugStr(nif, sb, nameof(UnkTex), UnkTex);
+		UnkData.DebugStr(nif, sb, nameof(UnkTex), UnkTex);
 		TexDesc.DebugStr(nif, sb, nameof(Decal0Tex), Decal0Tex);
 		TexDesc.DebugStr(nif, sb, nameof(Decal1Tex), Decal1Tex);
 		TexDesc.DebugStr(nif, sb, nameof(Decal2Tex), Decal2Tex);
