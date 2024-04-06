@@ -1,6 +1,7 @@
 ﻿using Kermalis.EndianBinaryIO;
 using Kermalis.SpeedRacerTool.NIF.SpeedRacer;
 using System;
+using System.Collections.Generic;
 
 namespace Kermalis.SpeedRacerTool.NIF.NiMain;
 
@@ -13,14 +14,14 @@ internal abstract class NiObject
 	public readonly int NIFIndex;
 	/// <summary>Offset in the .nif file</summary>
 	public readonly int NIFOffset;
-	public NiObject? Parent;
-	public int Depth;
+
+	public bool IsRoot;
+	public HashSet<NiObject>? Parents;
 
 	protected NiObject(int index, int offset)
 	{
 		NIFIndex = index;
 		NIFOffset = offset;
-		Depth = -1;
 	}
 
 	internal static NiObject ReadChunk(EndianBinaryReader r, int index, NIFFile nif)
@@ -41,6 +42,8 @@ internal abstract class NiObject
 				c = new NiBillboardNode(r, index, ofs); break;
 			case nameof(NiBooleanExtraData):
 				c = new NiBooleanExtraData(r, index, ofs); break;
+			case nameof(NiBoolInterpolator):
+				c = new NiBoolInterpolator(r, index, ofs); break;
 			case nameof(NiCamera):
 				c = new NiCamera(r, index, ofs); break;
 			case nameof(NiDirectionalLight):
@@ -135,41 +138,23 @@ internal abstract class NiObject
 		//throw new Exception();
 	}
 
-	public void SetIsRoot()
-	{
-		Depth = 0;
-	}
 	public virtual void SetParentAndChildren(NIFFile nif, NiObject? parent)
 	{
-		// Some files actually use the same root NiObject multiple times as other NiObjects' children
-		// Maybe the "Root" objects (such as NiCamera) can be in multiple nodes' children. It probably clones the camera in that case
+		// Some files actually use the same NiObject multiple times
+		// In that case, it may behave as if the child NiObject was cloned...
 
 		// parent is null when handling the root objects from NIFFile
 		if (parent is null)
 		{
 			// Make sure it's handled correctly
-			if (Parent is null && Depth is 0)
+			if (IsRoot)
 			{
 				return;
 			}
 			throw new Exception();
 		}
 
-		// New parent
-		if (Depth == 0)
-		{
-			// If a root object is a "child" of something, ignore for now...
-			return;
-		}
-
-		// Non-root object should have one parent...
-		if (Parent is not null)
-		{
-			throw new Exception();
-		}
-
-		// Non-root object being a child of something
-		Parent = parent;
-		Depth = Parent is null ? 0 : Parent.Depth + 1;
+		Parents ??= new HashSet<NiObject>(1);
+		Parents.Add(parent);
 	}
 }

@@ -74,17 +74,17 @@ internal sealed class NIFFile
 	{
 		foreach (ChunkPtr<NiObject> root in Roots)
 		{
-			root.Resolve(this).SetIsRoot();
+			root.Resolve(this).IsRoot = true;
 		}
 		foreach (ChunkPtr<NiObject> root in Roots)
 		{
 			root.Resolve(this).SetParentAndChildren(this, null);
 		}
 
-		// Sanity check
+		// Sanity check, make sure all NiObject have been reached at least once
 		foreach (NiObject o in BlockDatas)
 		{
-			if (o.Depth < 0)
+			if (!o.IsRoot && o.Parents is null)
 			{
 				throw new Exception();
 			}

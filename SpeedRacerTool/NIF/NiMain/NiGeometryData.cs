@@ -33,10 +33,7 @@ internal abstract class NiGeometryData : NiObject
 		KeepFlags = r.ReadByte();
 		CompressFlags = r.ReadByte();
 
-		bool hasVerts = r.ReadSafeBoolean();
-		SRAssert.False(hasVerts);
-
-		if (hasVerts)
+		if (r.ReadSafeBoolean())
 		{
 			Vertices = new Vector3[NumVerts];
 			r.ReadVector3s(Vertices);
@@ -64,10 +61,7 @@ internal abstract class NiGeometryData : NiObject
 
 		BoundingSphere = new NiBound(r);
 
-		bool hasVertColors = r.ReadSafeBoolean();
-		SRAssert.False(hasVertColors);
-
-		if (hasVertColors)
+		if (r.ReadSafeBoolean())
 		{
 			VertexColors = new Vector4[NumVerts];
 			r.ReadVector4s(VertexColors);

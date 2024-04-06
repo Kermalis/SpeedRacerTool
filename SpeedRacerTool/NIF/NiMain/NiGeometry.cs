@@ -20,6 +20,14 @@ internal abstract class NiGeometry : NiAVObject
 		MaterialData = new MaterialData(r);
 	}
 
+	public override void SetParentAndChildren(NIFFile nif, NiObject? parent)
+	{
+		base.SetParentAndChildren(nif, parent);
+
+		Data.Resolve(nif).SetParentAndChildren(nif, this);
+		SkinInstance.Resolve(nif)?.SetParentAndChildren(nif, this);
+	}
+
 	protected override void DebugStr(NIFFile nif, NIFStringBuilder sb)
 	{
 		base.DebugStr(nif, sb);
