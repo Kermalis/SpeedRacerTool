@@ -107,9 +107,13 @@ internal abstract class NiObject
 		return c;
 	}
 
-	internal void DebugStr_Wrap(NIFFile nif, NIFStringBuilder sb)
+	internal void DebugID(NIFStringBuilder sb)
 	{
 		sb.AppendLine(string.Format("\"{0} (#{1}) @ 0x{2:X}\"", GetType().Name, NIFIndex, NIFOffset), indent: false);
+	}
+	internal void DebugStr_Wrap(NIFFile nif, NIFStringBuilder sb)
+	{
+		DebugID(sb);
 		sb.NewObject();
 
 		DebugStr(nif, sb);

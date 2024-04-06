@@ -29,6 +29,12 @@ internal sealed class NIFStringBuilder : DebugStringBuilder
 		}
 	}
 
+	public void WriteChunkPtr(string name, NiObject o)
+	{
+		AppendName(name);
+		o.DebugID(this);
+	}
+
 	public void WriteTODO(string name)
 	{
 		_sb.Append(_curIndentChars);
