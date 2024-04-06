@@ -12,6 +12,13 @@ internal static class SRAssert
 			throw new Exception();
 		}
 	}
+	internal static void LessEqual(long value, long expected)
+	{
+		if (value > expected)
+		{
+			throw new Exception();
+		}
+	}
 	internal static void Equal(long value, long expected)
 	{
 		if (value != expected)
@@ -50,6 +57,20 @@ internal static class SRAssert
 	internal static void NotEqual(Vector3 value, Vector3 expected)
 	{
 		if (value == expected)
+		{
+			throw new Exception();
+		}
+	}
+	internal static void False(bool value)
+	{
+		if (value)
+		{
+			throw new Exception();
+		}
+	}
+	internal static void True(bool value)
+	{
+		if (!value)
 		{
 			throw new Exception();
 		}
