@@ -17,7 +17,7 @@ internal sealed class NiCamera : NiAVObject
 	public readonly float ViewportTop;
 	public readonly float ViewportBottom;
 	public readonly float LODAdjust;
-	public readonly ChunkRef<NiObject> UnkLink;
+	public readonly NullableChunkRef<NiObject> UnkLink;
 	// These two are unknown. Changing value crashes viewer according to nifskope
 	public readonly uint UnkUint1;
 	public readonly uint UnkUint2;
@@ -38,7 +38,8 @@ internal sealed class NiCamera : NiAVObject
 		ViewportTop = r.ReadSingle();
 		ViewportBottom = r.ReadSingle();
 		LODAdjust = r.ReadSingle();
-		UnkLink = new ChunkRef<NiObject>(r);
+		UnkLink = new NullableChunkRef<NiObject>(r);
+		SRAssert.Equal(UnkLink.ChunkIndex, -1);
 		UnkUint1 = r.ReadUInt32();
 		UnkUint2 = r.ReadUInt32();
 	}

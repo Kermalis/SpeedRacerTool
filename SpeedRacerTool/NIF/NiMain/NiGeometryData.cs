@@ -19,7 +19,7 @@ internal abstract class NiGeometryData : NiObject
 	public readonly Vector4[] VertexColors;
 	public readonly TexCoord[][] UVSets;
 	public readonly ConsistencyType ConsistencyFlags;
-	public readonly ChunkRef<NIFUnknownChunk> AdditionalData; // TODO: Ref<AbstractAdditionalGeometryData>
+	public readonly NullableChunkRef<NIFUnknownChunk> AdditionalData; // TODO: Ref<AbstractAdditionalGeometryData>
 
 	protected NiGeometryData(EndianBinaryReader r, int index, int offset)
 		: base(index, offset)
@@ -95,7 +95,8 @@ internal abstract class NiGeometryData : NiObject
 
 		ConsistencyFlags = r.ReadEnum<ConsistencyType>();
 
-		AdditionalData = new ChunkRef<NIFUnknownChunk>(r);
+		AdditionalData = new NullableChunkRef<NIFUnknownChunk>(r);
+		SRAssert.Equal(AdditionalData.ChunkIndex, -1);
 	}
 
 	protected override void DebugStr(NIFFile nif, NIFStringBuilder sb)

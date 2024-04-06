@@ -10,7 +10,7 @@ internal abstract class ATextureRenderData : NiObject
 	public readonly uint UnkUint1;
 	public readonly byte UnkByte1;
 	public readonly ChannelData[] Channels;
-	public readonly ChunkRef<NIFUnknownChunk> Palette; // TODO: ChunkRef<NiPalette>
+	public readonly NullableChunkRef<NIFUnknownChunk> Palette; // TODO: NullableChunkRef<NiPalette>
 	public readonly uint BytesPerPixel;
 	public readonly MipMap[] Mips;
 
@@ -33,7 +33,7 @@ internal abstract class ATextureRenderData : NiObject
 			Channels[i] = new ChannelData(r);
 		}
 
-		Palette = new ChunkRef<NIFUnknownChunk>(r);
+		Palette = new NullableChunkRef<NIFUnknownChunk>(r);
 		uint numMips = r.ReadUInt32();
 		BytesPerPixel = r.ReadUInt32();
 
@@ -48,7 +48,7 @@ internal abstract class ATextureRenderData : NiObject
 	{
 		base.SetParentAndChildren(nif, parent);
 
-		Palette.Resolve(nif).SetParentAndChildren(nif, this);
+		Palette.Resolve(nif)?.SetParentAndChildren(nif, this);
 	}
 
 	protected override void DebugStr(NIFFile nif, NIFStringBuilder sb)

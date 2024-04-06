@@ -6,16 +6,16 @@ namespace Kermalis.SpeedRacerTool.NIF.NiMain;
 internal abstract class NiGeometry : NiAVObject
 {
 	public readonly ChunkRef<NiGeometryData> Data;
-	public readonly ChunkRef<NIFUnknownChunk> SkinInstance; // TODO: Ref<NiSkinInstance>
+	public readonly NullableChunkRef<NIFUnknownChunk> SkinInstance; // TODO: Ref<NiSkinInstance>
 	public readonly MaterialData MaterialData;
 
 	protected NiGeometry(EndianBinaryReader r, int index, int offset)
 		: base(r, index, offset)
 	{
 		Data = new ChunkRef<NiGeometryData>(r);
-		SkinInstance = new ChunkRef<NIFUnknownChunk>(r);
+		SkinInstance = new NullableChunkRef<NIFUnknownChunk>(r);
 
-		//SRAssert.Equal(SkinInstance.ChunkIndex, -1);
+		SRAssert.Equal(SkinInstance.ChunkIndex, -1);
 
 		MaterialData = new MaterialData(r);
 	}
