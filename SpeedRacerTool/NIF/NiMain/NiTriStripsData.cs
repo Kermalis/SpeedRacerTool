@@ -19,7 +19,7 @@ internal sealed class NiTriStripsData : NiTriBasedGeomData
 		// Only PS2 version has this...
 		if (userVersion != 0)
 		{
-			bool hasPoints = r.ReadBoolean();
+			bool hasPoints = r.ReadSafeBoolean();
 			if (hasPoints)
 			{
 				Points = new ushort[numStrips][];

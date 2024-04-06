@@ -17,15 +17,15 @@ internal sealed class NiSourceTexture : NiTexture
 	public NiSourceTexture(EndianBinaryReader r, int index, int offset)
 		: base(r, index, offset)
 	{
-		IsExternal = r.ReadBoolean();
+		IsExternal = r.ReadSafeBoolean();
 		FileName = new StringIndex(r);
 		PixelData = new ChunkRef<ATextureRenderData>(r);
 		PixelLayout = r.ReadEnum<PixelLayout>();
 		MipMap = r.ReadEnum<MipMapFormat>();
 		Alpha = r.ReadEnum<AlphaFormat>();
-		IsStatic = r.ReadBoolean();
-		IsDirectRender = r.ReadBoolean();
-		ShouldPersistData = r.ReadBoolean();
+		IsStatic = r.ReadSafeBoolean();
+		IsDirectRender = r.ReadSafeBoolean();
+		ShouldPersistData = r.ReadSafeBoolean();
 	}
 
 	public override void SetParentAndChildren(NIFFile nif, NiObject? parent)
@@ -39,6 +39,16 @@ internal sealed class NiSourceTexture : NiTexture
 	{
 		base.DebugStr(nif, sb);
 
-		sb.WriteTODO(nameof(NiSourceTexture));
+		sb.AppendLine_Boolean(nameof(IsExternal), IsExternal);
+		sb.AppendLine(nameof(FileName), FileName.Resolve(nif));
+
+		sb.WriteChunk(nameof(PixelData), nif, PixelData.Resolve(nif));
+
+		sb.AppendLine(nameof(PixelLayout), PixelLayout.ToString());
+		sb.AppendLine(nameof(MipMap), MipMap.ToString());
+		sb.AppendLine(nameof(Alpha), Alpha.ToString());
+		sb.AppendLine_Boolean(nameof(IsStatic), IsStatic);
+		sb.AppendLine_Boolean(nameof(IsDirectRender), IsDirectRender);
+		sb.AppendLine_Boolean(nameof(ShouldPersistData), ShouldPersistData);
 	}
 }

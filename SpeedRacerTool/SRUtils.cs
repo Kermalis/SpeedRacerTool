@@ -33,4 +33,11 @@ internal static class SRUtils
 		Span<int> arrInt = MemoryMarshal.Cast<StringIndex, int>(arr);
 		r.ReadInt32s(arrInt);
 	}
+
+	public static bool ReadSafeBoolean(this EndianBinaryReader r)
+	{
+		byte b = r.ReadByte();
+		SRAssert.LessEqual(b, 1);
+		return b != 0;
+	}
 }

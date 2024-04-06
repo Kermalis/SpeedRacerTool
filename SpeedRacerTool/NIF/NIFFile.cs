@@ -24,7 +24,7 @@ internal sealed class NIFFile
 
 		ReadHeaderString(r, out VersionStr, out Version);
 
-		bool littleEndian = r.ReadBoolean();
+		bool littleEndian = r.ReadSafeBoolean();
 		// These two are always little endian:
 		UserVersion = r.ReadUInt32();
 		uint numBlocks = r.ReadUInt32();

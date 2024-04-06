@@ -13,6 +13,7 @@ internal sealed class MaterialData
 	internal MaterialData(EndianBinaryReader r)
 	{
 		int numMats = r.ReadInt32();
+		SRAssert.Equal(numMats, 0);
 
 		MaterialNames = new StringIndex[numMats];
 		r.ReadArray(MaterialNames);
@@ -21,6 +22,6 @@ internal sealed class MaterialData
 		r.ReadInt32s(MaterialExtraDatas);
 
 		ActiveMaterial = r.ReadInt32();
-		MaterialNeedsUpdate = r.ReadBoolean();
+		MaterialNeedsUpdate = r.ReadSafeBoolean();
 	}
 }

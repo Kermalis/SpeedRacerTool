@@ -11,7 +11,7 @@ internal class NiParticleSystem : NiParticles
 	internal NiParticleSystem(EndianBinaryReader r, int index, int offset)
 		: base(r, index, offset)
 	{
-		IsWorldSpace = r.ReadBoolean();
+		IsWorldSpace = r.ReadSafeBoolean();
 
 		Modifiers = new ChunkRef<NIFUnknownChunk>[r.ReadUInt32()];
 		r.ReadArray(Modifiers);

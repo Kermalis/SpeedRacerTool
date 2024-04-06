@@ -32,7 +32,7 @@ internal sealed class NiCamera : NiAVObject
 		FrustumBottom = r.ReadSingle();
 		FrustumNear = r.ReadSingle();
 		FrustumFar = r.ReadSingle();
-		IsOrtho = r.ReadBoolean();
+		IsOrtho = r.ReadSafeBoolean();
 		ViewportLeft = r.ReadSingle();
 		ViewportRight = r.ReadSingle();
 		ViewportTop = r.ReadSingle();
@@ -48,6 +48,23 @@ internal sealed class NiCamera : NiAVObject
 	{
 		base.DebugStr(nif, sb);
 
-		sb.WriteTODO(nameof(NiCamera));
+		sb.AppendLine(nameof(UnkUshort1), UnkUshort1);
+		sb.AppendLine(nameof(FrustumLeft), FrustumLeft);
+		sb.AppendLine(nameof(FrustumRight), FrustumRight);
+		sb.AppendLine(nameof(FrustumTop), FrustumTop);
+		sb.AppendLine(nameof(FrustumBottom), FrustumBottom);
+		sb.AppendLine(nameof(FrustumNear), FrustumNear);
+		sb.AppendLine(nameof(FrustumFar), FrustumFar);
+		sb.AppendLine_Boolean(nameof(IsOrtho), IsOrtho);
+		sb.AppendLine(nameof(ViewportLeft), ViewportLeft);
+		sb.AppendLine(nameof(ViewportRight), ViewportRight);
+		sb.AppendLine(nameof(ViewportTop), ViewportTop);
+		sb.AppendLine(nameof(ViewportBottom), ViewportBottom);
+		sb.AppendLine(nameof(LODAdjust), LODAdjust);
+
+		sb.WriteChunk(nameof(UnkLink), nif, UnkLink.Resolve(nif));
+
+		sb.AppendLine(nameof(UnkUint1), UnkUint1);
+		sb.AppendLine(nameof(UnkUint2), UnkUint2);
 	}
 }

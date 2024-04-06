@@ -10,7 +10,7 @@ internal abstract class NiDynamicEffect : NiAVObject
 	protected NiDynamicEffect(EndianBinaryReader r, int index, int offset)
 		: base(r, index, offset)
 	{
-		IsEnabled = r.ReadBoolean();
+		IsEnabled = r.ReadSafeBoolean();
 
 		AffectedNodes = new ChunkRef<NiAVObject>[r.ReadUInt32()];
 		r.ReadArray(AffectedNodes);

@@ -292,7 +292,7 @@ internal sealed class PS2TrackChunk : XDSChunk
 			internal ArrArr1Data(EndianBinaryReader r)
 			{
 				JoinID = r.ReadString_Count_TrimNullTerminators(0x20);
-				UnkBool = r.ReadBoolean();
+				UnkBool = r.ReadSafeBoolean();
 
 				SRAssert.Equal(r.ReadUInt16(), 0x0000);
 			}
