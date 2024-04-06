@@ -119,12 +119,40 @@ internal abstract class NiObject
 		//throw new Exception();
 	}
 
+	public void SetIsRoot()
+	{
+		Depth = 0;
+	}
 	public virtual void SetParentAndChildren(NIFFile nif, NiObject? parent)
 	{
+		// Some files actually use the same root NiObject multiple times as other NiObjects' children
+		// Maybe the "Root" objects (such as NiCamera) can be in multiple nodes' children. It probably clones the camera in that case
+
+		// parent is null when handling the root objects from NIFFile
+		if (parent is null)
+		{
+			// Make sure it's handled correctly
+			if (Parent is null && Depth is 0)
+			{
+				return;
+			}
+			throw new Exception();
+		}
+
+		// New parent
+		if (Depth == 0)
+		{
+			// If a root object is a "child" of something, ignore for now...
+			return;
+		}
+
+		// Non-root object should have one parent...
 		if (Parent is not null)
 		{
 			throw new Exception();
 		}
+
+		// Non-root object being a child of something
 		Parent = parent;
 		Depth = Parent is null ? 0 : Parent.Depth + 1;
 	}

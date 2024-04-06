@@ -74,6 +74,10 @@ internal sealed class NIFFile
 	{
 		foreach (ChunkPtr<NiObject> root in Roots)
 		{
+			root.Resolve(this).SetIsRoot();
+		}
+		foreach (ChunkPtr<NiObject> root in Roots)
+		{
 			root.Resolve(this).SetParentAndChildren(this, null);
 		}
 
