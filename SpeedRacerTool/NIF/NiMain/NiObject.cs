@@ -75,6 +75,8 @@ internal abstract class NiObject
 				c = new NiTextureEffect(r, index, ofs); break;
 			case nameof(NiTransformController):
 				c = new NiTransformController(r, index, ofs); break;
+			case nameof(NiTransformInterpolator):
+				c = new NiTransformInterpolator(r, index, ofs); break;
 			case nameof(NiTriShape):
 				c = new NiTriShape(r, index, ofs); break;
 			case nameof(NiTriShapeData):

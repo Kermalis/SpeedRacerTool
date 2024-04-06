@@ -90,6 +90,11 @@ internal abstract class DebugStringBuilder
 		AppendName(name);
 		AppendLine(val, indent: false);
 	}
+	public void AppendLine(string name, Quaternion val)
+	{
+		AppendName(name);
+		AppendLine(val, indent: false);
+	}
 	public void AppendLine(string name, string? val)
 	{
 		AppendName(name);
@@ -169,6 +174,22 @@ internal abstract class DebugStringBuilder
 		_sb.Append(val.Y.ToString(SRUtils.TOSTRING_NO_SCIENTIFIC));
 		_sb.Append("f, ");
 		_sb.Append(val.Z.ToString(SRUtils.TOSTRING_NO_SCIENTIFIC));
+		_sb.AppendLine("f)");
+	}
+	public void AppendLine(Quaternion val, bool indent = true)
+	{
+		if (indent)
+		{
+			_sb.Append(_curIndentChars);
+		}
+		_sb.Append('(');
+		_sb.Append(val.X.ToString(SRUtils.TOSTRING_NO_SCIENTIFIC));
+		_sb.Append("f, ");
+		_sb.Append(val.Y.ToString(SRUtils.TOSTRING_NO_SCIENTIFIC));
+		_sb.Append("f, ");
+		_sb.Append(val.Z.ToString(SRUtils.TOSTRING_NO_SCIENTIFIC));
+		_sb.Append("f, ");
+		_sb.Append(val.W.ToString(SRUtils.TOSTRING_NO_SCIENTIFIC));
 		_sb.AppendLine("f)");
 	}
 	public void AppendLine(Matrix3x3 val, bool indent = true)
