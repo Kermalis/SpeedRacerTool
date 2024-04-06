@@ -36,48 +36,59 @@ internal sealed class Program
 		{
 			Console.SetOut(log);
 
+			bool doCatch = false;
 			ProgramAction a = ProgramAction.TestEveryNIF;
 
-			try
+			if (doCatch)
 			{
-				switch (a)
+				try
 				{
-					case ProgramAction.PatchISO_PS2:
-					{
-						string originalISOFile = ISO_PATH + @"Speed Racer - Original.iso";
-						string newISOFile = ISO_PATH + @"Speed Racer Modded.iso";
-						PatchISO_PS2(originalISOFile, newISOFile, MODDED_PS2_ZIP_FILE);
-						break;
-					}
-					case ProgramAction.TestNIF:
-					{
-						TestNIF();
-						break;
-					}
-					case ProgramAction.TestXDS:
-					{
-						TestXDS();
-						break;
-					}
-					case ProgramAction.TestEveryNIF:
-					{
-						TestEveryNIF(RIPPED_PS2_PATH);
-						// TODO: Fix wii
-						//TestEveryNIF(RIPPED_WII_PATH);
-						break;
-					}
-					case ProgramAction.TestEveryXDS:
-					{
-						TestEveryXDS(RIPPED_PS2_PATH);
-						TestEveryXDS(RIPPED_WII_PATH);
-						break;
-					}
+					Do(a);
+				}
+				catch (Exception ex)
+				{
+					Console.WriteLine(ex.ToString());
 				}
 			}
-			catch (Exception ex)
+			else
 			{
-				Console.WriteLine(ex.ToString());
-				//throw;
+				Do(a);
+			}
+		}
+	}
+	private static void Do(ProgramAction a)
+	{
+		switch (a)
+		{
+			case ProgramAction.PatchISO_PS2:
+			{
+				string originalISOFile = ISO_PATH + @"Speed Racer - Original.iso";
+				string newISOFile = ISO_PATH + @"Speed Racer Modded.iso";
+				PatchISO_PS2(originalISOFile, newISOFile, MODDED_PS2_ZIP_FILE);
+				break;
+			}
+			case ProgramAction.TestNIF:
+			{
+				TestNIF();
+				break;
+			}
+			case ProgramAction.TestXDS:
+			{
+				TestXDS();
+				break;
+			}
+			case ProgramAction.TestEveryNIF:
+			{
+				TestEveryNIF(RIPPED_PS2_PATH);
+				// TODO: Fix wii
+				//TestEveryNIF(RIPPED_WII_PATH);
+				break;
+			}
+			case ProgramAction.TestEveryXDS:
+			{
+				TestEveryXDS(RIPPED_PS2_PATH);
+				TestEveryXDS(RIPPED_WII_PATH);
+				break;
 			}
 		}
 	}
