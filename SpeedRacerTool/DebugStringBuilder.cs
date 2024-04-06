@@ -40,7 +40,7 @@ internal abstract class DebugStringBuilder
 		_sb.Append(_curIndentChars);
 		_sb.Append('[');
 		_sb.Append(index);
-		_sb.AppendLine("] = ");
+		_sb.AppendLine("] =");
 	}
 	public void Append_ArrayElement(int index)
 	{
