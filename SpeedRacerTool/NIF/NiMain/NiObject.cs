@@ -83,6 +83,8 @@ internal abstract class NiObject
 				c = new NiTriStripsData(r, index, ofs, nif.UserVersion); break;
 			case nameof(NiVertexColorProperty):
 				c = new NiVertexColorProperty(r, index, ofs); break;
+			case nameof(NiVisController):
+				c = new NiVisController(r, index, ofs); break;
 			case nameof(NiZBufferProperty):
 				c = new NiZBufferProperty(r, index, ofs); break;
 
