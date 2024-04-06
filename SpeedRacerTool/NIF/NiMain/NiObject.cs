@@ -65,6 +65,8 @@ internal abstract class NiObject
 				c = new NiShadeProperty(r, index, ofs); break;
 			case nameof(NiSourceTexture):
 				c = new NiSourceTexture(r, index, ofs); break;
+			case nameof(NiSpecularProperty):
+				c = new NiSpecularProperty(r, index, ofs); break;
 			case nameof(NiSpotLight):
 				c = new NiSpotLight(r, index, ofs); break;
 			case nameof(NiStringExtraData):
