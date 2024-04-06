@@ -28,6 +28,9 @@ internal sealed class NiPixelData : ATextureRenderData
 	{
 		base.DebugStr(nif, sb);
 
-		sb.WriteTODO(nameof(NiPixelData));
+		sb.AppendLine(nameof(NumPixels), NumPixels, hex: false);
+		sb.AppendLine(nameof(NumFaces), NumFaces, hex: false);
+
+		sb.AppendLine(nameof(PixelData), string.Format("byte[{0}][{1}]", NumFaces, NumPixels));
 	}
 }
