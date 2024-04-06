@@ -33,6 +33,8 @@ internal abstract class NiObject
 
 		switch (chunkType)
 		{
+			case nameof(NiAlphaProperty):
+				c = new NiAlphaProperty(r, index, ofs); break;
 			case nameof(NiAmbientLight):
 				c = new NiAmbientLight(r, index, ofs); break;
 			case nameof(NiBillboardNode):
