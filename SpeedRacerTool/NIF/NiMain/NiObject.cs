@@ -48,6 +48,8 @@ internal abstract class NiObject
 				c = new NiCamera(r, index, ofs); break;
 			case nameof(NiDirectionalLight):
 				c = new NiDirectionalLight(r, index, ofs); break;
+			case nameof(NiGeomMorpherController):
+				c = new NiGeomMorpherController(r, index, ofs); break;
 			case nameof(NiIntegerExtraData):
 				c = new NiIntegerExtraData(r, index, ofs); break;
 			case nameof(NiLODNode):
