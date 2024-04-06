@@ -15,4 +15,16 @@ internal sealed class MipMap
 		Height = r.ReadUInt32();
 		Offset = r.ReadUInt32();
 	}
+
+	public void DebugStr(NIFStringBuilder sb, int index)
+	{
+		sb.AppendLine_ArrayElement(index);
+		sb.NewObject();
+
+		sb.AppendLine(nameof(Width), Width, hex: false);
+		sb.AppendLine(nameof(Height), Height, hex: false);
+		sb.AppendLine(nameof(Offset), Offset);
+
+		sb.EndObject();
+	}
 }
