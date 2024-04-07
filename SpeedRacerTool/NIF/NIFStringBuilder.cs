@@ -1,4 +1,5 @@
 ﻿using Kermalis.SpeedRacerTool.NIF.NiMain;
+using Kermalis.SpeedRacerTool.NIF.NiMain.Data;
 
 namespace Kermalis.SpeedRacerTool.NIF;
 

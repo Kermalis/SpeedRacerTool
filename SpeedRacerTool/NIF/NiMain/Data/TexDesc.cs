@@ -1,6 +1,6 @@
 ﻿using Kermalis.EndianBinaryIO;
 
-namespace Kermalis.SpeedRacerTool.NIF.NiMain;
+namespace Kermalis.SpeedRacerTool.NIF.NiMain.Data;
 
 internal sealed class TexDesc
 {
@@ -16,7 +16,7 @@ internal sealed class TexDesc
 		public Transform(EndianBinaryReader r)
 		{
 			Translation = new TexCoord(r);
-			Translation = new TexCoord(r);
+			Tiling = new TexCoord(r);
 			WRotation = r.ReadSingle();
 			UnkUint1 = r.ReadUInt32();
 			CenterOffset = new TexCoord(r);

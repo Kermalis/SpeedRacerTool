@@ -1,4 +1,5 @@
 ﻿using Kermalis.EndianBinaryIO;
+using Kermalis.SpeedRacerTool.NIF.NiMain.Data;
 using System.Numerics;
 
 namespace Kermalis.SpeedRacerTool.NIF.NiMain;
@@ -6,12 +7,11 @@ namespace Kermalis.SpeedRacerTool.NIF.NiMain;
 /// <summary>Mesh data: vertices, vertex normals, etc.</summary>
 internal abstract class NiGeometryData : NiObject
 {
-	public readonly int GroupID;
 	public readonly ushort NumVerts;
 	public readonly byte KeepFlags;
 	public readonly byte CompressFlags;
 	public readonly Vector3[]? Vertices;
-	public readonly ushort DataFlags; // NiGeometryDataFlags
+	public readonly NiGeometryDataFlags DataFlags;
 	public readonly Vector3[]? Normals;
 	public readonly Vector3[]? Tangents;
 	public readonly Vector3[]? Bitangents;
@@ -24,8 +24,7 @@ internal abstract class NiGeometryData : NiObject
 	protected NiGeometryData(EndianBinaryReader r, int index, int offset)
 		: base(index, offset)
 	{
-		GroupID = r.ReadInt32();
-		SRAssert.Equal(GroupID, 0);
+		SRAssert.Equal(r.ReadInt32(), 0);
 
 		NumVerts = r.ReadUInt16();
 		SRAssert.GreaterEqual(NumVerts, 1);
@@ -39,7 +38,7 @@ internal abstract class NiGeometryData : NiObject
 			r.ReadVector3s(Vertices);
 		}
 
-		DataFlags = r.ReadUInt16();
+		DataFlags = new NiGeometryDataFlags(r);
 
 		bool hasNorms = r.ReadSafeBoolean();
 		SRAssert.False(hasNorms);
@@ -49,7 +48,7 @@ internal abstract class NiGeometryData : NiObject
 			Normals = new Vector3[NumVerts];
 			r.ReadVector3s(Normals);
 
-			if ((DataFlags & 0b0001_0000_0000_0000) != 0)
+			if (DataFlags.NBTMethod == NiNBTMethod.NBT_METHOD_NDL)
 			{
 				SRAssert.True(false); // Force error so I can debug
 				Tangents = new Vector3[NumVerts];
@@ -68,7 +67,7 @@ internal abstract class NiGeometryData : NiObject
 		}
 
 		// TODO: Might have i/j inverted, but I don't think so actually
-		UVSets = new TexCoord[DataFlags & 0b0011_1111][];
+		UVSets = new TexCoord[DataFlags.NumUVSets][];
 		SRAssert.Equal(UVSets.Length, 0);
 		for (int i = 0; i < UVSets.Length; i++)
 		{
@@ -88,6 +87,15 @@ internal abstract class NiGeometryData : NiObject
 	protected override void DebugStr(NIFFile nif, NIFStringBuilder sb)
 	{
 		base.DebugStr(nif, sb);
+
+		sb.AppendLine(nameof(NumVerts), NumVerts, hex: false);
+		sb.AppendLine(nameof(KeepFlags), KeepFlags);
+		sb.AppendLine(nameof(CompressFlags), CompressFlags);
+		sb.AppendLine(nameof(ConsistencyFlags), ConsistencyFlags.ToString());
+
+		DataFlags.DebugStr(sb, nameof(DataFlags));
+
+		sb.WriteChunk(nameof(AdditionalData), nif, AdditionalData.Resolve(nif));
 
 		sb.WriteTODO(nameof(NiGeometryData));
 	}

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Kermalis.SpeedRacerTool.NIF.NiMain;
+namespace Kermalis.SpeedRacerTool.NIF.NiMain.Data;
 
 // TODO: Are these const names from some leaked source/debugging, or are they simply from nifskope?
 
@@ -75,6 +75,14 @@ internal enum MipMapFormat : uint
 	MIP_FMT_NO = 0,
 	MIP_FMT_YES = 1,
 	MIP_FMT_DEFAULT = 2,
+}
+
+internal enum NiNBTMethod : ushort
+{
+	NBT_METHOD_NONE = 0,
+	NBT_METHOD_NDL = 1,
+	NBT_METHOD_MAX = 2,
+	NBT_METHOD_ATI = 3,
 }
 
 internal enum PixelFormat : uint

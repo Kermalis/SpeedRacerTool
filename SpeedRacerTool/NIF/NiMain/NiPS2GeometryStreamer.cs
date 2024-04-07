@@ -1,4 +1,5 @@
 ﻿using Kermalis.EndianBinaryIO;
+using Kermalis.SpeedRacerTool.NIF.NiMain.Data;
 using Kermalis.SRGLTF;
 using System;
 using System.Collections.Generic;

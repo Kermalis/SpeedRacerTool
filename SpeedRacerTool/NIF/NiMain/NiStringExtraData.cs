@@ -1,4 +1,5 @@
 ﻿using Kermalis.EndianBinaryIO;
+using Kermalis.SpeedRacerTool.NIF.NiMain.Data;
 using System;
 
 namespace Kermalis.SpeedRacerTool.NIF.NiMain;

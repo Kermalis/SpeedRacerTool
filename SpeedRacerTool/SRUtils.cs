@@ -1,5 +1,6 @@
 ﻿using Kermalis.EndianBinaryIO;
 using Kermalis.SpeedRacerTool.NIF.NiMain;
+using Kermalis.SpeedRacerTool.NIF.NiMain.Data;
 using System;
 using System.Runtime.InteropServices;
 

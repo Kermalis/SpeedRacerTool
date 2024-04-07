@@ -241,6 +241,13 @@ internal abstract class DebugStringBuilder
 		AppendLine('{');
 		Indent(+1);
 	}
+	public void NewObject(string name)
+	{
+		AppendName(name);
+
+		AppendLine('{');
+		Indent(+1);
+	}
 	public void EndObject()
 	{
 		Indent(-1);
