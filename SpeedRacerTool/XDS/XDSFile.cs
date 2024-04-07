@@ -1,4 +1,5 @@
 ﻿using Kermalis.EndianBinaryIO;
+using Kermalis.SpeedRacerTool.XDS.Chunks;
 using System;
 using System.Collections.Generic;
 using System.IO;

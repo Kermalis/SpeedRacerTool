@@ -1,22 +1,17 @@
 ﻿using Kermalis.EndianBinaryIO;
 using Kermalis.SpeedRacerTool.NIF.NiMain.Data;
-using System.Numerics;
 
 namespace Kermalis.SpeedRacerTool.NIF.NiMain;
 
 internal sealed class NiTransformInterpolator : NiKeyBasedInterpolator
 {
-	public readonly Vector3 Translation;
-	public readonly Quaternion Rotation;
-	public readonly float Scale;
+	public readonly QTransform Transform;
 	public readonly ChunkRef<NIFUnknownChunk> Data; // TODO: NiTransformData
 
 	public NiTransformInterpolator(EndianBinaryReader r, int index, int offset)
 		: base(index, offset)
 	{
-		Translation = r.ReadVector3();
-		Rotation = r.ReadQuaternion();
-		Scale = r.ReadSingle();
+		Transform = new QTransform(r);
 		Data = new ChunkRef<NIFUnknownChunk>(r);
 	}
 
@@ -29,9 +24,7 @@ internal sealed class NiTransformInterpolator : NiKeyBasedInterpolator
 
 	protected override void DebugStr(NIFFile nif, NIFStringBuilder sb)
 	{
-		sb.AppendLine(nameof(Translation), Translation);
-		sb.AppendLine(nameof(Rotation), Rotation);
-		sb.AppendLine(nameof(Scale), Scale);
+		Transform.DebugStr(sb, nameof(Transform));
 
 		sb.WriteChunk(nameof(Data), nif, Data.Resolve(nif));
 	}

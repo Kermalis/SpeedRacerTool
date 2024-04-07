@@ -194,6 +194,7 @@ internal sealed class Program
 
 
 		// PS2 TESTING
+		//const string PATH = @"C:\Users\Kermalis\Documents\Emulation\PS2\Hacking\Speed Racer PS2 and WII rip\Original PS2.ZIP ps2_ps2\ui\models\321go.nif";
 		const string PATH = @"C:\Users\Kermalis\Documents\Emulation\PS2\Hacking\Speed Racer PS2 and WII rip\Original PS2.ZIP ps2_ps2\tracks\t01\models\t01ldir.nif";
 
 
