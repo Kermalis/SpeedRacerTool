@@ -2,40 +2,8 @@
 
 namespace Kermalis.SpeedRacerTool.XDS.Chunks;
 
-internal sealed class SpeechStringsChunk : XDSChunk
+internal sealed partial class SpeechStringsChunk : XDSChunk
 {
-	public sealed class Entry
-	{
-		public OneBeeString TextID;
-		public OneBeeString Text;
-
-		internal Entry(EndianBinaryReader r)
-		{
-			// NODE START
-			XDSFile.ReadNodeStart(r);
-
-			TextID = new OneBeeString(r);
-			Text = new OneBeeString(r);
-
-			XDSFile.ReadNodeEnd(r);
-			// NODE END
-		}
-
-		internal void DebugStr(XDSStringBuilder sb)
-		{
-			sb.NewNode();
-
-			sb.AppendLine_NoQuotes(ToString());
-
-			sb.EndNode();
-		}
-
-		public override string ToString()
-		{
-			return $"[{TextID}] = {Text}";
-		}
-	}
-
 	public MagicValue[] Magics;
 	public Entry[] Entries;
 

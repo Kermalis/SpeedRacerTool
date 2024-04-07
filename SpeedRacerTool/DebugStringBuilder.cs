@@ -91,15 +91,26 @@ internal abstract class DebugStringBuilder
 		}
 	}
 
+	public void AppendLine(short val, bool indent = true)
+	{
+		if (indent)
+		{
+			_sb.Append(_curIndentChars);
+		}
+		_sb.AppendLine(val.ToString());
+	}
 	public void AppendLine(string name, short val)
 	{
 		AppendName(name);
-		_sb.AppendLine(val.ToString());
+		AppendLine(val, indent: false);
 	}
 
-	public void AppendLine(string name, ushort val, bool hex = true)
+	public void AppendLine(ushort val, bool hex = true, bool indent = true)
 	{
-		AppendName(name);
+		if (indent)
+		{
+			_sb.Append(_curIndentChars);
+		}
 		if (hex)
 		{
 			_sb.Append("0x");
@@ -109,6 +120,11 @@ internal abstract class DebugStringBuilder
 		{
 			_sb.AppendLine(val.ToString());
 		}
+	}
+	public void AppendLine(string name, ushort val, bool hex = true)
+	{
+		AppendName(name);
+		AppendLine(val, hex: hex, indent: false);
 	}
 
 	public void AppendLine(string name, int val)
@@ -241,6 +257,12 @@ internal abstract class DebugStringBuilder
 		AppendLine('{');
 		Indent(+1);
 	}
+	public void NewObject(int index)
+	{
+		AppendLine_ArrayElement(index);
+
+		NewObject();
+	}
 	public void NewObject(int index, string type)
 	{
 		Append_ArrayElement(index);
@@ -270,12 +292,6 @@ internal abstract class DebugStringBuilder
 		AppendName(name);
 
 		AppendLine_NoQuotes($"Arr({len}) =", indent: false);
-		AppendLine('[');
-		Indent(+1);
-	}
-	public void NewArray(int len)
-	{
-		AppendLine_NoQuotes($"Arr({len}) =");
 		AppendLine('[');
 		Indent(+1);
 	}

@@ -19,8 +19,7 @@ internal sealed class ChannelData
 
 	public void DebugStr(NIFStringBuilder sb, int index)
 	{
-		sb.AppendLine_ArrayElement(index);
-		sb.NewObject();
+		sb.NewObject(index);
 
 		sb.AppendLine(nameof(Type), Type.ToString());
 		sb.AppendLine(nameof(Convention), Convention.ToString());

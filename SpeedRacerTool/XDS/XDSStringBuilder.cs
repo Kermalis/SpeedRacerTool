@@ -2,6 +2,13 @@
 
 internal sealed class XDSStringBuilder : DebugStringBuilder
 {
+	public readonly bool IsVerbose;
+
+	public XDSStringBuilder(bool verbose)
+	{
+		IsVerbose = verbose;
+	}
+
 	public void AppendLine(string name, OneBeeString str)
 	{
 		AppendName(name);

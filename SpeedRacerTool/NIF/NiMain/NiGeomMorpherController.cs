@@ -18,8 +18,7 @@ internal sealed class NiGeomMorpherController : NiInterpController
 
 		public void DebugStr(NIFFile nif, NIFStringBuilder sb, int index)
 		{
-			sb.AppendLine_ArrayElement(index);
-			sb.NewObject();
+			sb.NewObject(index);
 
 			sb.AppendLine(nameof(Weight), Weight);
 

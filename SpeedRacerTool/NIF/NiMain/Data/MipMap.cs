@@ -18,8 +18,7 @@ internal sealed class MipMap
 
 	public void DebugStr(NIFStringBuilder sb, int index)
 	{
-		sb.AppendLine_ArrayElement(index);
-		sb.NewObject();
+		sb.NewObject(index);
 
 		sb.AppendLine(nameof(Width), Width, hex: false);
 		sb.AppendLine(nameof(Height), Height, hex: false);

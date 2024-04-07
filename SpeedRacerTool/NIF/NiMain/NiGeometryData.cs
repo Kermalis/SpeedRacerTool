@@ -5,13 +5,13 @@ using System.Numerics;
 namespace Kermalis.SpeedRacerTool.NIF.NiMain;
 
 /// <summary>Mesh data: vertices, vertex normals, etc.</summary>
-internal abstract class NiGeometryData : NiObject
+internal abstract partial class NiGeometryData : NiObject
 {
 	public readonly ushort NumVerts;
 	public readonly byte KeepFlags;
 	public readonly byte CompressFlags;
 	public readonly Vector3[]? Vertices;
-	public readonly NiGeometryDataFlags DataFlags;
+	public readonly DataFlags DFlags;
 	public readonly Vector3[]? Normals;
 	public readonly Vector3[]? Tangents;
 	public readonly Vector3[]? Bitangents;
@@ -38,7 +38,7 @@ internal abstract class NiGeometryData : NiObject
 			r.ReadVector3s(Vertices);
 		}
 
-		DataFlags = new NiGeometryDataFlags(r);
+		DFlags = new DataFlags(r);
 
 		bool hasNorms = r.ReadSafeBoolean();
 		SRAssert.False(hasNorms);
@@ -48,7 +48,7 @@ internal abstract class NiGeometryData : NiObject
 			Normals = new Vector3[NumVerts];
 			r.ReadVector3s(Normals);
 
-			if (DataFlags.NBTMethod == NiNBTMethod.NBT_METHOD_NDL)
+			if (DFlags.NBTMethod == NiNBTMethod.NBT_METHOD_NDL)
 			{
 				SRAssert.True(false); // Force error so I can debug
 				Tangents = new Vector3[NumVerts];
@@ -67,7 +67,7 @@ internal abstract class NiGeometryData : NiObject
 		}
 
 		// TODO: Might have i/j inverted, but I don't think so actually
-		UVSets = new TexCoord[DataFlags.NumUVSets][];
+		UVSets = new TexCoord[DFlags.NumUVSets][];
 		SRAssert.Equal(UVSets.Length, 0);
 		for (int i = 0; i < UVSets.Length; i++)
 		{
@@ -93,7 +93,7 @@ internal abstract class NiGeometryData : NiObject
 		sb.AppendLine(nameof(CompressFlags), CompressFlags);
 		sb.AppendLine(nameof(ConsistencyFlags), ConsistencyFlags.ToString());
 
-		DataFlags.DebugStr(sb, nameof(DataFlags));
+		DFlags.DebugStr(sb, nameof(DFlags));
 
 		sb.WriteChunk(nameof(AdditionalData), nif, AdditionalData.Resolve(nif));
 

@@ -84,7 +84,8 @@ internal sealed class XDSFile
 
 		// Debug
 
-		var sb = new XDSStringBuilder();
+		bool verboseDebug = false;
+		var sb = new XDSStringBuilder(verboseDebug);
 
 		sb.AppendLine_NoQuotes(string.Format("FileType=0x{0:X8} | ({1} chunks) =", FileType, Chunks.Count));
 		sb.AppendLine('[');
@@ -99,6 +100,20 @@ internal sealed class XDSFile
 		Console.WriteLine(sb.ToString());
 	}
 
+	internal short ReadFileInt16(EndianBinaryReader r)
+	{
+		r.Endianness = Endianness;
+		short val = r.ReadInt16();
+		r.Endianness = Endianness.LittleEndian;
+		return val;
+	}
+	internal ushort ReadFileUInt16(EndianBinaryReader r)
+	{
+		r.Endianness = Endianness;
+		ushort val = r.ReadUInt16();
+		r.Endianness = Endianness.LittleEndian;
+		return val;
+	}
 	internal uint ReadFileUInt32(EndianBinaryReader r)
 	{
 		r.Endianness = Endianness;
@@ -131,12 +146,6 @@ internal sealed class XDSFile
 	{
 		r.Endianness = Endianness;
 		r.ReadSingles(dest);
-		r.Endianness = Endianness.LittleEndian;
-	}
-	internal void ReadFileUInt16s(EndianBinaryReader r, Span<ushort> dest)
-	{
-		r.Endianness = Endianness;
-		r.ReadUInt16s(dest);
 		r.Endianness = Endianness.LittleEndian;
 	}
 

@@ -35,7 +35,7 @@ internal sealed class ReplayListChunk : XDSChunk
 	{
 		sb.NewNode();
 
-		sb.NewArray(Entries.Values.Length);
+		sb.NewArray(nameof(Entries), Entries.Values.Length);
 		for (int i = 0; i < Entries.Values.Length; i++)
 		{
 			sb.Append_ArrayElement(i);

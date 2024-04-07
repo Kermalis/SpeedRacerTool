@@ -2,105 +2,8 @@
 
 namespace Kermalis.SpeedRacerTool.XDS.Chunks;
 
-internal sealed class ActionMapChunk : XDSChunk
+internal sealed partial class ActionMapChunk : XDSChunk
 {
-	public sealed class Entry
-	{
-		public sealed class KeyBind
-		{
-			public MagicValue Magic_Type;
-			public MagicValue Magic_KeyFilter;
-			public MagicValue Magic_Key;
-
-			// Node data
-			public OneBeeString Type;
-			public OneBeeString KeyFilter;
-			public OneBeeString Key;
-
-			internal KeyBind(EndianBinaryReader r)
-			{
-				Magic_Type = new MagicValue(r);
-				Magic_KeyFilter = new MagicValue(r);
-				Magic_Key = new MagicValue(r);
-
-				// NODE START
-				XDSFile.ReadNodeStart(r);
-
-				Type = new OneBeeString(r);
-				KeyFilter = new OneBeeString(r);
-				Key = new OneBeeString(r);
-
-				XDSFile.ReadNodeEnd(r);
-				// NODE END
-			}
-
-			internal void DebugStr(XDSStringBuilder sb, int index)
-			{
-				sb.AppendLine_ArrayElement(index);
-				sb.NewObject();
-
-				sb.NewNode();
-
-				sb.AppendLine(nameof(Type), Type);
-				sb.AppendLine(nameof(KeyFilter), KeyFilter);
-				sb.AppendLine(nameof(Key), Key);
-
-				sb.EndNode();
-
-				sb.EndObject();
-			}
-		}
-
-		public MagicValue Magic_ActionName;
-		public Magic_OneAyyArray Magic_KeyBinds;
-
-		// Node data
-		public OneBeeString ActionName;
-		public OneAyyArray<KeyBind> KeyBinds;
-
-		internal Entry(EndianBinaryReader r, XDSFile xds)
-		{
-			Magic_ActionName = new MagicValue(r);
-			Magic_KeyBinds = new Magic_OneAyyArray(r, xds);
-
-			// NODE START
-			XDSFile.ReadNodeStart(r);
-
-			ActionName = new OneBeeString(r);
-
-			KeyBinds = new OneAyyArray<KeyBind>(r);
-			KeyBinds.AssertMatch(Magic_KeyBinds);
-			for (int i = 0; i < KeyBinds.Values.Length; i++)
-			{
-				KeyBinds.Values[i] = new KeyBind(r);
-			}
-
-			XDSFile.ReadNodeEnd(r);
-			// NODE END
-		}
-
-		internal void DebugStr(XDSStringBuilder sb, int index)
-		{
-			sb.AppendLine_ArrayElement(index);
-			sb.NewObject();
-
-			sb.NewNode();
-
-			sb.AppendLine(nameof(ActionName), ActionName);
-
-			sb.NewArray(KeyBinds.Values.Length);
-			for (int i = 0; i < KeyBinds.Values.Length; i++)
-			{
-				KeyBinds.Values[i].DebugStr(sb, i);
-			}
-			sb.EndArray();
-
-			sb.EndNode();
-
-			sb.EndObject();
-		}
-	}
-
 	public MagicValue Magic_ActionGroupName;
 	public Magic_OneAyyArray Magic_Entries;
 
@@ -139,7 +42,7 @@ internal sealed class ActionMapChunk : XDSChunk
 
 		sb.AppendLine(nameof(ActionGroupName), ActionGroupName);
 
-		sb.NewArray(Entries.Values.Length);
+		sb.NewArray(nameof(Entries), Entries.Values.Length);
 		for (int i = 0; i < Entries.Values.Length; i++)
 		{
 			Entries.Values[i].DebugStr(sb, i);
