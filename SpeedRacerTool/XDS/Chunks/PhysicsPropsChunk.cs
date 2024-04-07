@@ -65,4 +65,14 @@ internal sealed partial class PhysicsPropsChunk : XDSChunk
 
 		sb.EndNode();
 	}
+
+	public void TestHeightfieldDump(string objPath)
+	{
+		var obj = new OBJBuilder();
+
+		Entry e = Entries.Values[0];
+		e.TestOBJHeightfield(obj);
+
+		obj.Write(objPath);
+	}
 }

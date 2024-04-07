@@ -11,14 +11,14 @@ partial class PhysicsPropsChunk
 		public MagicValue Magic_CollisionShape;
 		public Magic_OneAyyArray Magic_ConvexArray1;
 		public Magic_OneAyyArray Magic_ConvexArray2;
-		public uint HeightfieldWL1; // Which is width and which is length?
+		public uint HeightfieldWL1; // Which is width and which is length? They are equal in t01 for example
 		public uint HeightfieldWL2;
 		public Magic_OneAyyArray Magic_HeightfieldData;
 		public float Radius;
 		public float CapsuleHeight;
 		public Vector3 BoxScale;
-		public Vector3 EulerRot; // TODO: Verify
-		public Vector3 Pos; // TODO: Verify
+		public Vector3 EulerRot;
+		public Vector3 Pos;
 
 		// Node data
 		public OneBeeString CollisionShape;
@@ -206,6 +206,25 @@ partial class PhysicsPropsChunk
 			sb.EndNode();
 
 			sb.EndObject();
+		}
+
+		public void TestOBJHeightfield(OBJBuilder obj)
+		{
+			// Pos is <-1000.32, 170.721, -513.68> in t01. In blender I had to <x, -z, y> for it to match.
+			// Maybe the pivot should be in the center?
+			// TODO: Rotation is correct, but again the pivot needs testing
+			float xScale = 1f / (HeightfieldWL1 - 1);
+			float zScale = 1f / (HeightfieldWL2 - 1);
+
+			int i = 0;
+			for (int z = 0; z < HeightfieldWL2; z++)
+			{
+				for (int x = 0; x < HeightfieldWL1; x++)
+				{
+					var v = new Vector3(x * xScale, HeightfieldDatas.Values[i++].Val, z * zScale);
+					obj.AddVertex(v * BoxScale);
+				}
+			}
 		}
 
 		public override string ToString()

@@ -1,6 +1,8 @@
 ﻿using Kermalis.EndianBinaryIO;
 using Kermalis.SpeedRacerTool.NIF;
+using Kermalis.SpeedRacerTool.NIF.NiMain;
 using Kermalis.SpeedRacerTool.XDS;
+using Kermalis.SpeedRacerTool.XDS.Chunks;
 using System;
 using System.IO;
 using System.Text;
@@ -37,7 +39,7 @@ internal sealed class Program
 			Console.SetOut(log);
 
 			bool doCatch = false;
-			ProgramAction a = ProgramAction.TestEveryNIF;
+			ProgramAction a = ProgramAction.TestXDS;
 
 			if (doCatch)
 			{
@@ -95,14 +97,20 @@ internal sealed class Program
 
 	private static void TestXDS()
 	{
-		// track registry (PS2)
-		const string PATH = @"C:\Users\Kermalis\Documents\Emulation\PS2\Hacking\Speed Racer PS2 and WII rip\Original PS2.ZIP ps2_ps2\game\track_registry.xds";
+		// track 1 heightfield physics (PS2)
+		//const string PATH = @"C:\Users\Kermalis\Documents\Emulation\PS2\Hacking\Speed Racer PS2 and WII rip\Original PS2.ZIP ps2_ps2\tracks\t01\physics\t01_phx_ground_hf.xds";
+
+		// track 5 heightfield physics (PS2)
+		const string PATH = @"C:\Users\Kermalis\Documents\Emulation\PS2\Hacking\Speed Racer PS2 and WII rip\Original PS2.ZIP ps2_ps2\tracks\t05\physics\t05_phx_ground_hf.xds";
 
 		Console.WriteLine("Opening {0}", PATH);
 
 		using (FileStream s = File.OpenRead(PATH))
 		{
 			var xds = new XDSFile(s, true);
+
+			var c = xds.Chunks[0] as PhysicsPropsChunk;
+			c?.TestHeightfieldDump(@"C:\Users\Kermalis\Downloads\Test.obj");
 
 			;
 		}
@@ -172,6 +180,12 @@ internal sealed class Program
 		// Its texture is @"C:\Users\Kermalis\Documents\Emulation\PS2\Hacking\Speed Racer PS2 and WII rip\Original WII rip\tracks\t01\t01ttrk1_colr.dds"
 		//const string PATH = @"C:\Users\Kermalis\Documents\Emulation\PS2\Hacking\Speed Racer PS2 and WII rip\Original PS2.ZIP ps2_ps2\tracks\t01\geo\fwd_short.nif";
 
+		// Thunderhead props (PS2)
+		const string PATH = @"C:\Users\Kermalis\Documents\Emulation\PS2\Hacking\Speed Racer PS2 and WII rip\Original PS2.ZIP ps2_ps2\tracks\t01\models\t01ggs.nif";
+
+
+
+
 		// Fuji forward long trk geo (PS2)
 		// Its texture is @"C:\Users\Kermalis\Documents\Emulation\PS2\Hacking\Speed Racer PS2 and WII rip\Original WII rip\tracks\t03\t03ttrk1_colr.dds"
 		//const string PATH = @"C:\Users\Kermalis\Documents\Emulation\PS2\Hacking\Speed Racer PS2 and WII rip\Original PS2.ZIP ps2_ps2\tracks\t03\geo\fwd_long.nif";
@@ -195,7 +209,7 @@ internal sealed class Program
 
 		// PS2 TESTING
 		//const string PATH = @"C:\Users\Kermalis\Documents\Emulation\PS2\Hacking\Speed Racer PS2 and WII rip\Original PS2.ZIP ps2_ps2\ui\models\321go.nif";
-		const string PATH = @"C:\Users\Kermalis\Documents\Emulation\PS2\Hacking\Speed Racer PS2 and WII rip\Original PS2.ZIP ps2_ps2\tracks\t01\models\t01ldir.nif";
+		//const string PATH = @"C:\Users\Kermalis\Documents\Emulation\PS2\Hacking\Speed Racer PS2 and WII rip\Original PS2.ZIP ps2_ps2\tracks\t01\models\t01ldir.nif";
 
 
 		// Thunderhead track_tunnelcap (WII)
@@ -210,11 +224,11 @@ internal sealed class Program
 		{
 			var nif = new NIFFile(s);
 
-			nif.PrintHierarchy();
+			//nif.PrintHierarchy();
 
-			//string objDir = GetNIFOutputDir(PATH);
-			//var testC = (NiPS2GeometryStreamer?)Array.Find(nif.BlockDatas, a => a is NiPS2GeometryStreamer);
-			//testC?.TestOBJ(nif, objDir, true);
+			string objDir = GetNIFOutputDir(PATH);
+			var testC = (NiPS2GeometryStreamer?)Array.Find(nif.BlockDatas, a => a is NiPS2GeometryStreamer);
+			testC?.TestOBJ(nif, objDir, true);
 			//testC?.TestGLTF(nif, Path.GetFileName(PATH));
 		}
 	}
