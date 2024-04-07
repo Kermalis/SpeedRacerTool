@@ -1,7 +1,7 @@
 ﻿using Kermalis.EndianBinaryIO;
 using System.Numerics;
 
-namespace Kermalis.SpeedRacerTool.XDS;
+namespace Kermalis.SpeedRacerTool.XDS.Chunks;
 
 internal sealed class SplinesChunk : XDSChunk
 {

@@ -1,4 +1,5 @@
 ﻿using Kermalis.EndianBinaryIO;
+using Kermalis.SpeedRacerTool.XDS.Chunks;
 
 namespace Kermalis.SpeedRacerTool.XDS;
 

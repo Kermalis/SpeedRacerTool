@@ -22,15 +22,14 @@ internal sealed class NiTexturingProperty : NiProperty
 
 		public static void DebugStr(NIFFile nif, NIFStringBuilder sb, string name, BumpMapData? b)
 		{
-			sb.AppendName(name);
 			if (b is null)
 			{
+				sb.AppendName(name);
 				sb.AppendLine_Null();
 			}
 			else
 			{
-				sb.AppendLine_NoQuotes(nameof(TexDesc) + '.' + nameof(BumpMapData));
-				sb.NewObject();
+				sb.NewObject(name, nameof(TexDesc) + '.' + nameof(BumpMapData));
 
 				b.DebugStr(nif, sb);
 
@@ -59,15 +58,14 @@ internal sealed class NiTexturingProperty : NiProperty
 
 		public static void DebugStr(NIFFile nif, NIFStringBuilder sb, string name, UnkData? u)
 		{
-			sb.AppendName(name);
 			if (u is null)
 			{
+				sb.AppendName(name);
 				sb.AppendLine_Null();
 			}
 			else
 			{
-				sb.AppendLine_NoQuotes(nameof(TexDesc) + '.' + nameof(UnkData));
-				sb.NewObject();
+				sb.NewObject(name, nameof(TexDesc) + '.' + nameof(UnkData));
 
 				u.DebugStr(nif, sb);
 

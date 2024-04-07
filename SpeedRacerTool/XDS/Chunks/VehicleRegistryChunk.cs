@@ -1,6 +1,6 @@
 ﻿using Kermalis.EndianBinaryIO;
 
-namespace Kermalis.SpeedRacerTool.XDS;
+namespace Kermalis.SpeedRacerTool.XDS.Chunks;
 
 internal sealed class VehicleRegistryChunk : XDSChunk
 {

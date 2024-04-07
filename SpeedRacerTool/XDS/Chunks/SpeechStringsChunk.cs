@@ -1,8 +1,8 @@
 ﻿using Kermalis.EndianBinaryIO;
 
-namespace Kermalis.SpeedRacerTool.XDS;
+namespace Kermalis.SpeedRacerTool.XDS.Chunks;
 
-internal sealed class TrackRegistryChunk : XDSChunk
+internal sealed class SpeechStringsChunk : XDSChunk
 {
 	public sealed class Entry
 	{
@@ -39,7 +39,7 @@ internal sealed class TrackRegistryChunk : XDSChunk
 	public MagicValue[] Magics;
 	public Entry[] Entries;
 
-	internal TrackRegistryChunk(EndianBinaryReader r, int offset, ushort opcode, ushort numNodes)
+	internal SpeechStringsChunk(EndianBinaryReader r, int offset, ushort opcode, ushort numNodes)
 		: base(offset, opcode, numNodes)
 	{
 		SRAssert.Equal(OpCode, 0x0106);

@@ -21,7 +21,7 @@ internal readonly struct NiGeometryDataFlags
 
 	public void DebugStr(NIFStringBuilder sb, string name)
 	{
-		sb.NewObject(name);
+		sb.NewObject(name, nameof(NiGeometryDataFlags));
 
 		sb.AppendLine(nameof(NumUVSets), NumUVSets);
 		sb.AppendLine(nameof(UnkMat), UnkMat);

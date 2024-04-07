@@ -24,15 +24,14 @@ internal sealed class TexDesc
 
 		public static void DebugStr(NIFStringBuilder sb, string name, Transform? t)
 		{
-			sb.AppendName(name);
 			if (t is null)
 			{
+				sb.AppendName(name);
 				sb.AppendLine_Null();
 			}
 			else
 			{
-				sb.AppendLine_NoQuotes(nameof(TexDesc) + '.' + nameof(Transform));
-				sb.NewObject();
+				sb.NewObject(name, nameof(TexDesc) + '.' + nameof(Transform));
 
 				t.DebugStr(sb);
 
@@ -72,15 +71,14 @@ internal sealed class TexDesc
 
 	public static void DebugStr(NIFFile nif, NIFStringBuilder sb, string name, TexDesc? t)
 	{
-		sb.AppendName(name);
 		if (t is null)
 		{
+			sb.AppendName(name);
 			sb.AppendLine_Null();
 		}
 		else
 		{
-			sb.AppendLine_NoQuotes(nameof(TexDesc));
-			sb.NewObject();
+			sb.NewObject(name, nameof(TexDesc));
 
 			t.DebugStr(nif, sb);
 

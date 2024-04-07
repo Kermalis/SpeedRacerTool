@@ -64,7 +64,7 @@ internal abstract class DebugStringBuilder
 	public void AppendLine_Boolean(string name, bool val)
 	{
 		AppendName(name);
-		AppendLine_NoQuotes(val.ToString(), indent: false);
+		_sb.AppendLine(val.ToString());
 	}
 
 	public void AppendLine(char c, bool indent = true)
@@ -241,12 +241,19 @@ internal abstract class DebugStringBuilder
 		AppendLine('{');
 		Indent(+1);
 	}
-	public void NewObject(string name)
+	public void NewObject(int index, string type)
+	{
+		Append_ArrayElement(index);
+		_sb.AppendLine(type);
+
+		NewObject();
+	}
+	public void NewObject(string name, string type)
 	{
 		AppendName(name);
+		_sb.AppendLine(type);
 
-		AppendLine('{');
-		Indent(+1);
+		NewObject();
 	}
 	public void EndObject()
 	{

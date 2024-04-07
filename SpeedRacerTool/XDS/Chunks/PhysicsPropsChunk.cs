@@ -2,7 +2,7 @@
 using System.IO;
 using System.Numerics;
 
-namespace Kermalis.SpeedRacerTool.XDS;
+namespace Kermalis.SpeedRacerTool.XDS.Chunks;
 
 internal sealed class PhysicsPropsChunk : XDSChunk
 {
