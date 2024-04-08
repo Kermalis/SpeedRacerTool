@@ -6,26 +6,26 @@ partial class PS2TrackChunk
 {
 	public sealed partial class Revision
 	{
-		public string RevisionType;
-		public Magic_OneAyyArray Magic1;
+		/// <summary>"short", "medium", or "long"</summary>
+		public string Type;
+		public Magic_OneAyyArray Magic_Changes;
 
 		// Node data
-		public OneAyyArray<ArrData1> Array1;
+		public OneAyyArray<Change> Changes;
 
 		internal Revision(EndianBinaryReader r, XDSFile xds)
 		{
-			RevisionType = r.ReadString_Count_TrimNullTerminators(0x20);
-			Magic1 = new Magic_OneAyyArray(r, xds);
+			Type = r.ReadString_Count_TrimNullTerminators(0x20);
+			Magic_Changes = new Magic_OneAyyArray(r, xds);
 
 			// NODE START
 			XDSFile.ReadNodeStart(r);
 
-			// In editor_template.xds, 5 elements from 0x1E1E-0x1ECC. 0xAF / 5 = 0x23
-			Array1 = new OneAyyArray<ArrData1>(r);
-			Array1.AssertMatch(Magic1);
-			for (int i = 0; i < Array1.Values.Length; i++)
+			Changes = new OneAyyArray<Change>(r);
+			Changes.AssertMatch(Magic_Changes);
+			for (int i = 0; i < Changes.Values.Length; i++)
 			{
-				Array1.Values[i] = new ArrData1(r);
+				Changes.Values[i] = new Change(r);
 			}
 
 			XDSFile.ReadNodeEnd(r);
@@ -36,14 +36,14 @@ partial class PS2TrackChunk
 		{
 			sb.NewObject(index);
 
-			sb.AppendLine(nameof(RevisionType), RevisionType);
+			sb.AppendLine(nameof(Type), Type);
 
 			sb.NewNode();
 
-			sb.NewArray(nameof(Array1), Array1.Values.Length);
-			for (int i = 0; i < Array1.Values.Length; i++)
+			sb.NewArray(nameof(Changes), Changes.Values.Length);
+			for (int i = 0; i < Changes.Values.Length; i++)
 			{
-				Array1.Values[i].DebugStr(sb, i);
+				Changes.Values[i].DebugStr(sb, i);
 			}
 			sb.EndArray();
 

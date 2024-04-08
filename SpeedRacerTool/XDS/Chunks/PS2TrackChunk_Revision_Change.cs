@@ -6,12 +6,12 @@ partial class PS2TrackChunk
 {
 	partial class Revision
 	{
-		public struct ArrData1
+		public struct Change
 		{
 			public string JoinID;
 			public bool UnkBool;
 
-			internal ArrData1(EndianBinaryReader r)
+			internal Change(EndianBinaryReader r)
 			{
 				JoinID = r.ReadString_Count_TrimNullTerminators(0x20);
 				UnkBool = r.ReadSafeBoolean();
@@ -31,7 +31,7 @@ partial class PS2TrackChunk
 
 			public override readonly string ToString()
 			{
-				return JoinID;
+				return JoinID + ' ' + UnkBool;
 			}
 		}
 	}

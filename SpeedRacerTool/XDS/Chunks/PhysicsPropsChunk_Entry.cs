@@ -13,7 +13,7 @@ partial class PhysicsPropsChunk
 		public Magic_OneAyyArray Magic_ConvexArray2;
 		public uint HeightfieldWL1; // Which is width and which is length? They are equal in t01 for example
 		public uint HeightfieldWL2;
-		public Magic_OneAyyArray Magic_HeightfieldData;
+		public Magic_OneAyyArray Magic_HeightfieldDatas;
 		public float Radius;
 		public float CapsuleHeight;
 		public Vector3 BoxScale;
@@ -35,7 +35,7 @@ partial class PhysicsPropsChunk
 			HeightfieldWL1 = xds.ReadFileUInt32(r);
 			HeightfieldWL2 = xds.ReadFileUInt32(r);
 			Magic_OneAyyArray.ReadEmpty(r);
-			Magic_HeightfieldData = new Magic_OneAyyArray(r, xds);
+			Magic_HeightfieldDatas = new Magic_OneAyyArray(r, xds);
 			Magic_OneAyyArray.ReadEmpty(r);
 			Radius = xds.ReadFileSingle(r);
 			CapsuleHeight = xds.ReadFileSingle(r);
@@ -59,7 +59,7 @@ partial class PhysicsPropsChunk
 					SRAssert.Equal(HeightfieldWL2, 0);
 					Magic_ConvexArray1.AssertIs0();
 					Magic_ConvexArray2.AssertIs0();
-					Magic_HeightfieldData.AssertIs0();
+					Magic_HeightfieldDatas.AssertIs0();
 					break;
 				}
 				case "CAPSULE":
@@ -71,7 +71,7 @@ partial class PhysicsPropsChunk
 					SRAssert.Equal(HeightfieldWL2, 0);
 					Magic_ConvexArray1.AssertIs0();
 					Magic_ConvexArray2.AssertIs0();
-					Magic_HeightfieldData.AssertIs0();
+					Magic_HeightfieldDatas.AssertIs0();
 					break;
 				}
 				case "CONVEX": // WII version doesn't use this
@@ -85,7 +85,7 @@ partial class PhysicsPropsChunk
 					SRAssert.Equal(HeightfieldWL2, 0);
 					Magic_ConvexArray1.AssertNot0();
 					Magic_ConvexArray2.AssertNot0();
-					Magic_HeightfieldData.AssertIs0();
+					Magic_HeightfieldDatas.AssertIs0();
 					break;
 				}
 				case "HEIGHTFIELD":
@@ -97,7 +97,7 @@ partial class PhysicsPropsChunk
 					SRAssert.NotEqual(HeightfieldWL2, 0);
 					Magic_ConvexArray1.AssertIs0();
 					Magic_ConvexArray2.AssertIs0();
-					Magic_HeightfieldData.AssertEqual(HeightfieldWL1 * HeightfieldWL2);
+					Magic_HeightfieldDatas.AssertEqual(HeightfieldWL1 * HeightfieldWL2);
 					break;
 				}
 				case "MESH": // PS2 version doesn't use this
@@ -111,7 +111,7 @@ partial class PhysicsPropsChunk
 					SRAssert.Equal(HeightfieldWL2, 0);
 					Magic_ConvexArray1.AssertNot0();
 					Magic_ConvexArray2.AssertNot0();
-					Magic_HeightfieldData.AssertIs0();
+					Magic_HeightfieldDatas.AssertIs0();
 					break;
 				}
 				case "SPHERE":
@@ -123,7 +123,7 @@ partial class PhysicsPropsChunk
 					SRAssert.Equal(HeightfieldWL2, 0);
 					Magic_ConvexArray1.AssertIs0();
 					Magic_ConvexArray2.AssertIs0();
-					Magic_HeightfieldData.AssertIs0();
+					Magic_HeightfieldDatas.AssertIs0();
 					break;
 				}
 				default: throw new InvalidDataException();
@@ -148,7 +148,7 @@ partial class PhysicsPropsChunk
 			OneAyyArray<object>.ReadEmpty(r);
 
 			HeightfieldDatas = new OneAyyArray<HeightfieldData>(r);
-			HeightfieldDatas.AssertMatch(Magic_HeightfieldData);
+			HeightfieldDatas.AssertMatch(Magic_HeightfieldDatas);
 			for (int i = 0; i < HeightfieldDatas.Values.Length; i++)
 			{
 				HeightfieldDatas.Values[i] = new HeightfieldData(r, xds);
