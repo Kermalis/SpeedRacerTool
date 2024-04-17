@@ -39,7 +39,7 @@ The interesting stuff is in "game" and "tracks".
 * General graphics
 
 The vehicle stats and AI difficulty are easy to change since they're .xml files.
-It's how I made my ["Speed Racer Always Cheats (Meme)"](https://www.youtube.com/watch?v=ZSVdYp7vOb8) video (private for now XDDDDDDDDDDDDDDDDDDDD).
+It's how I made my ["Speed Racer Always Cheats (Meme)"](https://www.youtube.com/watch?v=lVawtFND6y8) video.
 You just need to find a way to place them back in the .iso, which this tool can do, but I'll write about that below...
 
 "tracks" has the track data like you thought it would:
