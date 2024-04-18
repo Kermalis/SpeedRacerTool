@@ -275,15 +275,22 @@ internal sealed class NiPS2GeometryStreamer : NiObject
 					int vertIdx = 1;
 					foreach (ushort numVertsInThisStrip in strips.StripLengths)
 					{
-						// Output each face as a tri. just 3 verts.
+						// Output each face as a tri. just 3 verts, but maintain clockwise order on the surface
 						// example:
-						// "f 49 50 51 52" -> "f 49 50 51" and "f 50 51 52"
-						// "f 95 96 97 98 99" -> "f 95 96 97" and "f 96 97 98" and "f 97 98 99"
+						// "f 1 2 3 4" -> "f 1 2 3" and "f 3 2 4"
+						// "f 1 2 3 4 5" -> "f 1 2 3" and "f 3 2 4" and "f 3 4 5"
 
 						int numOutputTris = numVertsInThisStrip - 2;
 						for (int tri = 0; tri < numOutputTris; tri++)
 						{
-							obj.AddFace(vertIdx + tri, vertIdx + tri + 1, vertIdx + tri + 2);
+							if ((tri & 1) == 0) // Even
+							{
+								obj.AddFace(vertIdx + tri, vertIdx + tri + 1, vertIdx + tri + 2);
+							}
+							else // Odd
+							{
+								obj.AddFace(vertIdx + tri + 1, vertIdx + tri, vertIdx + tri + 2);
+							}
 						}
 						vertIdx += numVertsInThisStrip;
 					}

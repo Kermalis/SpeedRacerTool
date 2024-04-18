@@ -39,7 +39,7 @@ internal sealed class Program
 			Console.SetOut(log);
 
 			bool doCatch = false;
-			ProgramAction a = ProgramAction.TestXDS;
+			ProgramAction a = ProgramAction.TestNIF;
 
 			if (doCatch)
 			{
@@ -176,12 +176,12 @@ internal sealed class Program
 		// Thunderhead forward short trk data (PS2)
 		//const string PATH = @"C:\Users\Kermalis\Documents\Emulation\PS2\Hacking\Speed Racer PS2 and WII rip\Original PS2.ZIP ps2_ps2\tracks\t01\geo\fwd_short.trk";
 
-		// Thunderhead forward short trk geo (PS2)
+		// Thunderhead forward long trk geo (PS2)
 		// Its texture is @"C:\Users\Kermalis\Documents\Emulation\PS2\Hacking\Speed Racer PS2 and WII rip\Original WII rip\tracks\t01\t01ttrk1_colr.dds"
-		//const string PATH = @"C:\Users\Kermalis\Documents\Emulation\PS2\Hacking\Speed Racer PS2 and WII rip\Original PS2.ZIP ps2_ps2\tracks\t01\geo\fwd_short.nif";
+		const string PATH = @"C:\Users\Kermalis\Documents\Emulation\PS2\Hacking\Speed Racer PS2 and WII rip\Original PS2.ZIP ps2_ps2\tracks\t01\geo\fwd_long.nif";
 
 		// Thunderhead props (PS2)
-		const string PATH = @"C:\Users\Kermalis\Documents\Emulation\PS2\Hacking\Speed Racer PS2 and WII rip\Original PS2.ZIP ps2_ps2\tracks\t01\models\t01ggs.nif";
+		//const string PATH = @"C:\Users\Kermalis\Documents\Emulation\PS2\Hacking\Speed Racer PS2 and WII rip\Original PS2.ZIP ps2_ps2\tracks\t01\models\t01ggs.nif";
 
 
 
@@ -229,6 +229,9 @@ internal sealed class Program
 			string objDir = GetNIFOutputDir(PATH);
 			var testC = (NiPS2GeometryStreamer?)Array.Find(nif.BlockDatas, a => a is NiPS2GeometryStreamer);
 			testC?.TestOBJ(nif, objDir, true);
+
+
+			// TODO: -convcolonly for godot (https://www.youtube.com/watch?v=Mq-_FffB2eE)
 			//testC?.TestGLTF(nif, Path.GetFileName(PATH));
 		}
 	}
