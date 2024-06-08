@@ -12,7 +12,7 @@ internal sealed class NiTextureEffect : NiDynamicEffect
 	public readonly TexClampMode TexClamp;
 	public readonly EffectType TexType;
 	public readonly CoordGenType CoordGen;
-	public readonly ChunkRef<NiSourceTexture> SourceTex; // TODO: Child?
+	public readonly ChunkRef<NiSourceTexture> SourceTex;
 	public readonly byte Clipping;
 	public readonly Vector3 Unk100;
 	public readonly float Unk0;
@@ -30,6 +30,13 @@ internal sealed class NiTextureEffect : NiDynamicEffect
 		Clipping = r.ReadByte();
 		Unk100 = r.ReadVector3();
 		Unk0 = r.ReadSingle();
+	}
+
+	public override void SetParentAndChildren(NIFFile nif, NiObject? parent)
+	{
+		base.SetParentAndChildren(nif, parent);
+
+		SourceTex.Resolve(nif).SetParentAndChildren(nif, this);
 	}
 
 	protected override void DebugStr(NIFFile nif, NIFStringBuilder sb)

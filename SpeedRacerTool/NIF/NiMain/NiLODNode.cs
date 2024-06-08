@@ -13,6 +13,13 @@ internal sealed class NiLODNode : NiSwitchNode
 		LODData = new NullableChunkRef<NIFUnknownChunk>(r);
 	}
 
+	public override void SetParentAndChildren(NIFFile nif, NiObject? parent)
+	{
+		base.SetParentAndChildren(nif, parent);
+
+		LODData.Resolve(nif)?.SetParentAndChildren(nif, this);
+	}
+
 	protected override void DebugStr(NIFFile nif, NIFStringBuilder sb)
 	{
 		base.DebugStr(nif, sb);
