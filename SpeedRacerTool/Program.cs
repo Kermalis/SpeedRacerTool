@@ -71,7 +71,7 @@ internal sealed class Program
 			}
 			case ProgramAction.TestNIF:
 			{
-				TestNIF();
+				TestNIF(false);
 				break;
 			}
 			case ProgramAction.TestXDS:
@@ -81,7 +81,7 @@ internal sealed class Program
 			}
 			case ProgramAction.TestEveryNIF:
 			{
-				TestEveryNIF(RIPPED_PS2_PATH);
+				TestEveryNIF(RIPPED_PS2_PATH, false);
 				// TODO: Fix wii
 				//TestEveryNIF(RIPPED_WII_PATH);
 				break;
@@ -162,7 +162,7 @@ internal sealed class Program
 
 		Console.WriteLine("PS2.ZIP injected with {0} bytes of padding", numPaddingNeeded);
 	}
-	private static void TestNIF()
+	private static void TestNIF(bool requireFullHierarchy)
 	{
 		// Thunderhead grading (PS2)
 		//const string PATH = @"C:\Users\Kermalis\Documents\Emulation\PS2\Hacking\Speed Racer PS2 and WII rip\Original PS2.ZIP ps2_ps2\tracks\t01\grading.nif";
@@ -229,9 +229,12 @@ internal sealed class Program
 
 		using (FileStream s = File.OpenRead(PATH))
 		{
-			var nif = new NIFFile(s);
+			var nif = new NIFFile(s, requireFullHierarchy);
 
-			//nif.PrintHierarchy();
+			/*if (requireFullHierarchy)
+			{
+				nif.PrintHierarchy();
+			}*/
 
 			string objDir = GetNIFOutputDir(PATH);
 			var testC = (NiPS2GeometryStreamer?)Array.Find(nif.BlockDatas, a => a is NiPS2GeometryStreamer);
@@ -242,7 +245,7 @@ internal sealed class Program
 			//testC?.TestGLTF(nif, Path.GetFileName(PATH));
 		}
 	}
-	private static void TestEveryNIF(string dir)
+	private static void TestEveryNIF(string dir, bool requireFullHierarchy)
 	{
 		foreach (string path in Directory.EnumerateFiles(dir, "*.*", SearchOption.AllDirectories))
 		{
@@ -255,9 +258,12 @@ internal sealed class Program
 
 			using (FileStream s = File.OpenRead(path))
 			{
-				var nif = new NIFFile(s);
+				var nif = new NIFFile(s, requireFullHierarchy);
 
-				nif.PrintHierarchy();
+				if (requireFullHierarchy)
+				{
+					nif.PrintHierarchy();
+				}
 
 				//string objDir = GetNIFOutputDir(path);
 				//var testC = (NiPS2GeometryStreamer?)Array.Find(nif.BlockDatas, a => a is NiPS2GeometryStreamer);

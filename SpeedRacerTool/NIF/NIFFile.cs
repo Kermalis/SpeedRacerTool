@@ -19,7 +19,7 @@ internal sealed class NIFFile
 	public readonly NiObject[] BlockDatas;
 	public readonly ChunkPtr<NiObject>[] Roots;
 
-	public NIFFile(Stream s)
+	public NIFFile(Stream s, bool requireFullHierarchy)
 	{
 		var r = new EndianBinaryReader(s, ascii: true);
 
@@ -68,7 +68,10 @@ internal sealed class NIFFile
 		Roots = new ChunkPtr<NiObject>[r.ReadUInt32()];
 		r.ReadArray(Roots);
 
-		HandleHierarchy();
+		if (requireFullHierarchy)
+		{
+			HandleHierarchy();
+		}
 	}
 
 	private void HandleHierarchy()
