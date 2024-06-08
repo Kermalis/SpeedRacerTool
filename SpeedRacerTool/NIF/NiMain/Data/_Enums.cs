@@ -70,6 +70,15 @@ internal enum EffectType : uint
 	EFFECT_FOG_MAP = 3,
 }
 
+internal enum KeyType : uint
+{
+	LINEAR_KEY = 1,
+	QUADRATIC_KEY = 2,
+	TBC_KEY = 3,
+	XYZ_ROTATION_KEY = 4,
+	CONST_KEY = 5,
+}
+
 internal enum MipMapFormat : uint
 {
 	MIP_FMT_NO = 0,
@@ -131,6 +140,31 @@ internal enum TexFilterMode : uint
 	FILTER_NEAREST_MIPNEAREST = 3,
 	FILTER_NEAREST_MIPLERP = 4,
 	FILTER_BILERP_MIPNEAREST = 5,
+}
+
+internal enum TexTransform : uint
+{
+	TT_TRANSLATE_U = 0,
+	TT_TRANSLATE_V = 1,
+	TT_ROTATE = 2,
+	TT_SCALE_U = 3,
+	TT_SCALE_V = 4,
+}
+
+internal enum TexType : uint
+{
+	BASE_MAP = 0,
+	DARK_MAP = 1,
+	DETAIL_MAP = 2,
+	GLOSS_MAP = 3,
+	GLOW_MAP = 4,
+	BUMP_MAP = 5,
+	NORMAL_MAP = 6,
+	UNKNOWN2_MAP = 7,
+	DECAL_0_MAP = 8,
+	DECAL_1_MAP = 9,
+	DECAL_2_MAP = 10,
+	DECAL_3_MAP = 11,
 }
 
 // I don't have NifSkope names here

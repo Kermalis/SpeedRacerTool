@@ -48,6 +48,14 @@ internal abstract class NiObject
 				c = new NiCamera(r, index, ofs); break;
 			case nameof(NiDirectionalLight):
 				c = new NiDirectionalLight(r, index, ofs); break;
+			case nameof(NiFloatData):
+				c = new NiFloatData(r, index, ofs); break;
+			case nameof(NiFloatExtraData):
+				c = new NiFloatExtraData(r, index, ofs); break;
+			case nameof(NiFloatExtraDataController):
+				c = new NiFloatExtraDataController(r, index, ofs); break;
+			case nameof(NiFloatInterpolator):
+				c = new NiFloatInterpolator(r, index, ofs); break;
 			case nameof(NiGeomMorpherController):
 				c = new NiGeomMorpherController(r, index, ofs); break;
 			case nameof(NiIntegerExtraData):
@@ -66,6 +74,10 @@ internal abstract class NiObject
 				c = new NiPointLight(r, index, ofs); break;
 			case nameof(NiPS2GeometryStreamer):
 				c = new NiPS2GeometryStreamer(r, index, ofs); break;
+			case nameof(NiPSysEmitterCtlr):
+				c = new NiPSysEmitterCtlr(r, index, ofs); break;
+			case nameof(NiPSysUpdateCtlr):
+				c = new NiPSysUpdateCtlr(r, index, ofs); break;
 			case nameof(NiShadeProperty):
 				c = new NiShadeProperty(r, index, ofs); break;
 			case nameof(NiSourceTexture):
@@ -74,10 +86,14 @@ internal abstract class NiObject
 				c = new NiSpecularProperty(r, index, ofs); break;
 			case nameof(NiSpotLight):
 				c = new NiSpotLight(r, index, ofs); break;
+			case nameof(NiStencilProperty):
+				c = new NiStencilProperty(r, index, ofs); break;
 			case nameof(NiStringExtraData):
 				c = new NiStringExtraData(r, index, ofs, chunkSize); break;
 			case nameof(NiTextureEffect):
 				c = new NiTextureEffect(r, index, ofs); break;
+			case nameof(NiTextureTransformController):
+				c = new NiTextureTransformController(r, index, ofs); break;
 			case nameof(NiTexturingProperty):
 				c = new NiTexturingProperty(r, index, ofs); break;
 			case nameof(NiTransformController):
@@ -138,6 +154,7 @@ internal abstract class NiObject
 		sb.AppendLine(GetType().Name, ToString());
 		// Uncomment this when we remove NIFUnknownChunk:
 		//throw new Exception();
+		// Or make abstract? I think that wouldn't work for some abstract parents
 	}
 
 	public virtual void SetParentAndChildren(NIFFile nif, NiObject? parent)

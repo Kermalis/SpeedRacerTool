@@ -40,17 +40,15 @@ internal abstract partial class NiGeometryData : NiObject
 
 		DFlags = new DataFlags(r);
 
-		bool hasNorms = r.ReadSafeBoolean();
-		SRAssert.False(hasNorms);
-
-		if (hasNorms)
+		// Some track props have normals + vertex colors
+		if (r.ReadSafeBoolean())
 		{
 			Normals = new Vector3[NumVerts];
 			r.ReadVector3s(Normals);
 
 			if (DFlags.NBTMethod == NiNBTMethod.NBT_METHOD_NDL)
 			{
-				SRAssert.True(false); // Force error so I can debug
+				// Grand Prix PS2 props use this
 				Tangents = new Vector3[NumVerts];
 				r.ReadVector3s(Tangents);
 				Bitangents = new Vector3[NumVerts];
