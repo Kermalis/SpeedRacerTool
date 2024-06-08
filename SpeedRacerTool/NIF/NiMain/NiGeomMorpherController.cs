@@ -7,12 +7,12 @@ internal sealed class NiGeomMorpherController : NiInterpController
 {
 	public readonly struct MorphWeight
 	{
-		public readonly ChunkRef<NiInterpController> Interpolator;
+		public readonly ChunkRef<NiInterpolator> Interpolator;
 		public readonly float Weight;
 
 		internal MorphWeight(EndianBinaryReader r)
 		{
-			Interpolator = new ChunkRef<NiInterpController>(r);
+			Interpolator = new ChunkRef<NiInterpolator>(r);
 			Weight = r.ReadSingle();
 		}
 
