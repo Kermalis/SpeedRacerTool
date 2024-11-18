@@ -20,15 +20,32 @@ internal sealed class Program
 		TestEveryXDS,
 	}
 
-	private const string LOG_PATH = @"Log.txt";
-	private const string ISO_PATH = @"C:\Users\Kermalis\Documents\Emulation\PS2\Games\";
-	private const string MODDED_PS2_ZIP_FILE = @"C:\Users\Kermalis\Documents\Emulation\PS2\Hacking\Speed Racer PS2 and WII rip\Mod Test\ISO Contents\DATA\PS2.ZIP";
+	// Change these to your paths cuz I'm too lazy for console args:
 
-	private const string RIPPED_PATH = @"C:\Users\Kermalis\Documents\Emulation\PS2\Hacking\Speed Racer PS2 and WII rip\";
-	private const string RIPPED_PS2_PATH = RIPPED_PATH + @"Original PS2.ZIP ps2_ps2\";
-	private const string RIPPED_WII_PATH = RIPPED_PATH + @"Original WII rip\";
+	/// <summary>Filepath for the program log</summary>
+	private const string LOG_PATH = @"D:\3D Objects\SpeedRacerTool Output\Log.txt";
+	/// <summary>Open your PS2 iso with 7-zip. Open "DATA/PS2.ZIP" and extract the "ps2_ps2" folder inside. Then place the path where you extracted that here</summary>
+	private const string RIPPED_PS2_PATH = @"C:\Users\Kermalis\Documents\Emulation\PS2\Hacking\Speed Racer PS2 and WII rip\Original PS2.ZIP ps2_ps2\";
+	/// <summary>Open your WII iso with 7-zip and extract the "wii_wiics" folder inside. Then place the path where you extracted that here</summary>
+	private const string RIPPED_WII_PATH = @"C:\Users\Kermalis\Documents\Emulation\PS2\Hacking\Speed Racer PS2 and WII rip\Original WII rip\";
 
-	private const string OUT_OBJ_PATH = @"C:\Users\Kermalis\Downloads\Output\";
+	#region Modded PS2 ISO Paths
+
+	/// <summary>This is the modded "PS2.ZIP" that will be placed into the modded PS2 ISO</summary>
+	private const string PS2_MODDED_ZIP_FILE = @"C:\Users\Kermalis\Documents\Emulation\PS2\Hacking\Speed Racer PS2 and WII rip\Mod Test\ISO Contents\DATA\PS2.ZIP";
+	/// <summary>This is the filepath of the original PS2 ISO that will be used when creating a modded ISO</summary>
+	private const string PS2_INPUT_ISO_PATH = @"C:\Users\Kermalis\Documents\Emulation\PS2\Games\Speed Racer - Original.iso";
+	/// <summary>This is the filepath where the modded PS2 ISO will be created</summary>
+	private const string PS2_OUTPUT_ISO_PATH = @"C:\Users\Kermalis\Documents\Emulation\PS2\Games\Speed Racer Modded.iso";
+
+	#endregion
+
+	/// <summary>The path where the ripped OBJ files will be placed</summary>
+	private const string OUT_OBJ_PATH = @"D:\3D Objects\SpeedRacerTool Output\";
+	/// <summary>Test OBJ filepath</summary>
+	private const string OUT_TESTOBJ_FILE = @"D:\3D Objects\SpeedRacerTool Output\Test.obj";
+
+
 
 	private static readonly StringBuilder _sb = new();
 
@@ -64,19 +81,19 @@ internal sealed class Program
 		{
 			case ProgramAction.PatchISO_PS2:
 			{
-				string originalISOFile = ISO_PATH + @"Speed Racer - Original.iso";
-				string newISOFile = ISO_PATH + @"Speed Racer Modded.iso";
-				PatchISO_PS2(originalISOFile, newISOFile, MODDED_PS2_ZIP_FILE);
+				PatchISO_PS2(PS2_INPUT_ISO_PATH, PS2_OUTPUT_ISO_PATH, PS2_MODDED_ZIP_FILE);
 				break;
 			}
 			case ProgramAction.TestNIF:
 			{
-				TestNIF(false);
+				TestNIF(false, RIPPED_PS2_PATH);
+				//TestNIF(false, RIPPED_WII_PATH);
 				break;
 			}
 			case ProgramAction.TestXDS:
 			{
-				TestXDS();
+				TestXDS(RIPPED_PS2_PATH);
+				//TestXDS(RIPPED_WII_PATH);
 				break;
 			}
 			case ProgramAction.TestEveryNIF:
@@ -95,22 +112,23 @@ internal sealed class Program
 		}
 	}
 
-	private static void TestXDS()
+	private static void TestXDS(string dir)
 	{
 		// track 1 heightfield physics (PS2)
-		//const string PATH = @"C:\Users\Kermalis\Documents\Emulation\PS2\Hacking\Speed Racer PS2 and WII rip\Original PS2.ZIP ps2_ps2\tracks\t01\physics\t01_phx_ground_hf.xds";
+		//const string PATH = @"tracks\t01\physics\t01_phx_ground_hf.xds";
 
 		// track 5 heightfield physics (PS2)
-		const string PATH = @"C:\Users\Kermalis\Documents\Emulation\PS2\Hacking\Speed Racer PS2 and WII rip\Original PS2.ZIP ps2_ps2\tracks\t05\physics\t05_phx_ground_hf.xds";
+		const string PATH = @"tracks\t05\physics\t05_phx_ground_hf.xds";
 
-		Console.WriteLine("Opening {0}", PATH);
+		string fullPath = Path.Combine(dir, PATH);
+		Console.WriteLine("Opening {0}", fullPath);
 
-		using (FileStream s = File.OpenRead(PATH))
+		using (FileStream s = File.OpenRead(fullPath))
 		{
 			var xds = new XDSFile(s, true);
 
 			var c = xds.Chunks[0] as PhysicsPropsChunk;
-			c?.TestHeightfieldDump(@"C:\Users\Kermalis\Downloads\Test.obj");
+			c?.TestHeightfieldDump(OUT_TESTOBJ_FILE);
 
 			;
 		}
@@ -162,72 +180,143 @@ internal sealed class Program
 
 		Console.WriteLine("PS2.ZIP injected with {0} bytes of padding", numPaddingNeeded);
 	}
-	private static void TestNIF(bool requireFullHierarchy)
+	private static void TestNIF(bool requireFullHierarchy, string dir)
 	{
-		// Thunderhead grading (PS2)
-		//const string PATH = @"C:\Users\Kermalis\Documents\Emulation\PS2\Hacking\Speed Racer PS2 and WII rip\Original PS2.ZIP ps2_ps2\tracks\t01\grading.nif";
+		// Uncomment something to rip it
+		// I just included random things here... you can of course rip any .nif file if you just write the path here
 
-		// Thunderhead track_tunnelcap (PS2)
-		//const string PATH = @"C:\Users\Kermalis\Documents\Emulation\PS2\Hacking\Speed Racer PS2 and WII rip\Original PS2.ZIP ps2_ps2\tracks\t01\models\t01gtunn.nif";
+		#region Thunderhead
 
-		// Thunderhead track_endcap (PS2)
-		//const string PATH = @"C:\Users\Kermalis\Documents\Emulation\PS2\Hacking\Speed Racer PS2 and WII rip\Original PS2.ZIP ps2_ps2\tracks\t01\models\t01gjcap.nif";
+		// Its texture is "[WII RIP]\tracks\t01\t01ttrk1_colr.dds"
 
-		// Thunderhead forward short trk data (PS2)
-		//const string PATH = @"C:\Users\Kermalis\Documents\Emulation\PS2\Hacking\Speed Racer PS2 and WII rip\Original PS2.ZIP ps2_ps2\tracks\t01\geo\fwd_short.trk";
+		#region PS2 & WII
 
-		// Thunderhead forward long trk geo (PS2)
-		// Its texture is @"C:\Users\Kermalis\Documents\Emulation\PS2\Hacking\Speed Racer PS2 and WII rip\Original WII rip\tracks\t01\t01ttrk1_colr.dds"
-		//const string PATH = @"C:\Users\Kermalis\Documents\Emulation\PS2\Hacking\Speed Racer PS2 and WII rip\Original PS2.ZIP ps2_ps2\tracks\t01\geo\fwd_long.nif";
+		// track_tunnelcap:
+		//const string PATH = @"tracks\t01\models\t01gtunn.nif";
 
-		// Thunderhead props (PS2)
-		const string PATH = @"C:\Users\Kermalis\Documents\Emulation\PS2\Hacking\Speed Racer PS2 and WII rip\Original PS2.ZIP ps2_ps2\tracks\t01\models\t01ggs.nif";
-		// Onuris props (PS2)
-		//const string PATH = @"C:\Users\Kermalis\Documents\Emulation\PS2\Hacking\Speed Racer PS2 and WII rip\Original PS2.ZIP ps2_ps2\tracks\t02\models\t02gocc.nif";
-		// Fuji props (PS2) [need to add NiPSysData and other particle chunks]
-		//const string PATH = @"C:\Users\Kermalis\Documents\Emulation\PS2\Hacking\Speed Racer PS2 and WII rip\Original PS2.ZIP ps2_ps2\tracks\t03\models\t03gfji.nif";
-		// Aurora props (PS2)
-		//const string PATH = @"C:\Users\Kermalis\Documents\Emulation\PS2\Hacking\Speed Racer PS2 and WII rip\Original PS2.ZIP ps2_ps2\tracks\t04\models\t04gaur.nif";
-		// GrandPrix props (PS2)
-		//const string PATH = @"C:\Users\Kermalis\Documents\Emulation\PS2\Hacking\Speed Racer PS2 and WII rip\Original PS2.ZIP ps2_ps2\tracks\t05\models\t05ggp.nif";
-		// Skorost props (PS2)
-		//const string PATH = @"C:\Users\Kermalis\Documents\Emulation\PS2\Hacking\Speed Racer PS2 and WII rip\Original PS2.ZIP ps2_ps2\tracks\t06\models\t06gsk.nif";
+		// track_endcap:
+		//const string PATH = @"tracks\t01\models\t01gjcap.nif";
 
+		// props
+		const string PATH = @"tracks\t01\models\t01ggs.nif";
 
+		#endregion
 
+		#region PS2 Only
 
-		// Fuji forward long trk geo (PS2)
-		// Its texture is @"C:\Users\Kermalis\Documents\Emulation\PS2\Hacking\Speed Racer PS2 and WII rip\Original WII rip\tracks\t03\t03ttrk1_colr.dds"
-		//const string PATH = @"C:\Users\Kermalis\Documents\Emulation\PS2\Hacking\Speed Racer PS2 and WII rip\Original PS2.ZIP ps2_ps2\tracks\t03\geo\fwd_long.nif";
+		// grading (PS2)
+		//const string PATH = @"tracks\t01\grading.nif";
 
-		// Aurora forward long trk geo (PS2)
-		// Its texture is @"C:\Users\Kermalis\Documents\Emulation\PS2\Hacking\Speed Racer PS2 and WII rip\Original WII rip\tracks\t04\t04ttrk1_colr.dds"
-		//const string PATH = @"C:\Users\Kermalis\Documents\Emulation\PS2\Hacking\Speed Racer PS2 and WII rip\Original PS2.ZIP ps2_ps2\tracks\t04\geo\fwd_long.nif";
+		// forward short trk data (PS2)
+		//const string PATH = @"tracks\t01\geo\fwd_short.trk";
 
-		// GrandPrix forward long trk geo (PS2)
-		// Its texture is @"C:\Users\Kermalis\Documents\Emulation\PS2\Hacking\Speed Racer PS2 and WII rip\Original WII rip\tracks\t05\t05ttrk1_colr.dds"
-		//const string PATH = @"C:\Users\Kermalis\Documents\Emulation\PS2\Hacking\Speed Racer PS2 and WII rip\Original PS2.ZIP ps2_ps2\tracks\t05\geo\fwd_long.nif";
+		// forward long trk geo (PS2)
+		//const string PATH = @"tracks\t01\geo\fwd_long.nif";
 
-		// Skorost forward long trk geo (PS2)
-		// Its texture is @"C:\Users\Kermalis\Documents\Emulation\PS2\Hacking\Speed Racer PS2 and WII rip\Original WII rip\tracks\t05\t05ttrk1_colr.dds"
-		//const string PATH = @"C:\Users\Kermalis\Documents\Emulation\PS2\Hacking\Speed Racer PS2 and WII rip\Original PS2.ZIP ps2_ps2\tracks\t06\geo\fwd_long.nif";
+		#endregion
 
+		#endregion
 
+		//
+
+		#region Onuris
+
+		#region PS2 & WII
+
+		// props
+		//const string PATH = @"tracks\t02\models\t02gocc.nif";
+
+		#endregion
+
+		#endregion
+
+		//
+
+		#region Fuji
+
+		// Its texture is "[WII RIP]\tracks\t03\t03ttrk1_colr.dds"
+
+		#region PS2 & WII
+
+		// props [need to add NiPSysData and other particle chunks]
+		//const string PATH = @"tracks\t03\models\t03gfji.nif";
+
+		#endregion
+
+		#region PS2 Only
+
+		// forward long trk geo (PS2)
+		//const string PATH = @"tracks\t03\geo\fwd_long.nif";
+
+		#endregion
+
+		#endregion
+
+		//
+
+		#region Aurora
+
+		// Its texture is "[WII RIP]\tracks\t04\t04ttrk1_colr.dds"
+
+		#region PS2 & WII
+
+		// props
+		//const string PATH = @"tracks\t04\models\t04gaur.nif";
+
+		#endregion
+
+		#region PS2 Only
+
+		// forward long trk geo (PS2)
+		//const string PATH = @"tracks\t04\geo\fwd_long.nif";
+
+		#endregion
+
+		#endregion
+
+		//
+
+		#region Grand Prix
+
+		// Its texture is "[WII RIP]\tracks\t05\t05ttrk1_colr.dds"
+
+		#region PS2 & WII
+
+		// props
+		//const string PATH = @"tracks\t05\models\t05ggp.nif";
+
+		#endregion
+
+		#region PS2 Only
+
+		// forward long trk geo (PS2)
+		//const string PATH = @"tracks\t05\geo\fwd_long.nif";
+
+		#endregion
+
+		#endregion
+
+		//
+
+		#region Skorost (PS2 Only)
+
+		// props (PS2)
+		//const string PATH = @"tracks\t06\models\t06gsk.nif";
+
+		// forward long trk geo (PS2)
+		//const string PATH = @"tracks\t06\geo\fwd_long.nif";
+
+		#endregion
 
 		// PS2 TESTING
-		//const string PATH = @"C:\Users\Kermalis\Documents\Emulation\PS2\Hacking\Speed Racer PS2 and WII rip\Original PS2.ZIP ps2_ps2\ui\models\321go.nif";
-		//const string PATH = @"C:\Users\Kermalis\Documents\Emulation\PS2\Hacking\Speed Racer PS2 and WII rip\Original PS2.ZIP ps2_ps2\tracks\t01\models\t01ldir.nif";
+		//const string PATH = @"ui\models\321go.nif";
+		//const string PATH = @"tracks\t01\models\t01ldir.nif";
 
 
-		// Thunderhead track_tunnelcap (WII)
-		//const string PATH = @"C:\Users\Kermalis\Documents\Emulation\PS2\Hacking\Speed Racer PS2 and WII rip\Original WII rip\tracks\t01\models\t01gtunn.nif";
+		string fullPath = Path.Combine(dir, PATH);
+		Console.WriteLine("Opening {0}", fullPath);
 
-		// Thunderhead track_endcap (WII)
-		//const string PATH = @"C:\Users\Kermalis\Documents\Emulation\PS2\Hacking\Speed Racer PS2 and WII rip\Original WII rip\tracks\t01\models\t01gjcap.nif";
-
-		Console.WriteLine("Opening {0}", PATH);
-
-		using (FileStream s = File.OpenRead(PATH))
+		using (FileStream s = File.OpenRead(fullPath))
 		{
 			var nif = new NIFFile(s, requireFullHierarchy);
 
@@ -276,10 +365,9 @@ internal sealed class Program
 		;
 	}
 
-	private static string GetNIFOutputDir(string nifPath)
+	private static string GetNIFOutputDir(string relativeNIFPath)
 	{
-		string a = Path.GetRelativePath(RIPPED_PATH, nifPath);
-		a = a.Remove(a.Length - 4, 4); // remove ".nif" or ".trk"
+		string a = relativeNIFPath.Remove(relativeNIFPath.Length - 4, 4); // remove ".nif" or ".trk"
 		return Path.Combine(OUT_OBJ_PATH, a);
 	}
 

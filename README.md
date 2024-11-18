@@ -1,3 +1,9 @@
+You can find me in a Speed Racer community [Discord server][Discord]
+
+[![Join on Discord](https://discordapp.com/api/guilds/1017971829643694183/widget.png?style=shield)][Discord]
+
+
+
 ![Wireframe](https://github.com/Kermalis/SpeedRacerTool/assets/29823718/82762fde-3214-4080-b049-4cf3047588d7)
 
 ![PhysicsLol](https://github.com/Kermalis/SpeedRacerTool/assets/29823718/57b204b8-2240-4eed-a27c-0e598b463c74)
@@ -126,4 +132,6 @@ Been there done that, I hate it, just edit the file lol it's really not that har
 * Wii geometry ".nif" files support
 * Wii track ".xds" files support (they're different from PS2 but still similar enough)
 * Non-heightfield collision dumping
-* Maybe make it easier to use or talk to me
+* Maybe make it easier to use
+
+[Discord]: https://discord.gg/jYHFFhYGRE
