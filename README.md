@@ -134,4 +134,4 @@ Been there done that, I hate it, just edit the file lol it's really not that har
 * Non-heightfield collision dumping
 * Maybe make it easier to use
 
-[Discord]: https://discord.gg/jYHFFhYGRE
+[Discord]: https://discord.gg/Vkakcbm22a
